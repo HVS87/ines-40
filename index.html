@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Inês 40 — Quarenta Anos de Aventuras</title>
+  <meta name="description" content="Um jogo em pixel art que conta os 40 anos da Inês, nível a nível.">
+  <!-- Pré-visualização ao partilhar o endereço (as imagens vêm de tools/logo.html) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Inês 40 — Quarenta Anos de Aventuras">
+  <meta property="og:description" content="Um jogo em pixel art que conta os 40 anos da Inês, nível a nível.">
+  <meta property="og:locale" content="pt_PT">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Inês 40 — Quarenta Anos de Aventuras">
+  <meta name="twitter:description" content="Um jogo em pixel art que conta os 40 anos da Inês, nível a nível.">
+  <meta name="theme-color" content="#1a1433">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Inês 40">
+  <meta name="application-name" content="Inês 40">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Ícones reutilizáveis -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="heart" viewBox="0 0 7 6" shape-rendering="crispEdges">
+      <path fill="currentColor" d="M1 0h2v1h1v-1h2v1h1v2h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1v-1h-1v-2h1z"/>
+    </symbol>
+  </svg>
+
+  <canvas id="game" aria-label="Jogo dos 40 anos da Inês"></canvas>
+
+  <!-- HUD (durante o nível) -->
+  <div class="hud" id="hud">
+    <div class="hud-hearts"><svg class="ico-heart"><use href="#heart"/></svg><span id="hud-hearts">0/0</span></div>
+    <div class="hud-title" id="hud-title"></div>
+    <button class="btn btn-icon" data-action="pause" aria-label="Pausa"><span class="ico-pause"></span></button>
+  </div>
+
+  <div class="hint" id="hint" aria-live="polite"></div>
+
+  <!-- Menu principal -->
+  <section class="screen" data-screen="menu">
+    <header class="title-block">
+      <h1 class="game-title">Inês <svg class="ico-heart beat"><use href="#heart"/></svg> 40</h1>
+      <p class="subtitle">Quarenta anos de aventuras em pixel art</p>
+    </header>
+    <nav class="menu-buttons">
+      <button class="btn btn-primary" data-action="play" id="btn-play">Jogar</button>
+      <button class="btn" data-action="levels">Níveis</button>
+      <button class="btn" data-action="howto">Como Jogar</button>
+      <div class="btn-row">
+        <button class="btn btn-small" data-action="music" id="btn-music">Música: Sim</button>
+        <button class="btn btn-small" data-action="sound" id="btn-sound">Sons: Sim</button>
+        <button class="btn btn-small" data-action="fullscreen" id="btn-fullscreen" hidden>Ecrã inteiro</button>
+        <button class="btn btn-small" data-action="install" id="btn-install" hidden>Instalar app</button>
+      </div>
+    </nav>
+  </section>
+
+  <!-- Como Jogar -->
+  <section class="screen" data-screen="howto">
+    <div class="panel panel-wide">
+      <h2>Como Jogar</h2>
+      <div class="scroll">
+        <h3>A história</h3>
+        <p>Acompanha a Inês desde o dia em que nasceu até à festa dos 40 anos! Cada nível é um capítulo da vida dela: o colégio, o liceu, as noites e os verões com as amigas, os filhos, o trabalho, as viagens, o Lourenço... e a festa.</p>
+        <p>Cada nível tem um ou mais minijogos, com regras próprias explicadas antes de começar e no cimo do ecrã enquanto jogas. Ganha corações e chega ao fim de cada nível para desbloquear o seguinte. Nunca se perde: se alguma coisa correr mal, tenta-se outra vez.</p>
+
+        <h3>Ecrã tátil</h3>
+        <ul class="controls">
+          <li><span class="keys">Tocar no ecrã</span><span>Ação dos minijogos (tocar, manter premido ou tocar muitas vezes, conforme as instruções)</span></li>
+          <li><span class="keys">Arrastar o dedo</span><span>Mover a personagem ou apontar</span></li>
+          <li><span class="keys"><span class="mini-btn"><span class="ico-pause"></span></span></span><span>Pausa (em cima, à direita)</span></li>
+        </ul>
+
+        <h3>Teclado</h3>
+        <ul class="controls">
+          <li><span class="keys"><kbd>Espaço</kbd> ou <kbd>Enter</kbd></span><span>Ação dos minijogos</span></li>
+          <li><span class="keys"><kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd></span><span>Mover a personagem ou apontar</span></li>
+          <li><span class="keys"><kbd>P</kbd> ou <kbd>Esc</kbd></span><span>Pausa</span></li>
+          <li><span class="keys"><kbd>M</kbd></span><span>Ligar/desligar a música</span></li>
+          <li><span class="keys"><kbd>Enter</kbd></span><span>Confirmar nos menus</span></li>
+        </ul>
+
+        <h3>Dicas</h3>
+        <ul class="tips">
+          <li>Lê as instruções no cimo do ecrã: mudam de minijogo para minijogo.</li>
+          <li>No telemóvel e no tablet joga-se ao alto ou deitado: o jogo deteta a posição e arruma-se sozinho.</li>
+          <li>Podes repetir qualquer nível já desbloqueado em «Níveis», para apanhar os corações que faltaram.</li>
+          <li>A música e os sons ligam-se e desligam-se em separado, no menu ou na pausa.</li>
+        </ul>
+
+        <h3>Instalar como app</h3>
+        <p>O jogo pode ficar no ecrã principal do telemóvel, do tablet ou do computador, com ícone próprio, em ecrã inteiro e a funcionar sem rede. Usa o botão «Instalar app» no menu: no Android e no Chrome abre o pedido de instalação; no iPhone e no iPad mostra os passos (Partilhar → «Adicionar ao ecrã principal»).</p>
+        <p>O progresso fica guardado no próprio dispositivo.</p>
+      </div>
+      <button class="btn btn-primary" data-action="back" data-back>Voltar</button>
+    </div>
+  </section>
+
+  <!-- Seleção de níveis -->
+  <section class="screen" data-screen="levels">
+    <div class="panel panel-wide">
+      <h2>Níveis</h2>
+      <div class="scroll level-list" id="level-list"></div>
+      <button class="btn btn-primary" data-action="back" data-back>Voltar</button>
+    </div>
+  </section>
+
+  <!-- Introdução do nível -->
+  <section class="screen" data-screen="story">
+    <div class="panel">
+      <p class="kicker" id="story-kicker">Nível 1</p>
+      <h2 id="story-title"></h2>
+      <div class="scroll story-scroll">
+        <p class="story-text" id="story-text"></p>
+        <p class="story-help" id="story-help" hidden></p>
+      </div>
+      <div class="btn-row">
+        <button class="btn" data-action="menu" data-back>Menu</button>
+        <button class="btn btn-primary" data-action="start">Começar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pausa -->
+  <section class="screen" data-screen="pause">
+    <div class="panel">
+      <h2>Pausa</h2>
+      <div class="menu-buttons">
+        <button class="btn btn-primary" data-action="resume">Continuar</button>
+        <button class="btn" data-action="restart">Recomeçar nível</button>
+        <div class="btn-row">
+          <button class="btn btn-small" data-action="music" id="btn-music-pause">Música: Sim</button>
+          <button class="btn btn-small" data-action="sound" id="btn-sound-pause">Sons: Sim</button>
+        </div>
+        <button class="btn" data-action="menu">Sair para o menu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instalar como app -->
+  <section class="screen" data-screen="install">
+    <div class="panel">
+      <h2>Instalar como app</h2>
+      <div class="scroll">
+        <p class="install-lead" id="install-lead"></p>
+        <ol class="install-steps" id="install-steps"></ol>
+      </div>
+      <button class="btn btn-primary" data-action="back" data-back>Voltar</button>
+    </div>
+  </section>
+
+  <!-- Nível concluído -->
+  <section class="screen" data-screen="complete">
+    <div class="panel">
+      <p class="kicker">Nível concluído!</p>
+      <h2 id="complete-title"></h2>
+      <p class="complete-hearts"><svg class="ico-heart"><use href="#heart"/></svg><span id="complete-hearts">0/0</span><span class="perfect" id="complete-perfect" hidden>Perfeito!</span></p>
+      <div class="btn-row">
+        <button class="btn" data-action="menu" data-back>Menu</button>
+        <button class="btn" data-action="retry">Repetir</button>
+        <button class="btn btn-primary" data-action="next">Continuar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vitória -->
+  <section class="screen" data-screen="victory">
+    <div class="victory-text">
+      <p class="v-kicker">Inês <svg class="ico-heart beat"><use href="#heart"/></svg> 40</p>
+      <h2 class="v-title" id="v-title">Parabéns, Inês!</h2>
+      <p class="v-line" id="v-line">pelos teus 40 anos</p>
+      <p class="v-date on" id="v-date">15-11-2026</p>
+    </div>
+    <div class="victory-actions">
+      <button class="btn" data-action="menu" data-back>Menu</button>
+      <button class="btn btn-primary" data-action="levels">Níveis</button>
+    </div>
+  </section>
+
+  <noscript>Este jogo precisa de JavaScript ativo.</noscript>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

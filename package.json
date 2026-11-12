@@ -1,0 +1,10 @@
+{
+  "name": "ines-40",
+  "version": "0.1.0",
+  "description": "Jogo em pixel art sobre os 40 anos da Inês.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs"
+  }
+}
