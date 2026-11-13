@@ -55,7 +55,7 @@ corações ou tempo, e todos os atos acabam sempre.
 | 5 | `05-garage.js` | Paradise Garage | Talk → GaragePorta → Ritmo → GarageAmigos |
 | 6 | `06-verao.js` | Verões em Santo Amaro | VeraoPiscina → VeraoFuga → VeraoJanela → VeraoComboio → Talk → VeraoJanela |
 | 7 | `07-farol.js` | Acampar na Ilha do Farol | Talk → FarolChegada → FarolTenda → FarolFogueira → FarolGNR → Talk |
-| 8 | `08-croco.js` | O Crô-Crô | Imperiais → Caracois → Talk |
+| 8 | `08-croco.js` | O Crôcô | Imperiais → Caracois → Talk |
 | 9 | `09-tomas.js` | Nasce o Tomás | Talk → Catch |
 | 10 | `10-bimby.js` | A Bimby | BimbyReceita → BimbyProgramar → Talk → Call |
 | 11 | `11-pedras.js` | Pedras d'El Rei | Talk → PedrasComboio → PedrasRaquetes → PedrasAncoras → Call |

@@ -6,9 +6,9 @@ import { mkR, sky, stars, person, text, PINK, GOLD } from '../draw.js';
 
 // quem aparece na festa, da esquerda para a direita (a Inês fica ao centro, maior)
 const CROWD = [
-  ['tio', 'hoje'], ['tiafatima', 'hoje'], ['ana', 'festa'], ['soft', 'festa'], ['isabel', 'festa'], ['pipoca', 'festa'],
+  ['tio', 'hoje'], ['tiafatima', 'hoje'], ['ana', 'festa'], ['kiko', 'festa'], ['soft', 'festa'], ['isabel', 'festa'], ['pipoca', 'festa'],
   ['tomas', 'festa'], ['lourenco', 'festa'], ['mi', 'festa'], ['leal', 'festa'], ['maria', 'festa'], ['nuno', 'festa'],
-  ['tete', 'festa'], ['maisa', 'festa'],
+  ['tete', 'festa'], ['maisa', 'festa'], ['moncada', 'festa'], ['marta', 'festa'], ['gonzaga', 'festa'],
 ];
 
 export class VictoryScene {

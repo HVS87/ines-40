@@ -1,10 +1,10 @@
-// Cenários do nível «O Crô-Crô»: a esplanada do café (toldo com letreiro, árvores, mesas) e a
+// Cenários do nível «O Crôcô»: a esplanada do café (toldo com letreiro, árvores, mesas) e a
 // malta sentada às mesas. Usado pelos três atos do nível.
 import { INK, PAPER, GOLD, hash, lerp, sky, disc, text, person } from '../draw.js';
 import { getCharacter } from '../sprites.js';
 
 // Os amigos da esplanada, pela ordem em que se sentam.
-export const MALTA = [['ana', 'Ana'], ['mi', 'Mi'], ['soft', 'Soft'], ['pipoca', 'Pipoca'], ['ines', 'Inês'], ['pi', 'Pi'], ['leal', 'Leal'], ['isabel', 'Isabel'], ['maria', 'Maria'], ['tete', 'Tété']];
+export const MALTA = [['ana', 'Ana'], ['mi', 'Mi'], ['soft', 'Soft'], ['pipoca', 'Pipoca'], ['ines', 'Inês'], ['pi', 'Pi'], ['leal', 'Leal'], ['isabel', 'Isabel'], ['maisa', 'Maísa'], ['maria', 'Maria'], ['tete', 'Tété']];
 export const malta = () => MALTA.map(([who, name]) => ({ who, name, frames: getCharacter(who, 'casual') }));
 
 function rgb(c) { const n = parseInt(c.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
@@ -38,9 +38,9 @@ export function esplanada(ctx, v, R, o) {
   R(x0, wt, bw, 3, '#b5523a');
   for (let x = x0 + 2; x < x0 + bw - 4; x += 6) { R(x, gy - 22, 5, 5, '#f6f2ea'); R(x + 1, gy - 21, 3, 3, '#5a8fd0'); R(x, gy - 16, 5, 5, '#f6f2ea'); R(x + 2, gy - 14, 1, 1, '#5a8fd0'); }
   // letreiro (com os acentos circunflexos desenhados à mão, para se lerem bem)
-  R(cx - 37, wt + 5, 74, 22, INK); R(cx - 36, wt + 6, 72, 20, '#a8324a');
-  text(ctx, 'CRO-CRO', cx, wt + 13, '#fff6e6', { scale: 2, align: 'center' });
-  for (const ox of [cx - 11, cx + 21]) { R(ox + 2, wt + 8, 2, 2, '#fff6e6'); R(ox, wt + 10, 2, 2, '#fff6e6'); R(ox + 4, wt + 10, 2, 2, '#fff6e6'); }
+  R(cx - 31, wt + 5, 62, 22, INK); R(cx - 30, wt + 6, 60, 20, '#a8324a');
+  text(ctx, 'CROCO', cx, wt + 13, '#fff6e6', { scale: 2, align: 'center' });
+  for (const ox of [cx - 3, cx + 13]) { R(ox + 2, wt + 8, 2, 2, '#fff6e6'); R(ox, wt + 10, 2, 2, '#fff6e6'); R(ox + 4, wt + 10, 2, 2, '#fff6e6'); }
   // toldo às riscas
   const ay = wt + 31;
   for (let x = 0; x < bw + 8; x += 8) { const c = (x >> 3) & 1 ? '#fff6e6' : '#2f8a5a'; R(x0 - 4 + x, ay, Math.min(8, bw + 8 - x), 9, c); R(x0 - 3 + x, ay + 9, Math.min(6, bw + 8 - x), 2, c); }
@@ -89,11 +89,11 @@ export function sentados(ctx, R, list, o) {
     person(ctx, m.frames, x, y, { face: x < (x0 + x1) / 2 ? 1 : -1, scale: 2, hop });
   };
   if (rows === 2) {
-    const back = list.slice(0, 5), front = list.slice(5), by = gy - 40;
-    back.forEach((m, i) => draw(m, Math.round(x0 + 14 + ((x1 - x0 - 28) * i) / 4), by));
-    mesa(R, x0 + 2, x1 - 2, by - 17, Math.min(drinks, 5), 0);
+    const half = Math.ceil(list.length / 2), back = list.slice(0, half), front = list.slice(half), by = gy - 40;
+    back.forEach((m, i) => draw(m, Math.round(x0 + 14 + ((x1 - x0 - 28) * i) / Math.max(1, back.length - 1)), by));
+    mesa(R, x0 + 2, x1 - 2, by - 17, Math.min(drinks, half), 0);
     front.forEach((m, i) => draw(m, Math.round(x0 + 22 + ((x1 - x0 - 44) * i) / Math.max(1, front.length - 1)), gy));
-    mesa(R, x0 + 14, x1 - 14, gy - 17, Math.max(0, drinks - 5), o.cafe ? 0.5 : 0);
+    mesa(R, x0 + 14, x1 - 14, gy - 17, Math.max(0, drinks - half), o.cafe ? 0.5 : 0);
   } else {
     list.forEach((m, i) => draw(m, Math.round(x0 + 14 + ((x1 - x0 - 28) * i) / (list.length - 1)), gy));
     mesa(R, x0, x1, gy - 17, drinks, o.cafe ? 0.4 : 0);

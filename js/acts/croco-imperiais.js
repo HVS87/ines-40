@@ -1,4 +1,4 @@
-// «O Crô-Crô», ato 1: tirar as imperiais para a mesa. Mantém-se premido para encher o copo e
+// «O Crôcô», ato 1: tirar as imperiais para a mesa. Mantém-se premido para encher o copo e
 // larga-se quando a espuma chega à marca verde. Cada imperial bem tirada dá um coração.
 import { Act } from './base.js';
 import { INK, clamp, text } from '../draw.js';
@@ -31,7 +31,7 @@ export class Imperiais extends Act {
     if (this.state === 'res') {
       if (this.st > 1.3) {
         this.n++; this.T = 0; this.state = 'fill'; this.st = 0; this.armed = false; this.started = false;
-        if (this.n >= this.max) { this.over = 0.01; this.sfx('win'); this.hint('Todos: «Saúde! Às tardes no Crô-Crô!»'); }
+        if (this.n >= this.max) { this.over = 0.01; this.sfx('win'); this.hint('Todos: «Saúde! Às tardes no Crôcô!»'); }
       }
       return;
     }

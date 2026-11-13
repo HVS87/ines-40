@@ -16,7 +16,7 @@ export default {
       groups: [
         { people: [['tio', 'hoje'], ['tiafatima', 'hoje'], ['irma1', 'festa'], ['irma2', 'festa'], ['irmao', 'festa'], ['irmao2', 'festa']], extra: 'baloes',
           line: 'Tia Fátima: «Quarenta anos! E parece que foi ontem a corrida para a maternidade...»' },
-        { people: [['ana', 'festa'], ['maisa', 'festa'], ['soft', 'festa'], ['isabel', 'festa']],
+        { people: [['ana', 'festa'], ['kiko', 'festa'], ['maisa', 'festa'], ['soft', 'festa'], ['isabel', 'festa']],
           line: 'Isabel: «Das Escravas até hoje, sempre juntas! E desta vez não trouxe o trolley.»' },
         { people: [['mi', 'festa'], ['leal', 'festa'], ['maria', 'festa'], ['nuno', 'festa'], ['tete', 'festa']],
           line: 'Mi: «Um brinde à melhor madrinha que o Micas podia ter!»' },
@@ -26,13 +26,15 @@ export default {
           line: 'Bárbara: «O bolo? Feito na Bimby, claro. Velocidade 5, com muito amor.»' },
         { people: [['pi', 'festa'], ['carlos', 'festa'], ['zebras', 'festa']],
           line: 'Pi: «Amanhã alugamos um barco! A carta de marinheiro já está no bolso.»' },
+        { people: [['moncada', 'festa'], ['marta', 'festa'], ['gonzaga', 'festa']],
+          line: 'Moncada: «Parabéns, Inês! Depois do catamarã, uma festa em terra firme.»' },
         { people: [['lourenco', 'festa'], ['tomas', 'festa']], extra: 'bebe',
           line: 'Lourenço: «Parabéns, meu amor. Hoje não há cangurus, aranhas nem emus: só nós.»' },
       ],
     },
     {
       act: Bolo, music: 'parabens',
-      crowd: [['tio', 'hoje'], ['tiafatima', 'hoje'], ['ana', 'festa'], ['maisa', 'festa'], ['soft', 'festa'], ['isabel', 'festa'], ['pipoca', 'festa'], ['mi', 'festa'], ['leal', 'festa'], ['maria', 'festa'], ['nuno', 'festa'], ['tete', 'festa'], ['lourenco', 'festa'], ['tomas', 'festa']],
+      crowd: [['tio', 'hoje'], ['tiafatima', 'hoje'], ['ana', 'festa'], ['kiko', 'festa'], ['maisa', 'festa'], ['soft', 'festa'], ['isabel', 'festa'], ['pipoca', 'festa'], ['mi', 'festa'], ['leal', 'festa'], ['maria', 'festa'], ['nuno', 'festa'], ['tete', 'festa'], ['moncada', 'festa'], ['marta', 'festa'], ['gonzaga', 'festa'], ['lourenco', 'festa'], ['tomas', 'festa']],
     },
   ],
 };

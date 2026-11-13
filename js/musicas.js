@@ -221,7 +221,7 @@ export const TRACKS = {
       'A5 - C6 - E6 - - C6', 'D6 - - F6 E6 - D6 -', 'B5 - - D6 B5 - G#5 E5', 'A5 - - - - - . .',
     ],
   },
-  // a esplanada do Crô-Crô: bossa nova de fim de tarde
+  // a esplanada do Crôcô: bossa nova de fim de tarde
   esplanada: {
     bpm: 120, lead: 'triangle', leadVol: 0.05, arp: 'triangle', arpVol: 0.02, comp: 'x..x..x...x..x..', compLen: 0.7, bass: 'r..ff..r', bassVol: 0.06, bassLen: 1.4,
     drums: { r: 'x..x..x...x..x..', m: 'xoxoxoxo', k: 'o..oo..o' },
