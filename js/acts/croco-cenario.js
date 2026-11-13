@@ -4,7 +4,7 @@ import { INK, PAPER, GOLD, hash, lerp, sky, disc, text, person } from '../draw.j
 import { getCharacter } from '../sprites.js';
 
 // Os amigos da esplanada, pela ordem em que se sentam.
-export const MALTA = [['ana', 'Ana'], ['mi', 'Mi'], ['soft', 'Soft'], ['pipoca', 'Pipoca'], ['ines', 'Inês'], ['lourenco', 'Lourenço'], ['isabel', 'Isabel'], ['maria', 'Maria'], ['tete', 'Tété']];
+export const MALTA = [['ana', 'Ana'], ['mi', 'Mi'], ['soft', 'Soft'], ['pipoca', 'Pipoca'], ['ines', 'Inês'], ['pi', 'Pi'], ['leal', 'Leal'], ['isabel', 'Isabel'], ['maria', 'Maria'], ['tete', 'Tété']];
 export const malta = () => MALTA.map(([who, name]) => ({ who, name, frames: getCharacter(who, 'casual') }));
 
 function rgb(c) { const n = parseInt(c.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
@@ -92,7 +92,7 @@ export function sentados(ctx, R, list, o) {
     const back = list.slice(0, 5), front = list.slice(5), by = gy - 40;
     back.forEach((m, i) => draw(m, Math.round(x0 + 14 + ((x1 - x0 - 28) * i) / 4), by));
     mesa(R, x0 + 2, x1 - 2, by - 17, Math.min(drinks, 5), 0);
-    front.forEach((m, i) => draw(m, Math.round(x0 + 30 + ((x1 - x0 - 60) * i) / 3), gy));
+    front.forEach((m, i) => draw(m, Math.round(x0 + 22 + ((x1 - x0 - 44) * i) / Math.max(1, front.length - 1)), gy));
     mesa(R, x0 + 14, x1 - 14, gy - 17, Math.max(0, drinks - 5), o.cafe ? 0.5 : 0);
   } else {
     list.forEach((m, i) => draw(m, Math.round(x0 + 14 + ((x1 - x0 - 28) * i) / (list.length - 1)), gy));

@@ -1,4 +1,4 @@
-// Nível 26 — os 40 anos da Inês: a festa no Recreio, com a família e os amigos todos.
+// Nível 27 — os 40 anos da Inês: a festa no Recreio, com a família e os amigos todos.
 import { Abracos, Bolo } from '../acts/festa.js';
 import { TIO } from '../nomes.js';
 
@@ -25,7 +25,7 @@ export default {
         { people: [['barbara', 'festa'], ['isabelv', 'festa']],
           line: 'Bárbara: «O bolo? Feito na Bimby, claro. Velocidade 5, com muito amor.»' },
         { people: [['pi', 'festa'], ['carlos', 'festa'], ['zebras', 'festa']],
-          line: 'Pi: «Amanhã há passeio de barco! O Carlos jura que o comandante é ele...»' },
+          line: 'Pi: «Amanhã alugamos um barco! A carta de marinheiro já está no bolso.»' },
         { people: [['lourenco', 'festa'], ['tomas', 'festa']], extra: 'bebe',
           line: 'Lourenço: «Parabéns, meu amor. Hoje não há cangurus, aranhas nem emus: só nós.»' },
       ],

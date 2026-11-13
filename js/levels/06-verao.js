@@ -1,4 +1,4 @@
-// Nível 7 — «Verões em Santo Amaro»: os dias na piscina da casa dos avós da Isabel, em Santo
+// Nível 6 — «Verões em Santo Amaro»: os dias na piscina da casa dos avós da Isabel, em Santo
 // Amaro de Oeiras, e as noites em que fugiam pela janela para ir ao Garage, de comboio.
 import { Talk } from '../acts/base.js';
 import { VeraoPiscina } from '../acts/verao-piscina.js';

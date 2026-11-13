@@ -1,8 +1,8 @@
-// Nível 20 — «Lanheses»: os dias de família na Casa do Tinoco, a casa de família do Lourenço,
+// Nível 21 — «Lanheses»: os dias de família na Casa do Tinoco, a casa de família do Lourenço,
 // entre Ponte de Lima e Viana do Castelo. A eira e o espigueiro, o churrasco de carne barrosã
-// e a mesa comprida ao pé da piscina.
+// e a mesa comprida ao pé da piscina. No fim, o Lourenço leva todos a ver o pôr do sol à Serra d'Arga.
 import { Talk } from '../acts/base.js';
-import { INK, PAPER, clamp, hash, person } from '../draw.js';
+import { INK, PAPER, clamp, hash, person, sky, disc, hills } from '../draw.js';
 import { getCharacter } from '../sprites.js';
 import { TIO } from '../nomes.js';
 import { Eira } from '../acts/lanheses-eira.js';
@@ -75,6 +75,39 @@ function mesa(ctx, v, R, t, act) {
   if (act.i >= 2) for (const p of act.people) { const x = Math.round(p.x * w) + (p.face || 1) * 11, cy = gy - 36 - Math.round(Math.abs(Math.sin(t * 5 + p.x * 9)) * 3); R(x - 2, cy - 1, 5, 7, INK); R(x - 1, cy, 3, 4, '#e8f0a8'); R(x, cy + 4, 1, 2, PAPER); }
 }
 
+// O pôr do sol na Serra d'Arga: o sol a descer sobre o mar, os montes em camadas, os penedos de
+// granito e os garranos a pastar. Os irmãos da Inês ficam mais atrás, a ver.
+function arga(ctx, v, R, t, act) {
+  const gy = act.ground(v), top = act.top(v), w = v.w, hy = gy - 64;
+  sky(ctx, w, v.h, hy + 6, ['#3a3a78', '#8a4a8a', '#e0607a', '#f8a05a', '#ffd98a']);
+  for (let i = 0; i < 3; i++) { const cx = ((i * 131 + t * 3) % (w + 70)) - 35, cy = top + 14 + i * 13; R(cx, cy, 30, 3, 'rgba(255,214,170,0.55)'); R(cx + 6, cy - 2, 16, 2, 'rgba(255,214,170,0.55)'); }
+  const sx = Math.round(w * 0.5);
+  disc(ctx, sx, hy - 3, 13, '#fff3c4');
+  // o mar, lá ao fundo, com o reflexo do sol
+  R(0, hy, w, 8, '#c8607a'); R(0, hy, w, 1, '#ffd98a');
+  for (let k = 0; k < 4; k++) R(sx - 10 + k * 2 + Math.round(Math.sin(t * 2 + k) * 2), hy + 1 + k * 2, 20 - k * 4, 1, '#fff3c4');
+  // os montes, do mais longe para o mais perto
+  hills(ctx, w, v.h, gy, 0, 0, 47, 7, '#7a4a7a', 2);
+  hills(ctx, w, v.h, gy, 60, 1, 22, 7, '#57386a', 5);
+  // garranos a pastar na encosta, em silhueta
+  for (const [fx, dy, f] of [[0.26, 27, 1], [0.76, 25, -1]]) {
+    const x = Math.round(w * fx), y = gy - dy, c = '#2a2040';
+    R(x - 6, y - 6, 12, 5, c); R(x - 6, y - 1, 2, 5, c); R(x + 4, y - 1, 2, 5, c); R(x - 3, y - 1, 1, 4, c); R(x + 2, y - 1, 1, 4, c);
+    R(x + f * 6 - (f < 0 ? 3 : 0), y - 4, 3, 6, c); R(x + f * 8 - (f < 0 ? 3 : 0), y, 3, 3, c); R(x - f * 7 - (f < 0 ? 0 : 1), y - 5, 1, 5, c);
+  }
+  // o cimo da serra: chão, tojo e penedos de granito
+  R(0, gy, w, v.h - gy, '#3a2c52'); R(0, gy, w, 2, '#5a4470');
+  for (let k = 0; k < 26; k++) { const x = Math.round(hash(k + 3) * (w - 4)), y = gy + 5 + Math.round(hash(k * 1.7 + 2) * Math.max(0, v.h - gy - 10)); R(x, y, 3, 1, '#57406e'); if (k % 4 === 0) R(x + 1, y - 2, 1, 2, '#e8c05a'); }
+  for (const [fx, bw, bh] of [[0.05, 22, 13], [0.93, 26, 16], [0.6, 12, 6]]) {
+    const x = Math.round(w * fx);
+    R(x - bw / 2, gy - bh + 3, bw, bh - 3, '#2a2040'); R(x - bw / 2 + 3, gy - bh, bw - 6, 3, '#2a2040');
+    R(x - bw / 2 + 3, gy - bh, bw - 8, 1, '#f8a05a'); R(x - bw / 2 + 1, gy - bh + 3, 2, 1, '#f8a05a');
+  }
+  // a Sofia e o Zé Inácio de um lado, o Kiko e a Maria do outro
+  const lados = [['irma1', 0.07], ['irmao', 0.19], ['irmao2', 0.83], ['irma2', 0.94]];
+  for (const [who, fx] of lados) person(ctx, getCharacter(who, 'casual'), Math.round(w * fx), gy, { scale: 2, face: fx < 0.5 ? 1 : -1 });
+}
+
 export default {
   id: 'lanheses',
   title: 'Lanheses',
@@ -114,6 +147,21 @@ export default {
         'Lourenço: «Então e a sobremesa? Ainda agora começámos!»',
         `${TIO}: «Um brinde à Casa do Tinoco... e ao cozinheiro!»`,
         'Inês: «À família! Para o ano há mais: já estão todos convidados.»',
+        "Lourenço: «E logo, ao fim da tarde, vamos todos ver o pôr do sol à Serra d'Arga!»",
+      ],
+    },
+    {
+      act: Talk, when: "Ao fim da tarde, no alto da Serra d'Arga...", bg: arga,
+      cast: [
+        { who: 'lourenco', outfit: 'casual', x: 0.31, face: 1, name: 'Lourenço' },
+        { who: 'ines', outfit: 'casual', x: 0.43, face: 1, name: 'Inês' },
+        { who: 'tiafatima', outfit: 'hoje', x: 0.59, face: -1, name: 'Tia Fátima' },
+        { who: 'tio', outfit: 'hoje', x: 0.71, face: -1, name: TIO },
+      ],
+      lines: [
+        'Lourenço: «Chegámos lá acima. Agora é só esperar pelo espetáculo.»',
+        'Tia Fátima: «Que vista! Daqui vê-se tudo, até ao mar.»',
+        "Inês: «O pôr do sol na Serra d'Arga, com a família toda. Não podia acabar melhor!»",
       ],
     },
   ],

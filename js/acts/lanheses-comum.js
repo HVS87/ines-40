@@ -1,4 +1,4 @@
-// Nível 20 «Lanheses»: os cenários da Casa do Tinoco, partilhados pelos atos do nível — o céu
+// Nível 21 «Lanheses»: os cenários da Casa do Tinoco, partilhados pelos atos do nível — o céu
 // e os montes do Minho, a casa de granito, a vinha em latada, o espigueiro enorme (caixa de
 // granito com fendas, sobre pilares com lajes redondas, telhado de duas águas e cruz) e a
 // eira lajeada onde o milho seca.

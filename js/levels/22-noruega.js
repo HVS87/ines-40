@@ -1,4 +1,4 @@
-// Nível 21 — Roadtrip na Noruega: a Inês, o Lourenço e o Tomás vão de carro de Oslo a Bergen
+// Nível 22 — Roadtrip na Noruega: a Inês, o Lourenço e o Tomás vão de carro de Oslo a Bergen
 // (montanhas, Borgund, o túnel de Lærdal, Flåm) e mergulham no fiorde, junto ao chalé.
 import { Estrada } from '../acts/estrada.js';
 import { peleNoruega } from '../acts/noruega-viagem.js';

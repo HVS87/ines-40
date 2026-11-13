@@ -37,7 +37,7 @@ export default {
   id: 'rainha',
   title: 'O Rainha',
   music: 'play',
-  story: 'Na adolescência, a Inês vai para o Liceu Rainha Dona Amélia — «o Rainha» —, num palácio da Rua da Junqueira. A Ana, a Soft e a Isabel também vão. Lá conhece novas amigas, como a Mi, a Maria e a Tété... e um rapaz chamado Lourenço Bruschy.',
+  story: 'Na adolescência, a Inês vai para o Liceu Rainha Dona Amélia — «o Rainha» —, num palácio da Rua da Junqueira. A Ana, a Soft e a Isabel também vão; a Maísa segue para outro liceu, mas a amizade continua. Lá conhece novas amigas, como a Mi, a Maria e a Tété... e um rapaz chamado Lourenço Bruschy.',
   help: 'Mantém premido (ou a seta para a direita) para andar e toca no ecrã (ou Espaço) para cumprimentar. Na escadaria, arrasta o dedo (ou usa as setas) para te desviares de quem desce.',
   outro: 'Amigas novas para a vida inteira... e um «olá» que ainda ia dar muito que falar.',
   acts: [

@@ -1,6 +1,5 @@
 // Nível 12: momentos de história no Xafarix (configurações para o ato Talk).
 //  - a entrada na sala;
-//  - a Mi conhece o Leal (com a Inês e a Ana a fazer de cupido);
 //  - o Nuno ajoelha-se e pede a Maria em casamento, e todos brindam.
 import { INK, PAPER, GOLD, PINK } from '../draw.js';
 import { xafarixBg } from './xafarix-cenario.js';
@@ -9,8 +8,6 @@ const sala = (ctx, v, R, t, act) => xafarixBg(ctx, v, R, t, { gy: act.ground(v),
 // outro canto da sala, sem o palco: só mesas
 const canto = (ctx, v, R, t, act) => xafarixBg(ctx, v, R, t, { gy: act.ground(v), top: act.top(v), stage: null, signX: Math.round(v.w * 0.5), tables: [Math.round(v.w * 0.34), Math.round(v.w * 0.71)] });
 const find = (act, who) => act.people.find((p) => p.who === who);
-// aproxima alguém (devagar) de uma posição
-const walk = (p, x) => { if (p && Math.abs(p.x - x) > 0.002) p.x += (x - p.x) * 0.06; };
 
 // Coração de píxeis (7x6).
 function coracao(R, x, y, c = PINK) {
@@ -34,45 +31,6 @@ export const CENA_ENTRADA = {
   lines: [
     'Pipoca: «Hoje é o Mico da Câmara Pereira que toca e canta. Isto vai aquecer!»',
     'Inês: «Então vamos dançar... nem que seja em cima das mesas!»',
-  ],
-};
-
-export const CENA_LEAL = {
-  bg: (ctx, v, R, t, act) => {
-    if (act.i >= 2) walk(find(act, 'mi'), 0.68);
-    if (act.i >= 3) walk(find(act, 'leal'), 0.82);
-    sala(ctx, v, R, t, act);
-  },
-  fg: (ctx, v, R, t, act) => {
-    const gy = act.ground(v), ines = find(act, 'ines'), mi = find(act, 'mi'), leal = find(act, 'leal');
-    // o arco e a flecha do cupido, na mão da Inês
-    if (act.i >= 1) {
-      const x = Math.round(ines.x * v.w) + 12, y = gy - 26;
-      for (let k = -4; k <= 4; k++) R(x + 3 - Math.round((k * k) / 5), y + k, 1, 1, GOLD);
-      R(x - 4, y, 9, 1, PAPER); R(x + 5, y - 1, 2, 3, PINK);
-    }
-    // corações entre a Mi e o Leal
-    if (act.i >= 3) {
-      const cx = ((mi.x + leal.x) / 2) * v.w, n = act.i >= 4 ? 3 : 1;
-      for (let k = 0; k < n; k++) {
-        const p = (t * 0.5 + k / n) % 1;
-        coracao(R, Math.round(cx + Math.sin(p * 6 + k * 2) * 6), Math.round(gy - 44 - p * 26));
-      }
-    }
-  },
-  cast: [
-    { who: 'ana', outfit: 'night', x: 0.36, name: 'Ana' },
-    { who: 'ines', outfit: 'night', x: 0.47, name: 'Inês' },
-    { who: 'mi', outfit: 'night', x: 0.58, name: 'Mi' },
-    { who: 'leal', outfit: 'night', x: 0.94, name: 'Leal', face: -1 },
-  ],
-  onLine: (i, act) => { if (i === 3) act.sfx('kiss'); },
-  lines: [
-    'Ana: «Inês, já viste quem não tira os olhos da Mi?»',
-    'Inês: «Mi, vai lá falar com ele! Nós ficamos aqui... a fazer de cupido.»',
-    'Leal: «Olá! Sou o Miguel, mas toda a gente me chama Leal.»',
-    'Mi: «E eu sou a Mi. Danças comigo?»',
-    'E foi assim, nas noites do Xafarix, que a Mi e o Leal começaram a namorar.',
   ],
 };
 

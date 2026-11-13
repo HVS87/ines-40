@@ -1,4 +1,4 @@
-// Nível 19 — Moçambique: a chegada à praia, a pesca de barco e o banquete ao pôr do sol.
+// Nível 20 — Moçambique: a chegada à praia, a pesca de barco e o banquete ao pôr do sol.
 import { Talk } from '../acts/base.js';
 import { Pesca } from '../acts/pesca.js';
 import { Banquete } from '../acts/mocambique-banquete.js';

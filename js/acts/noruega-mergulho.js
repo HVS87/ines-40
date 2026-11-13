@@ -1,4 +1,4 @@
-// Ato «mergulho» (nível 21): o chalé vermelho à beira do fiorde. Um de cada vez, o Tomás, o
+// Ato «mergulho» (nível 22): o chalé vermelho à beira do fiorde. Um de cada vez, o Tomás, o
 // Lourenço e a Inês saltam do pontão para a água gelada: mantém-se premido para encher a barra
 // da coragem e larga-se na zona verde (mergulho perfeito = coração; fora dela, chapão, mas vai
 // à água na mesma). Depois, aguentar o frio: tocar quando a onda chega ao círculo. No fim,

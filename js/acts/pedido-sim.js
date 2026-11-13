@@ -1,4 +1,4 @@
-// Nível 24, o pedido: no catamarã, o Lourenço ajoelha-se com o anel. Mantém-se o dedo no ecrã
+// Nível 25, o pedido: no catamarã, o Lourenço ajoelha-se com o anel. Mantém-se o dedo no ecrã
 // (ou Espaço) para encher o coração do «SIM!»; quando enche, a Inês diz que sim e há fogo de
 // vista de corações. Não há como falhar: se ninguém tocar, o coração enche-se sozinho, devagar.
 import { Act } from './base.js';
@@ -7,8 +7,9 @@ import { INK, PAPER, PINK, GOLD, clamp, shadow, text } from '../draw.js';
 import { tejoBg } from './pedido-cenario.js';
 import { convesChao } from './pedido-paella.js';
 
-const LEFT = [['pi', 'casual', 0.08], ['ana', 'casual', 0.2]];
-const RIGHT = [['mi', 'casual', 0.8], ['leal', 'casual', 0.92]];
+// os amigos a bordo, dos dois lados (fila 1 = um passo atrás, para caberem todos)
+const LEFT = [['moncada', 'casual', 0.04, 1], ['pi', 'casual', 0.11, 0], ['kiko', 'casual', 0.19, 1], ['ana', 'casual', 0.27, 0]];
+const RIGHT = [['mi', 'casual', 0.73, 0], ['leal', 'casual', 0.81, 1], ['marta', 'casual', 0.89, 0], ['gonzaga', 'casual', 0.96, 1]];
 
 // Forma de coração: para um raio r, as riscas (y, x0, x1) que o preenchem.
 const shapes = {};
@@ -39,7 +40,7 @@ export class PedidoSim extends Act {
     this.boomT = 0;
     this.ines = getCharacter('ines', 'casual');
     this.lourenco = getCharacter('lourenco', 'casual');
-    this.guests = [...LEFT, ...RIGHT].map(([who, outfit, x]) => ({ x, frames: getCharacter(who, outfit), face: x < 0.5 ? 1 : -1 }));
+    this.guests = [...LEFT, ...RIGHT].map(([who, outfit, x, row]) => ({ x, row, frames: getCharacter(who, outfit), face: x < 0.5 ? 1 : -1 })).sort((a, b) => b.row - a.row);
     this.hint('Lourenço: «Inês, tenho uma coisa muito importante para te perguntar...»');
   }
 
@@ -97,8 +98,8 @@ export class PedidoSim extends Act {
     for (const g of this.guests) {
       const x = Math.round(g.x * v.w), hop = sim ? Math.round(Math.abs(Math.sin(t * 7 + g.x * 20)) * 4) : 0;
       const img = g.frames[sim && Math.floor(t * 4 + g.x * 9) % 2 ? 'a' : 'stand'][g.face < 0 ? 'l' : 'r'];
-      shadow(ctx, x, gy + 2, 14);
-      ctx.drawImage(img, x - 16, gy + 2 - 48 - hop, 32, 48);
+      shadow(ctx, x, gy + 2 - g.row * 7, 14);
+      ctx.drawImage(img, x - 16, gy + 2 - g.row * 7 - 48 - hop, 32, 48);
     }
     // a Inês e o Lourenço (de joelhos depois de fazer a pergunta; de pé e juntinhos depois do sim)
     const close = sim ? clamp(this.timer / 0.8, 0, 1) : 0;

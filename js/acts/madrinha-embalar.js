@@ -1,4 +1,4 @@
-// Nível 22 «Madrinha do Micas», ato 1: na pia batismal, com o Micas ao colo. Cada toque é um
+// Nível 23 «Madrinha do Micas», ato 1: na pia batismal, com o Micas ao colo. Cada toque é um
 // embalo: o marcador (a carinha do Micas) sobe e depois vai descendo sozinho. Com toques
 // suaves e a compasso fica na zona calma (verde) e a barra do batismo vai enchendo, em cinco
 // partes; cada parte sem choro vale um coração. Se o marcador sair por cima (embalo a mais)

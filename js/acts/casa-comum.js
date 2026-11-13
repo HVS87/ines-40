@@ -37,7 +37,7 @@ export function salaLayout(v, gy, top) {
   return {
     gy, top,
     sofaX: Math.round(w * 0.5), sofaW: Math.round(w * 0.2) + 44,
-    janela: P ? { x: 14, y: top + 14, w: 54, h: 62 } : { x: Math.round(w * 0.05), y: top + 6, w: 46, h: 40 },
+    janela: P ? { x: 12, y: top + 14, w: 78, h: 62 } : { x: Math.round(w * 0.04), y: top + 5, w: 64, h: 44 },
     quadros: (P ? [0.3, 0.52, 0.74] : [0.36, 0.5, 0.64]).map((f) => Math.round(w * f)),
     quadroY: P ? gy - 118 : Math.min(top + 26, gy - 66),
     plantaX: Math.round(w * (P ? 0.13 : 0.11)),
@@ -149,23 +149,58 @@ export function estante(R, x, gy, fase) {
   }
 }
 
-// A janela, com os telhados lá fora (de dia ou de noite).
+// A porta da varanda, com a vista da Ajuda: o Tejo, a Ponte 25 de Abril e a outra margem, com o
+// Cristo Rei (de dia ou de noite, com a ponte iluminada).
 function janela(R, J, noite) {
   const { x, y, w, h } = J;
   R(x - 2, y - 2, w + 4, h + 4, INK); R(x - 1, y - 1, w + 2, h + 2, PAPER);
-  R(x + 1, y + 1, w - 2, h - 2, noite ? '#232a5a' : '#8fcdf0'); R(x + 1, y + Math.round(h * 0.45), w - 2, Math.round(h * 0.3), noite ? '#2f3a72' : '#bfe6f8');
-  if (noite) { for (let k = 0; k < 6; k++) R(x + 3 + Math.round(hash(k + 1) * (w - 7)), y + 3 + Math.round(hash(k * 3 + 2) * h * 0.35), 1, 1, '#ffffff'); R(x + w - 10, y + 5, 4, 4, '#fff6c4'); }
-  else { R(x + w - 12, y + 5, 5, 5, '#fff1a8'); R(x + 5, y + 8, 9, 2, '#ffffff'); R(x + 7, y + 6, 5, 2, '#ffffff'); }
-  // casario
-  const by = y + h - 1, casas = [[2, 12, 14], [14, 18, 10], [24, 10, 12], [36, 15, 14]];
-  for (const [dx, ch, cw] of casas) {
-    if (dx + 2 >= w) continue;
-    const ww = Math.min(cw, w - 1 - dx);
-    R(x + dx, by - ch, ww, ch, noite ? '#3a3f6a' : '#f2e6d0'); R(x + dx, by - ch - 3, ww, 3, noite ? '#5a3a4a' : '#d8785a');
-    R(x + dx + 2, by - ch + 4, 2, 3, noite ? GOLD : '#6fa8d4'); if (ww > 8) R(x + dx + 6, by - ch + 4, 2, 3, noite && hash(dx) > 0.5 ? '#3a3f6a' : noite ? GOLD : '#6fa8d4');
+  const x0 = x + 1, w0 = w - 2, hz = y + Math.round(h * 0.6);       // hz = a linha de água
+  R(x0, y + 1, w0, hz - y - 1, noite ? '#232a5a' : '#8fcdf0'); R(x0, hz - 9, w0, 9, noite ? '#2f3a72' : '#bfe6f8');
+  if (noite) { for (let k = 0; k < 7; k++) R(x + 3 + Math.round(hash(k + 1) * (w - 7)), y + 3 + Math.round(hash(k * 3 + 2) * h * 0.3), 1, 1, '#ffffff'); R(x + 6, y + 4, 4, 4, '#fff6c4'); }
+  else { R(x + 6, y + 4, 5, 5, '#fff1a8'); R(x + w - 18, y + 7, 9, 2, '#ffffff'); R(x + w - 16, y + 5, 5, 2, '#ffffff'); }
+  // a outra margem, com o Cristo Rei
+  const terra = noite ? '#1a2046' : '#7fa88a', cristo = noite ? '#c9c9d8' : '#f2f2f7';
+  R(x0, hz - 3, w0, 3, terra); R(x0 + Math.round(w0 * 0.55), hz - 5, w0 - Math.round(w0 * 0.55), 2, terra);
+  const cr = x0 + Math.round(w0 * 0.84);
+  R(cr, hz - 12, 1, 7, cristo); R(cr - 1, hz - 11, 3, 1, cristo);
+  // o rio
+  R(x0, hz, w0, y + h - hz - 1, noite ? '#1c2a5e' : '#3f8fd0'); R(x0, hz, w0, 1, noite ? '#3a4a8a' : '#8fcdf0');
+  for (let k = 0; k < 6; k++) R(x0 + 2 + Math.round(hash(k + 7) * (w0 - 8)), hz + 3 + k * 2, 4, 1, noite ? '#3a4a8a' : '#8fcdf0');
+  // a ponte: o tabuleiro, as duas torres e os cabos
+  const cor = noite ? '#b04a3e' : '#c8452f', dy = hz - 4, t1 = x0 + Math.round(w0 * 0.28), t2 = x0 + Math.round(w0 * 0.7), alto = Math.min(18, Math.round(h * 0.32));
+  R(x0, dy, w0, 2, cor);
+  for (const tx of [t1, t2]) R(tx, dy - alto, 2, alto + 7, cor);
+  for (let px = x0; px < x0 + w0; px++) {
+    let cy;
+    if (px < t1) cy = dy - alto + Math.round(((t1 - px) / Math.max(1, t1 - x0)) * (alto - 1));
+    else if (px > t2 + 1) cy = dy - alto + Math.round(((px - t2 - 1) / Math.max(1, x0 + w0 - t2 - 2)) * (alto - 1));
+    else { const u = (px - (t1 + t2 + 1) / 2) / ((t2 - t1) / 2); cy = dy - 1 - Math.round((alto - 1) * u * u); }
+    R(px, cy, 1, 1, cor);
+    if (noite && (px - x0) % 3 === 0) R(px, dy - 1, 1, 1, GOLD);       // as luzes do tabuleiro
   }
-  R(x + Math.round(w / 2) - 1, y, 2, h, PAPER); R(x, y + Math.round(h / 2) - 1, w, 2, PAPER);
+  // o caixilho da porta e a grade da varanda
+  R(x + Math.round(w / 2) - 1, y, 2, h, PAPER);
+  const gv = y + h - 9;
+  R(x0, gv, w0, 1, INK); for (let px = x0 + 1; px < x0 + w0; px += 4) R(px, gv + 1, 1, 8, INK);
   R(x - 3, y + h + 2, w + 6, 3, INK); R(x - 2, y + h + 2, w + 4, 2, PAPER);
+}
+
+// O Ginja, o cão da família: de orelhas caídas e cauda a abanar. (x, gy) = as patas; face 1 =
+// virado para a direita; u = escala; hop = salto (píxeis).
+export function ginja(R, x, gy, face = 1, t = 0, u = 2, hop = 0) {
+  const C = '#a8562e', L = '#cf7a44', D = '#7a3a1e';
+  const P = (dx, dy, w, h, c) => R(Math.round(x + (face > 0 ? dx : -dx - w) * u), Math.round(gy - hop + dy * u), w * u, h * u, c);
+  const wag = Math.floor(t * 8) % 2;
+  P(-9, -14 - wag, 3, 6, INK); P(-8, -13 - wag, 1, 5, C);                          // cauda
+  P(-3, -4, 3, 4, INK); P(-2, -4, 1, 3, D); P(0, -4, 3, 4, INK); P(1, -4, 1, 3, D);   // patas de trás (lado de lá)
+  P(-7, -10, 14, 7, INK); P(-6, -9, 12, 5, C); P(-6, -9, 12, 1, L);                 // tronco
+  P(-7, -4, 4, 5, INK); P(-6, -4, 2, 4, C); P(2, -4, 4, 5, INK); P(3, -4, 2, 4, C);   // patas
+  P(4, -15, 8, 9, INK); P(5, -14, 6, 7, C); P(5, -14, 6, 1, L);                     // cabeça
+  P(11, -12, 3, 5, INK); P(11, -11, 2, 3, L); P(12, -11, 1, 1, INK);                // focinho
+  P(9, -12, 1, 1, INK);                                                           // olho
+  P(5, -14, 3, 6, D);                                                             // orelha caída
+  P(4, -8, 3, 1, '#d8303a'); P(5, -7, 1, 1, GOLD);                                 // coleira
+  if (wag) P(11, -8, 1, 2, PINK);                                                  // língua de fora
 }
 
 // A sala inteira: parede (na cor escolhida ou ainda em reboco), janela, chão de madeira e o

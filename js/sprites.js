@@ -97,22 +97,22 @@ const HOMEM = {
   },
 };
 
-// Crianças (mais pequenas do que os adultos). k = laços do cabelo (menina) / gola (menino);
+// Crianças (mais pequenas do que os adultos). k = fita do cabelo (menina, de cabelo comprido) / gola (menino);
 // w = blusa (mangas e peito, por baixo das alças do vestido).
 const MENINA = {
   upper: [
     '................',
     '....oooooo......',
-    '...ohhhhhho.....',
-    '.kohhhhhhhhok...',
-    '.kohhssssshok...',
-    '..ohsssesseo....',
-    '..ohssssscso....',
-    '...ossssmmo.....',
-    '....oooooo......',
-    '...owtwwtwo.....',
-    '..owwttttwwo....',
-    '...otttttto.....',
+    '...ohhkhhho.....',
+    '..ohhhkhhhho....',
+    '.ohhhsssssho....',
+    '.ohhsssesseo....',
+    '.ohhssssscso....',
+    '.ohhssssmmo.....',
+    '.ohhoooooo......',
+    '.ohhwtwwtwo.....',
+    '.ohwwttttwwo....',
+    '..ootttttto.....',
     '..oTTTTTTTTo....',
   ],
   legs: {
@@ -147,9 +147,12 @@ const MENINO = {
 // Penteados (linhas do boneco de mulher que mudam): cabelo ondulado e franja.
 const ONDAS = { 10: '.ovvhsssesseso..', 12: '.ovvhosssmmso...', 14: '.ovvotttttto....' };
 const FRANJA = { 7: '..ovhhhhhhhhho..', 8: '..ovhhhshshsso..' };
+// Camisola de rugby às riscas (linhas do boneco de homem): k = risca branca.
+const RUGBY = { 12: '....ottkktto....', 13: '...okkkkkkkko...', 14: '...osttttttso...', 15: '...oskkkkkkso...', 16: '....otttttto....' };
 const BASE = { o: '#2b1d2e', s: '#f6c9a0', c: '#f09a8c', e: '#2b1d2e', m: '#c2544c' };
 const F = MULHER, M = HOMEM, GIRL = MENINA, BOY = MENINO;
 const NOBEARD = '#f6c9a0';
+const RALA = '#c9a084';      // barba rala: só uma sombra no queixo
 const FARDA = { t: '#3f62b8', T: '#2f4a94', w: '#ffffff', b: '#2b1d2e' };   // a farda do colégio: vestido azul de alças sobre blusa branca
 
 // O ELENCO. Aspeto de cada personagem: cores base (cabelo h/H/v, olhos e, pele s, barba d) e roupa
@@ -231,6 +234,12 @@ export const LOOKS = {
   ze: { def: M, base: { h: '#6b4a2e', d: NOBEARD }, outfits: { casual: { t: '#7a8a5a', k: '#7a8a5a', p: '#3b4a7a', b: '#2b1d2e' }, bata: { t: '#3fae8a', k: '#3fae8a', p: '#3fae8a', b: '#ffffff', q: '#3fae8a', Q: '#2f8a6c', cap: true } } },
   zebras: { def: M, base: { h: '#4a2f1e', d: '#6b4a36', e: '#4a3a2a' }, outfits: { casual: { t: '#ff8a4b', k: '#ff8a4b', p: '#7a6a4a', b: '#5a3a22' }, praia: { t: '#7be0b0', k: '#7be0b0', p: '#c0392b', b: '#eebb8e' }, festa: { t: '#ff8a4b', k: '#ffffff', p: '#3a3f55', b: '#111122' } } },
   pi: { def: M, base: { h: '#5a3a22', s: '#e0a878', d: NOBEARD, e: '#4a3a2a' }, outfits: { casual: { t: '#f2f2f7', k: '#f2f2f7', p: '#c9a86a', b: '#5a3a22', shades: true }, festa: { t: '#f2f2f7', k: '#f2f2f7', p: '#c9a86a', b: '#5a3a22', shades: true } } },   // quase sempre de óculos escuros
+  // o Kiko (Francisco), namorado da Ana — não confundir com o irmão da Inês, que é o `irmao2`
+  kiko: { def: M, base: { h: '#5a3a26', d: NOBEARD, e: '#4a3a2a' }, outfits: {
+    casual: { t: '#8fb4e0', k: '#ffffff', p: '#c9a86a', b: '#5a3a22' }, work: { t: '#dfe8f4', k: '#2a3358', p: '#2a3358', b: '#111122' }, festa: { t: '#8fb4e0', k: '#ffffff', p: '#2a3358', b: '#111122' } } },
+  moncada: { def: M, base: { h: '#4a3020', d: RALA, e: '#4a3a2a' }, outfits: { casual: { t: '#e0d2b4', k: '#e0d2b4', p: '#3f6fb5', b: '#5a3a22' }, festa: { t: '#e0d2b4', k: '#ffffff', p: '#2a3358', b: '#111122' } } },
+  marta: { def: F, base: { h: '#a87a4a', H: '#dcb478', v: '#a87a4a', s: '#efbd94', e: '#55803f' }, outfits: { casual: { t: '#f2f2f7', T: '#ff8a6a', b: '#5a3a22' }, festa: { t: '#ff8a6a', T: '#e06a4a', b: '#2b1d2e' } } },
+  gonzaga: { def: M, base: { h: '#33241c', s: '#efbd94', d: '#c09478', e: '#4a3a2a' }, outfits: { casual: { t: '#a8324a', k: '#a8324a', p: '#c9a86a', b: '#5a3a22' }, festa: { t: '#a8324a', k: '#ffffff', p: '#2a3358', b: '#111122' } } },
   carlos: { def: M, base: { h: '#a8a4ac', s: '#e0a878', d: NOBEARD }, outfits: { casual: { t: '#2a3358', k: '#ffffff', p: '#f2f2f7', b: '#5a3a22', q: '#ffffff', Q: '#2a3358', cap: true }, festa: { t: '#2a3358', k: '#ffffff', p: '#f2f2f7', b: '#5a3a22' } } },
   barbara: { def: F, base: { h: '#d8a858', H: '#f0c888', v: '#d8a858' }, outfits: { casual: { t: '#3f9f6a', T: '#2f7f52', b: '#2b1d2e' }, festa: { t: '#ffb347', T: '#e09030', b: '#2b1d2e' } } },
   isabelv: { def: F, base: { h: '#3b2a20', H: '#5a4030', v: '#3b2a20' }, outfits: { casual: { t: '#f2f2f7', T: '#3f9f6a', b: '#2b1d2e' }, festa: { t: '#5a8fd0', T: '#3f6fb0', b: '#2b1d2e' } } },
@@ -238,7 +247,8 @@ export const LOOKS = {
   tomasc: { def: BOY, base: { h: '#6b4a2e' }, outfits: { casual: { t: '#8fc4ff', k: '#ffffff', p: '#5a8fd0', b: '#ffffff' } } },
   tomas: { def: M, base: { h: '#6b4a2e', d: NOBEARD }, outfits: {
     casual: { t: '#4fb888', k: '#4fb888', p: '#3a3f55', b: '#ffffff' }, teen: { t: '#ff8a4b', k: '#2b2b3a', p: '#4a6a9a', b: '#ffffff' },
-    inverno: { t: '#ffb347', k: '#2b2b3a', p: '#2b2b3a', b: '#5a3a22', q: '#2b2b3a', Q: '#ffb347', cap: true }, festa: { t: '#f2f2f7', k: '#4fb888', p: '#3a3f55', b: '#111122' } } },
+    inverno: { t: '#ffb347', k: '#2b2b3a', p: '#2b2b3a', b: '#5a3a22', q: '#2b2b3a', Q: '#ffb347', cap: true }, festa: { t: '#f2f2f7', k: '#4fb888', p: '#3a3f55', b: '#111122' },
+    rugby: { t: '#2f8a4a', k: '#ffffff', p: '#f2f2f7', b: '#111122', rows: RUGBY } } },                 // equipamento da Agronomia
   // ----- figurantes -----
   freira: { def: F, base: { h: '#8a8794', H: '#8a8794', v: '#1c1c28' }, outfits: { casual: { t: '#1c1c28', T: '#1c1c28', b: '#111122', q: '#1c1c28', Q: '#ffffff', cap: true } } },
   professora: { def: F, base: { h: '#9a5a3a', H: '#b87a52', v: '#9a5a3a' }, outfits: { casual: { t: '#b8862e', T: '#96691e', b: '#2b1d2e' } } },
@@ -251,6 +261,7 @@ export const LOOKS = {
   parteira: { def: F, base: { h: '#2b2b3a', H: '#4a4a5e', v: '#2b2b3a' }, outfits: { casual: { t: '#f29ac0', T: '#d877a3', b: '#ffffff', q: '#f29ac0', Q: '#d877a3', cap: true } } },
   padre: { def: M, base: { h: '#8a8794', d: NOBEARD }, outfits: { casual: { t: '#f2f2f7', k: '#7a3fa0', p: '#f2f2f7', b: '#111122' } } },
   musico: { def: M, base: { h: '#3b2a20', d: NOBEARD }, outfits: { casual: { t: '#c0392b', k: '#ffffff', p: '#2b2b3a', b: '#111122' }, b: { t: '#2f6f8a', k: '#ffffff', p: '#2b2b3a', b: '#111122', h: '#8a8794' } } },   // músicos do arraial
+  adversario: { def: M, base: { h: '#3b2a20', d: NOBEARD }, outfits: { casual: { t: '#2a3358', k: '#ffd166', p: '#2a3358', b: '#111122', rows: RUGBY }, b: { t: '#2a3358', k: '#ffd166', p: '#2a3358', b: '#111122', rows: RUGBY, h: '#c8a468' } } },   // a outra equipa, no rugby
   sambista: { def: M, base: { h: '#2b2b3a', s: '#b8794a', d: '#b8794a' }, outfits: { casual: { t: '#ffd23e', k: '#3fa672', p: '#f2f2f7', b: '#f2f2f7', q: '#f2f2f7', Q: '#2b2b3a', cap: true } } },
 };
 
@@ -264,12 +275,24 @@ export function getCharacter(name, outfit = 'casual') {
   seen.add(name);
   if (cache.has(key)) return cache.get(key);
   const look = LOOKS[name] || LOOKS.ines;
-  const { cap, shades, ...clothes } = look.outfits[outfit] || look.outfits.casual;
+  const { cap, shades, rows, ...clothes } = look.outfits[outfit] || look.outfits.casual;
   const pal = { ...BASE, ...look.base, ...clothes };
   let upper = look.rows ? look.def.upper.map((row, i) => look.rows[i] || row) : look.def.upper;
+  if (rows) upper = upper.map((row, i) => rows[i] || row);     // a roupa também pode mudar linhas (riscas)
   if (cap) upper = upper.map((row, i) => look.def.cap[i] || row);
-  // óculos escuros: os olhos e o que fica entre eles passam a ser uma barra escura
-  if (shades) { pal.g = '#111122'; upper = upper.map((row) => row.replace(/e.*e/, (m) => 'g'.repeat(m.length))); }
+  // óculos escuros (tipo Wayfarer): duas lentes com reflexo, a ponte entre elas e a haste até à orelha
+  if (shades) {
+    pal.g = '#111122'; pal.G = '#7f93b8';
+    let n = 0;
+    upper = upper.map((row) => {
+      const a = row.indexOf('e'), b = row.lastIndexOf('e');
+      if (a < 0) return row;
+      const c = row.split('');
+      if (n++ === 0) { for (let x = a - 3; x <= b; x++) c[x] = 'g'; c[a] = 'G'; c[b] = 'G'; }   // armação, de fora a fora
+      else { c[a - 1] = 'g'; c[a] = 'g'; c[b - 1] = 'g'; c[b] = 'g'; }                          // as duas lentes
+      return c.join('');
+    });
+  }
   const frames = {};
   for (const leg of Object.keys(look.def.legs)) {
     const img = makeSprite([...upper, ...look.def.legs[leg]], pal);

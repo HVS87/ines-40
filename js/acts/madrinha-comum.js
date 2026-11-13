@@ -1,4 +1,4 @@
-// Nível 22 «Madrinha do Micas»: cenários e desenhos partilhados pelos atos do batizado — a
+// Nível 23 «Madrinha do Micas»: cenários e desenhos partilhados pelos atos do batizado — a
 // igreja por dentro (arcos, vitral, altar), a pia batismal, o círio pascal, a igreja por fora
 // e o Micas, desenhado à mão, de veste branca.
 import { INK, PAPER, GOLD, SKIN, hash, sky, disc } from '../draw.js';

@@ -1,4 +1,4 @@
-// Cenário do nível 24 (o pedido): o Tejo ao pôr do sol visto do convés de um catamarã, com a
+// Cenário do nível 25 (o pedido): o Tejo ao pôr do sol visto do convés de um catamarã, com a
 // Ponte 25 de Abril, o Cristo Rei e a Torre de Belém ao fundo. E o segundo barco, o da roda de samba.
 import { getCharacter } from '../sprites.js';
 import { INK, PAPER, GOLD, sky, disc, hash, text } from '../draw.js';

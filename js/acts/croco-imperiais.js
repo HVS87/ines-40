@@ -5,7 +5,7 @@ import { INK, clamp, text } from '../draw.js';
 import { esplanada, sentados, malta, partes, painel } from './croco-cenario.js';
 
 const BASE = 'Mantém premido para encher o copo e larga com a espuma na marca verde!';
-const BOAS = ['Pipoca: «Essa é para mim! Está perfeita.»', 'Ana: «Com a espuma mesmo no ponto!»', 'Lourenço: «Tiras imperiais como ninguém.»', 'Tété: «Fresquinha! Venha a próxima.»', 'Maria: «Assim é que é uma imperial!»'];
+const BOAS = ['Pipoca: «Essa é para mim! Está perfeita.»', 'Ana: «Com a espuma mesmo no ponto!»', 'Leal: «Tiras imperiais como ninguém.»', 'Tété: «Fresquinha! Venha a próxima.»', 'Maria: «Assim é que é uma imperial!»'];
 const CURTAS = ['Soft: «Isso é só meia imperial...»', 'Isabel: «Falta cerveja nesse copo!»'];
 const CHEIAS = ['Mi: «Olha a espuma a fugir pelo copo abaixo!»', 'Pipoca: «Entornou! Deixa, que eu bebo assim mesmo.»'];
 

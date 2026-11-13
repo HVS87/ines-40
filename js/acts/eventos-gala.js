@@ -1,4 +1,4 @@
-// Nível 18, ato 2: montar a gala. A sala vê-se de lado (mais larga do que o ecrã: a câmara
+// Nível 19, ato 2: montar a gala. A sala vê-se de lado (mais larga do que o ecrã: a câmara
 // segue a Inês, de auricular). Vão aparecendo imprevistos, um de cada vez, em seis postos:
 // microfone, projetor, luzes, mesas, catering e crachás. Levar a Inês até lá (arrastar o dedo ou
 // setas) antes de o tempo acabar vale um coração; se não, a Bárbara resolve (sem coração).

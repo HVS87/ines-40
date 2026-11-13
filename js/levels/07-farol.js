@@ -1,4 +1,4 @@
-// Nível 8: acampar na Ilha do Farol. Nove raparigas, uma tenda individual, o trolley da Isabel,
+// Nível 7: acampar na Ilha do Farol. Nove raparigas, uma tenda individual, o trolley da Isabel,
 // os pescadores, o jantar de enlatados à volta da fogueira e, de manhã, a lancha da GNR.
 import { partida } from '../acts/cenarios.js';
 import { Talk } from '../acts/base.js';
@@ -36,8 +36,8 @@ export default {
   id: 'farol',
   title: 'Acampar na Ilha do Farol',
   music: 'play',
-  story: 'A Inês foi acampar com as amigas para a Ilha do Farol, ao largo de Olhão. Eram nove raparigas, com uma tenda individual, e a Isabel levou um trolley de viagem em vez de mochila. Valeram-lhes os pescadores... até aparecer a GNR.',
-  help: 'Toca no ecrã (ou Espaço) para saltar, puxar o trolley e pregar as estacas; mantém premido para soprar a fogueira. De manhã, toca em cada coisa (ou setas e Espaço) para a arrumar.',
+  story: 'A Inês foi acampar com as amigas para a Ilha do Farol, ao largo de Olhão: nove raparigas, sol, praia e uma noite debaixo das estrelas. O que é que podia correr mal?',
+  help: 'Toca no ecrã (ou Espaço) para saltar, dar uma ajuda às amigas e pregar as estacas; mantém premido para soprar a fogueira. De manhã, toca em cada coisa (ou setas e Espaço) para a arrumar.',
   outro: 'Acampamento levantado! E o trolley da Isabel ficou para a história.',
   acts: [
     {
@@ -48,7 +48,7 @@ export default {
         { who: 'isabel', outfit: 'praia', x: 0.62, face: -1, name: 'Isabel' }, { who: 'mi', outfit: 'praia', x: 0.9, face: -1 },
       ],
       lines: [
-        'Inês: «Ilha do Farol! Nove amigas, uma ilha inteira... e uma tenda.»',
+        'Inês: «Ilha do Farol! Nove amigas e uma ilha inteira só para nós.»',
         'Isabel: «Alguém me ajuda? O meu trolley prende-se nas tábuas...»',
         'Inês: «Isabel... trouxeste um TROLLEY para acampar?!»',
         'Isabel: «Então? Tem rodinhas. É muito mais prático do que uma mochila!»',

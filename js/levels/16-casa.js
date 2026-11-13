@@ -1,12 +1,13 @@
 // Nível 16 — «Viver Juntos»: a Inês, o Lourenço e o Tomás (já adolescente) mudam-se para a
-// mesma casa. As mudanças pelas escadas acima, a sala para decorar e a estante das instruções
-// impossíveis; no fim, os três no sofá, com pizza.
+// mesma casa, na Ajuda, com vista para o rio e a ponte. As mudanças pelas escadas acima, a sala
+// para decorar e a estante das instruções impossíveis; no fim, os três no sofá, com pizza e
+// PlayStation, e a chegada do Ginja, o cão da família.
 import { Talk } from '../acts/base.js';
-import { INK, PAPER, GOLD } from '../draw.js';
+import { INK, PAPER, GOLD, PINK, clamp, lerp } from '../draw.js';
 import { Mudancas } from '../acts/casa-mudancas.js';
 import { Decorar } from '../acts/casa-decorar.js';
 import { Movel } from '../acts/casa-movel.js';
-import { casaPronta, salaLayout, drawSala, sofaBack, sofaFront } from '../acts/casa-comum.js';
+import { casaPronta, salaLayout, drawSala, sofaBack, sofaFront, ginja } from '../acts/casa-comum.js';
 
 // O serão: a sala pronta, de noite (atrás das pessoas só o encosto do sofá).
 function serao(ctx, v, R, t, act) {
@@ -33,18 +34,55 @@ function pizza(ctx, v, R, t, act) {
   for (let k = 0; k < 5; k++) R(x - 9 + k * 4 + (k % 2), by - 7 + (k % 2), 2, 1, '#c0392b');
   // fumozinho
   for (let k = 0; k < 3; k++) { const p = (t * 0.6 + k / 3) % 1; R(x - 6 + k * 6 + Math.round(Math.sin(t * 2 + k) * 2), by - 9 - Math.round(p * 10), 1, 2, `rgba(255,246,230,${(0.6 * (1 - p)).toFixed(2)})`); }
+  // a PlayStation: os comandos nas mãos do Lourenço e do Tomás e a luz da televisão a piscar
+  if (act.i >= 1 && act.i <= 3) {
+    R(x - L.sofaW / 2, gy - 58, L.sofaW, 44, Math.floor(t * 6) % 3 ? 'rgba(120,170,255,0.10)' : 'rgba(170,220,255,0.16)');
+    for (const p of act.people) {
+      if (p.who === 'ines') continue;
+      const cx = Math.round(p.x * v.w) + (p.face || 1) * 7, cy = gy - 33 + (Math.floor(t * 9 + p.x * 20) % 2);
+      R(cx - 5, cy, 10, 5, INK); R(cx - 4, cy + 1, 8, 3, '#3a3f55'); R(cx - 3, cy + 2, 1, 1, '#6fb0f0'); R(cx + 2, cy + 1, 1, 1, PINK); R(cx + 3, cy + 2, 1, 1, '#7be0b0');
+    }
+  }
+}
+
+// A sala, de dia, no dia em que chega o Ginja.
+function salaDia(ctx, v, R, t, act) {
+  const st = casaPronta(act.s), L = salaLayout(v, act.ground(v), act.top(v));
+  drawSala(ctx, v, R, L, st, { estante: 4 });
+}
+
+// O Ginja entra a correr pela direita, fica a abanar a cauda... e acaba em cima do sofá.
+function cao(ctx, v, R, t, act) {
+  const L = salaLayout(v, act.ground(v), act.top(v)), gy = L.gy;
+  const k = clamp(t / 1.6, 0, 1), porta = lerp(v.w + 30, v.w * 0.84, k);
+  if (act.i < 3) {
+    const hop = k < 1 ? Math.round(Math.abs(Math.sin(t * 10)) * 3) : Math.round(Math.abs(Math.sin(t * 6)) * 2);
+    ginja(R, porta, gy, -1, t, 2, hop);
+    return;
+  }
+  // salto para o sofá
+  const j = clamp(act.timer / 0.7, 0, 1), gx = lerp(v.w * 0.84, L.sofaX, j), y = lerp(gy, gy - 16, j);
+  ginja(R, gx, y, -1, t, 2, Math.round(Math.sin(j * Math.PI) * 16) + (j >= 1 ? Math.round(Math.abs(Math.sin(t * 6)) * 2) : 0));
+}
+
+// Corações quando o Ginja chega.
+function festas(i, act) {
+  if (i !== 1 && i !== 4) return;
+  const v = act.game.view, gy = act.ground(v);
+  act.sfx('chirp');
+  for (let k = 0; k < 4; k++) act.fx.heart(v.w * (i === 1 ? 0.84 : 0.5) + (k - 1.5) * 11, gy - 40 - (k % 2) * 8, k % 2 ? GOLD : PINK);
 }
 
 export default {
   id: 'casa',
   title: 'Viver Juntos',
   music: 'play',
-  story: 'A Inês e o Lourenço decidem viver juntos, com o Tomás, que já é um adolescente. Há caixas para carregar pelas escadas acima, paredes para pintar e uma casa inteira para decorar a três.',
+  story: 'A Inês e o Lourenço decidem viver juntos, com o Tomás, que já é um adolescente. A casa nova fica na Ajuda e tem uma varanda com uma vista incrível sobre o rio e a ponte. Há caixas para carregar pelas escadas acima, paredes para pintar e uma casa inteira para decorar a três.',
   help: 'Toca no ecrã (ou carrega em Espaço) no momento certo: quando a caixa chega às mãos da Inês, quando o quadro está direito... Para regar, mantém premido. No móvel, toca nas peças pela ordem das instruções (ou usa as setas e Espaço).',
-  outro: 'Casa nova, vida a três!',
-  ending: 'Uma casa, três pessoas e uma pizza: está tudo no sítio.',
+  outro: 'Casa nova, vida a três... e a quatro patas!',
+  ending: 'Uma casa com vista para o rio, três pessoas, um cão e uma pizza: está tudo no sítio.',
   acts: [
-    { act: Mudancas, when: 'Dia de mudanças...', hearts: 5 },
+    { act: Mudancas, when: 'Dia de mudanças, na Ajuda...', hearts: 5 },
     { act: Decorar, when: 'Com as caixas todas lá em cima...', hearts: 5 },
     { act: Movel, when: 'Só falta montar a estante.', hearts: 4 },
     {
@@ -56,9 +94,26 @@ export default {
       ],
       lines: [
         'Lourenço: «Casa pronta! Quem é que encomendou a pizza?»',
-        'Tomás: «Eu! Pelo telemóvel. Afinal sempre serve para alguma coisa...»',
+        'Tomás: «Eu! E enquanto não acaba... uma partida na PlayStation?»',
+        'Lourenço: «Só uma! ... Está bem, à melhor de cinco.»',
+        'Inês: «Pizza e PlayStation: estes dois foram feitos um para o outro!»',
         'Inês: «A nossa casa. Os três. Não mudava nada!»',
         'Lourenço: «Nem a peça que sobrou?»',
+      ],
+    },
+    {
+      act: Talk, hearts: 1, when: 'E, pouco tempo depois...', bg: salaDia, fg: cao, onLine: festas,
+      cast: [
+        { who: 'tomas', outfit: 'teen', x: 0.16, face: 1, name: 'Tomás' },
+        { who: 'ines', outfit: 'casual', x: 0.3, face: 1, name: 'Inês' },
+        { who: 'lourenco', outfit: 'casual', x: 0.68, face: 1, name: 'Lourenço' },
+      ],
+      lines: [
+        'Chegou lá a casa mais um habitante, de quatro patas e cauda a abanar...',
+        'Inês: «Bem-vindo a casa, Ginja!»',
+        'Tomás: «Ele pode dormir no meu quarto? Diz que sim, mãe!»',
+        'Lourenço: «O Ginja dorme na cama dele... Ginja! Sai já do sofá!»',
+        'E assim ficou a casa da Ajuda: a Inês, o Lourenço, o Tomás e o Ginja.',
       ],
     },
   ],

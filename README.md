@@ -1,6 +1,6 @@
 # Inês 40 — Quarenta Anos de Aventuras
 
-Jogo de browser em pixel art que conta a vida da Inês em 26 níveis, do dia em que nasceu
+Jogo de browser em pixel art que conta a vida da Inês em 27 níveis, do dia em que nasceu
 (15 de novembro de 1986) à festa dos 40 anos (15 de novembro de 2026). Feito para lhe ser
 oferecido nesse dia.
 
@@ -52,31 +52,32 @@ corações ou tempo, e todos os atos acabam sempre.
 | 3 | `03-rainha.js` | O Rainha | Chegada → Escadaria → Talk |
 | 4 | `04-namoro.js` | O Namoro | Passeio → Jantar → Conta |
 | 5 | `05-garage.js` | Paradise Garage | Talk → GaragePorta → Ritmo → GarageAmigos |
-| 6 | `06-croco.js` | O Crô-Crô | Imperiais → Caracois → Talk |
-| 7 | `07-verao.js` | Verões em Santo Amaro | VeraoPiscina → VeraoFuga → VeraoJanela → VeraoComboio → Talk → VeraoJanela |
-| 8 | `08-farol.js` | Acampar na Ilha do Farol | Talk → FarolChegada → FarolTenda → FarolFogueira → FarolGNR → Talk |
+| 6 | `06-verao.js` | Verões em Santo Amaro | VeraoPiscina → VeraoFuga → VeraoJanela → VeraoComboio → Talk → VeraoJanela |
+| 7 | `07-farol.js` | Acampar na Ilha do Farol | Talk → FarolChegada → FarolTenda → FarolFogueira → FarolGNR → Talk |
+| 8 | `08-croco.js` | O Crô-Crô | Imperiais → Caracois → Talk |
 | 9 | `09-tomas.js` | Nasce o Tomás | Talk → Catch |
 | 10 | `10-bimby.js` | A Bimby | BimbyReceita → BimbyProgramar → Talk → Call |
 | 11 | `11-pedras.js` | Pedras d'El Rei | Talk → PedrasComboio → PedrasRaquetes → PedrasAncoras → Call |
 | 12 | `12-xafarix.js` | O Xafarix | Talk → Ritmo → LongIsland → Talk → Call |
 | 13 | `13-jantares.js` | Jantares com Amigos | JantaresQuiche → JantaresCuf → JantaresNoite → Call |
-| 14 | `14-santos.js` | Santos | Sardinhas → Ritmo → Talk → Call |
+| 14 | `14-santos.js` | Santos | Sardinhas → Ritmo → Talk → Talk → Call |
 | 15 | `15-sushi.js` | O Regresso do Lourenço | Reencontro → Cozinha → Estrada |
-| 16 | `16-casa.js` | Viver Juntos | Mudancas → Decorar → Movel → Talk |
-| 17 | `17-naval.js` | Fins de Tarde no Clube Naval | Brinde → Veleiros → Talk |
-| 18 | `18-eventos.js` | Eventos e Viagens | EventosMala → EventosGala → Talk |
-| 19 | `19-mocambique.js` | Moçambique | Talk → Pesca → Banquete |
-| 20 | `20-lanheses.js` | Lanheses | Talk → Eira → Churrasco → Talk |
-| 21 | `21-noruega.js` | Roadtrip na Noruega | Estrada → Mergulho |
-| 22 | `22-madrinha.js` | Madrinha do Micas | Talk → Embalar → Vela → Foto → Talk |
-| 23 | `23-barco.js` | Passeios de Barco | Navegar → Pesca → Mergulhos |
-| 24 | `24-pedido.js` | O Pedido | Talk → Paella → PedidoSim → Ritmo |
-| 25 | `25-jeanne.js` | Nasce a Jeanne | Talk → Catch |
-| 26 | `26-festa.js` | Os 40 Anos | Abracos → Bolo |
+| 16 | `16-casa.js` | Viver Juntos | Mudancas → Decorar → Movel → Talk → Talk |
+| 17 | `17-rugby.js` | Tomás no Rugby | Talk → Estrada → Pontape → Talk |
+| 18 | `18-naval.js` | Fins de Tarde no Clube Naval | Brinde → Veleiros → Talk |
+| 19 | `19-eventos.js` | Eventos e Viagens | EventosMala → EventosGala → Talk |
+| 20 | `20-mocambique.js` | Moçambique | Talk → Pesca → Banquete |
+| 21 | `21-lanheses.js` | Lanheses | Talk → Eira → Churrasco → Talk → Talk |
+| 22 | `22-noruega.js` | Roadtrip na Noruega | Estrada → Mergulho |
+| 23 | `23-madrinha.js` | Madrinha do Micas | Talk → Embalar → Vela → Foto → Talk |
+| 24 | `24-barco.js` | Passeios de Barco | Navegar → Pesca → Mergulhos |
+| 25 | `25-pedido.js` | O Pedido | Talk → Paella → PedidoSim → Ritmo |
+| 26 | `26-jeanne.js` | Nasce a Jeanne | Talk → Catch |
+| 27 | `27-festa.js` | Os 40 Anos | Abracos → Bolo |
 
 `Talk` é um momento de história (cenário, personagens e falas); `Catch` é o nascimento (o
 bebé salta e é preciso apanhá-lo); `Call` é um telefonema da Austrália, interrompido por um
-canguru, uma aranha gigante ou um bando de emus; `Estrada`, `Ritmo` e `Pesca` são mecânicas
+canguru, um coala, uma aranha gigante, um bumerangue ou um bando de emus; `Estrada`, `Ritmo` e `Pesca` são mecânicas
 partilhadas por vários níveis, cada um com a sua «pele».
 
 ## Mudar coisas
@@ -94,7 +95,7 @@ partilhadas por vários níveis, cada um com a sua «pele».
 
 ## Testar
 
-- <http://localhost:8090/?qa> corre a suite automática: os robôs jogam os 26 níveis do princípio
+- <http://localhost:8090/?qa> corre a suite automática: os robôs jogam os 27 níveis do princípio
   ao fim (com pausa a meio), e verificam-se os textos, os menus, a gravação do progresso, a lista
   de ficheiros para jogar sem rede e toques ao acaso. Resultado no painel e em `window.__qa`.
   Acrescentar `&touch&device=mobile` para testar como num telemóvel.

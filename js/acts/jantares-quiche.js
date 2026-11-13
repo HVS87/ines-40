@@ -135,7 +135,7 @@ export class JantaresQuiche extends Act {
     this.phase = 'ai'; this.at = 0; this.dip = 0.4; this.who = 'Inês';
     this.sfx('hurt');
     this.fx.burst(b.mx(CUTS - 1), b.yc - 4, 16, [GOLD, '#ffffff', PINK], 70);
-    this.hint('Inês: «Ai! O dedo!»');
+    this.hint('Inês: «Ai! O dedo!» Ficou quase aberto ao meio...');
   }
 
   draw(ctx, v, R) {

@@ -6,7 +6,7 @@ import { INK, GOLD, clamp, hash, disc, text } from '../draw.js';
 import { esplanada, sentados, malta, partes, painel } from './croco-cenario.js';
 
 const BASE = 'Toca quando o palito estiver na zona verde, por cima do caracol!';
-const BOAS = ['Inês: «Hmm, este estava ótimo!»', 'Ana: «E agora molha o pão no molho!»', 'Tété: «Cuidado com o molho, que salpica.»', 'Lourenço: «Isto pede mais uma imperial.»', 'Mi: «Não há caracóis como estes!»', 'Maria: «Primavera é isto mesmo.»'];
+const BOAS = ['Inês: «Hmm, este estava ótimo!»', 'Ana: «E agora molha o pão no molho!»', 'Tété: «Cuidado com o molho, que salpica.»', 'Pi: «Isto pede mais uma imperial.»', 'Mi: «Não há caracóis como estes!»', 'Maria: «Primavera é isto mesmo.»'];
 const MAS = ['Pipoca: «Esse escorregou... fica para mim!»', 'Soft: «O caracol fugiu-te!»', 'Isabel: «Roda o palito, que é jeito.»'];
 const RONDAS = 8;
 
@@ -55,7 +55,7 @@ export class Caracois extends Act {
     const p = partes(v, this.top(v)), t = this.t;
     esplanada(ctx, v, R, { gy: p.gy, top: p.top, cx: p.cx, half: p.half, t });
     const res = this.state === 'res';
-    sentados(ctx, R, this.list, { x0: p.x0, x1: p.x1, gy: p.gy, rows: p.rows, t, drinks: 9, all: this.over > 0, speaker: res && !this.ok ? 'Pipoca' : res ? 'Inês' : '' });
+    sentados(ctx, R, this.list, { x0: p.x0, x1: p.x1, gy: p.gy, rows: p.rows, t, drinks: 10, all: this.over > 0, speaker: res && !this.ok ? 'Pipoca' : res ? 'Inês' : '' });
 
     // ----- a mesa em grande plano -----
     const { pw, ph } = painel(R, p, '#dfe3ee'), px = 0, py = 0;

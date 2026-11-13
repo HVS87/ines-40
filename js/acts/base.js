@@ -75,6 +75,7 @@ export class Talk extends Act {
 
   update(dt, I) {
     this.timer += dt;
+    if (this.cfg.tick) this.cfg.tick(dt, this);      // movimento próprio da cena (alguém que chega, por exemplo)
     const line = (this.cfg.lines || [])[this.i] || '';
     if ((this.timer > 0.45 && I.actionPressed) || this.timer > 3 + line.length * 0.06) this.advance();
   }
