@@ -138,8 +138,3 @@ export function recreio(ctx, v, R, t, o) {
   for (const ax of o.arvores || []) if (ax - cam > -30 && ax - cam < w + 30) arvore(ctx, R, Math.round(ax - cam), gy + 3);
 }
 
-// Uma personagem sentada: só a parte de cima do boneco (as primeiras `rows` linhas), à escala 2.
-export function busto(ctx, frames, x, y, face = 1, rows = 13) {
-  const img = frames.stand[face < 0 ? 'l' : 'r'];
-  ctx.drawImage(img, 0, 0, img.width, rows, Math.round(x - img.width), Math.round(y - rows * 2), img.width * 2, rows * 2);
-}

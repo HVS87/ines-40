@@ -42,6 +42,9 @@ export class Abracos extends Act {
     if (this.over) { this.over += dt; if (this.over > 3.4) this.done(); return; }
     let dir = (I.right ? 1 : 0) - (I.left ? 1 : 0);
     if (!dir && I.pointerX >= 0) { const d = I.pointerX * v.w - (this.x - this.cam(v)); if (Math.abs(d) > 10) dir = Math.sign(d); }
+    // sem ninguém a mexer durante muito tempo, a Inês vai andando sozinha (ninguém fica preso)
+    this.idle = dir || I.pointerX >= 0 ? 0 : (this.idle || 0) + dt;
+    if (this.idle > 20) dir = 1;
     this.moving = !!dir;
     if (dir) {
       this.x = clamp(this.x + dir * 88 * dt, 16, this.world() - 40);
@@ -181,12 +184,16 @@ export class Bolo extends Act {
     // a sala, com a banda (lá atrás, à direita) a tocar os parabéns
     interior(ctx, v, R, gy - 30, PALCO - Math.round(v.w * 0.8), top, t, { stageX: PALCO, beat: t * 2.3, on: this.state !== 'blow' });
     // os convidados atrás da mesa, aos saltinhos
-    const n = this.crowd.length;
-    this.crowd.forEach((f, i) => {
-      const x = Math.round(((i + 0.5) / n) * (v.w - 10)) + 5, hop = Math.round(Math.abs(Math.sin(t * 6 + i * 1.1)) * (this.state === 'wish' ? 5 : 2));
-      const img = f.stand[x < v.w / 2 ? 'r' : 'l'];
-      ctx.drawImage(img, x - 8, gy - 30 - img.height - hop);
-    });
+    const n = this.crowd.length, filas = n * 14 > v.w - 10 ? 2 : 1;
+    for (let fila = filas - 1; fila >= 0; fila--) {        // a fila de trás primeiro
+      this.crowd.forEach((f, i) => {
+        if (i % filas !== fila) return;
+        const k = Math.floor(i / filas), cols = Math.ceil(n / filas);
+        const x = Math.round(((k + 0.5 + fila * 0.5) / (cols + (filas - 1) * 0.5)) * (v.w - 10)) + 5, hop = Math.round(Math.abs(Math.sin(t * 6 + i * 1.1)) * (this.state === 'wish' ? 5 : 2));
+        const img = f.stand[x < v.w / 2 ? 'r' : 'l'];
+        ctx.drawImage(img, x - 8, gy - 30 - fila * 11 - img.height - hop);
+      });
+    }
     // a mesa e o bolo de dois andares
     const cx = Math.round(v.w / 2), cw = Math.min(150, v.w - 60), ty = gy - 26;
     R(cx - cw / 2 - 14, ty, cw + 28, 5, INK); R(cx - cw / 2 - 13, ty + 1, cw + 26, 3, ROSA); R(cx - cw / 2 - 8, ty + 5, 3, 21, INK); R(cx + cw / 2 + 5, ty + 5, 3, 21, INK);
@@ -206,7 +213,7 @@ export class Bolo extends Act {
     shadow(ctx, ix, gy, 14);
     ctx.drawImage(this.ines.stand.r, ix - 16 + lean, gy - 48, 32, 48);
     if (this.puff > 0) for (let k = 0; k < 4; k++) R(ix + 20 + k * 7 + Math.round((0.25 - this.puff) * 60), gy - 36 - (k % 2) * 2, 4, 1, '#ffffff');
-    if (this.state === 'blow') text(ctx, `${40 - this.out} VELAS`, cx, Math.max(top + 4, ty - 52), '#2f6f62', { align: 'center', scale: 2 });
-    if (this.state === 'wish') text(ctx, 'PARABÉNS INÊS!', cx, Math.max(top + 4, ty - 56), '#c0392b', { align: 'center', scale: v.w > 300 ? 2 : 1, shadow: '#ffffff' });
+    if (this.state === 'blow') text(ctx, 40 - this.out === 1 ? '1 VELA' : `${40 - this.out} VELAS`, cx, Math.max(top + 4, ty - 52), '#2f6f62', { align: 'center', scale: 2 });
+    if (this.state === 'wish') text(ctx, 'PARABÉNS, INÊS!', cx, Math.max(top + 4, ty - 56), '#c0392b', { align: 'center', scale: v.w > 300 ? 2 : 1, shadow: '#ffffff' });
   }
 }

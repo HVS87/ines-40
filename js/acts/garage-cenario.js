@@ -195,7 +195,7 @@ export function pistaBg(ctx, v, R, t, o) {
   }
   const nb = P ? 4 : 5;
   for (let i = 0; i < nb; i++) {
-    const x0 = Math.round(((i + 0.5) * w) / nb), c = LIGHTS[(i + b) % LIGHTS.length];
+    const x0 = Math.round(((i + 0.5) * w) / nb), c = LIGHTS[(((i + b) % LIGHTS.length) + LIGHTS.length) % LIGHTS.length];
     const sway = Math.sin(t * 1.3 + i * 2.1) * (P ? 40 : 60);
     R(x0 - 3, top - 2, 6, 4, INK); R(x0 - 2, top + 1, 4, 2, `rgb(${c})`);
     beam(R, x0, top + 3, x0 + sway, gy + 6, 4, 34, `rgba(${c},${(0.1 + pulse * 0.08).toFixed(2)})`);

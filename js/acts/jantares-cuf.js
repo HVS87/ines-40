@@ -93,7 +93,7 @@ export class JantaresCuf extends Act {
       }
       const dur = this.idx < 0 ? 0 : this.cur === SENHA ? 2.2 : DUR;
       if (this.st >= dur) {
-        if (this.cur === SENHA) { this.go('Enfermeira: «Senha A27? ... A27?! Ah, é a menina do dedo!»'); return; }
+        if (this.cur === SENHA) { this.go('Enfermeira: «Senha A27?... A27?! Ah, é a menina do dedo!»'); return; }
         this.idx++; this.st = 0; this.sfx('plim');
       }
     } else if (this.phase === 'ida') {

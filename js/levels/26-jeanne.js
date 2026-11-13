@@ -22,7 +22,7 @@ export default {
       ],
       lines: [
         'Lourenço: «Tomás, tu cobres o lado direito. Eu fico com o esquerdo.»',
-        'Tomás: «Lourenço... isto é um parto, não é um jogo de râguebi.»',
+        'Tomás: «Lourenço... isto é um parto, não é um jogo de rugby.»',
         'Parteira: «Menos tática e mais ação: ela vem aí!»',
       ],
     },

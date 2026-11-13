@@ -24,23 +24,7 @@ function tone(freq, at, dur, type = 'square', vol = 0.06, slideTo = 0, bus = sfx
   osc.stop(t0 + dur + 0.02);
 }
 
-// Um apito contínuo (sem o decair dos outros sons), como o do monitor cardíaco em linha reta.
-function hold(freq, dur, type = 'square', vol = 0.03, at = 0) {
-  const t0 = ac.currentTime + at;
-  const osc = ac.createOscillator(), gain = ac.createGain();
-  osc.type = type;
-  osc.frequency.setValueAtTime(freq, t0);
-  gain.gain.setValueAtTime(vol, t0);
-  gain.gain.setValueAtTime(vol, t0 + dur - 0.05);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-  osc.connect(gain);
-  gain.connect(sfxBus);
-  osc.start(t0);
-  osc.stop(t0 + dur + 0.02);
-}
-
 const SOUNDS = {
-  flatline: () => { hold(1000, 2.4, 'square', 0.028); hold(1000, 2.4, 'sine', 0.03); },
   plim: () => { tone(1568, 0, 0.32, 'triangle', 0.09); tone(2349, 0.03, 0.45, 'sine', 0.06); tone(3136, 0.06, 0.3, 'sine', 0.03); },
   catchWin: () => [784, 988, 1175, 1568, 1175, 1568, 1976, 2349].forEach((f, i) => tone(f, i * 0.09, 0.2, 'square', 0.05)),
   click: () => tone(660, 0, 0.06, 'square', 0.04),
@@ -236,7 +220,6 @@ function stopMusic(forget) {
 }
 
 export const audio = {
-  get muted() { return muted; },
   setMuted(m) { muted = !!m; },
 
   get musicMuted() { return musicMuted; },
@@ -322,7 +305,11 @@ export const audio = {
     else if (ac.resume) ac.resume().then(startMusic, () => {});
   },
 
+  // sons pedidos que não existem (para os testes)
+  unknown: new Set(),
+
   play(name) {
+    if (!SOUNDS[name]) this.unknown.add(String(name));
     if (muted || !ac || ac.state !== 'running') return;
     const s = SOUNDS[name];
     if (s) try { s(); } catch (err) { /* ignora */ }

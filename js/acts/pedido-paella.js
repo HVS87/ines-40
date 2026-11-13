@@ -23,7 +23,6 @@ export class Paella extends Act {
     this.wait = 0.9;
     this.cool = 0;             // a concha a ir buscar mais arroz
     this.drop = null;          // arroz a cair { x, y, ok }
-    this.good = 0;
     this.over = 0;
     this.cook = getCharacter('empregado');
     this.ines = getCharacter('ines', 'barco*');
@@ -61,7 +60,7 @@ export class Paella extends Act {
         const ok = Math.abs(plate - xs) <= WIN;
         this.drop = { x: xs, y: gy - 42, ok };
         if (ok) {
-          g.full = true; this.good++;
+          g.full = true;
           this.heart(1, xs, gy - 50);
           this.sfx('check');
           this.leave(0.25);

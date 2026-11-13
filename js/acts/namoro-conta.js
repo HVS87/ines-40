@@ -175,11 +175,11 @@ export class Conta extends Act {
     if (b.w > 100) {
       text(ctx, '1 PIZZA', b.x + 6, b.y + 14, '#6a6478'); text(ctx, '1 ESPARGUETE', b.x + 6, b.y + 22, '#6a6478');
       R(b.x + 5, b.y + 31, b.w - 10, 1, '#c9c9d8');
-      text(ctx, 'FALTAM ' + (this.total - this.paid), b.x + b.w - 6, b.y + 14, INK, { align: 'right' });
+      text(ctx, (this.total - this.paid === 1 ? 'FALTA ' : 'FALTAM ') + (this.total - this.paid), b.x + b.w - 6, b.y + 14, INK, { align: 'right' });
     } else {
       text(ctx, '1 PIZZA', b.x + 6, b.y + 16, '#6a6478'); text(ctx, '1 ESPARGUETE', b.x + 6, b.y + 25, '#6a6478');
       R(b.x + 5, b.y + 34, b.w - 10, 1, '#c9c9d8');
-      text(ctx, 'FALTAM ' + (this.total - this.paid), b.x + b.w / 2, b.y + 40, INK, { align: 'center' });
+      text(ctx, (this.total - this.paid === 1 ? 'FALTA ' : 'FALTAM ') + (this.total - this.paid), b.x + b.w / 2, b.y + 40, INK, { align: 'center' });
     }
     for (let i = 0; i < this.total; i++) { const s = this.slot(i, g); disc(ctx, s.x, s.y, 6, '#d8d3e6'); disc(ctx, s.x, s.y, 5, '#ffffff'); }
     // as coisas dos bolsos

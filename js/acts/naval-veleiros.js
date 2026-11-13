@@ -46,7 +46,7 @@ export class Veleiros extends Act {
       b.shot = true; this.flash = 0.14; this.sfx('click');
       this.foto = { dx, ok, t: 0, cor: b.cor, dir: b.dir };
       if (ok) { this.heart(1, g.sunX, g.sunY - 16); this.sfx('plim'); }
-      this.hint(ok ? ['Que fotografia! Vem aí outro veleiro.', 'Linda! Esta vai para a moldura.', 'Em cheio, com o sol na vela!', 'Perfeita! Parece um postal.', 'Mais uma para o álbum!'][this.n % 5] : (Math.abs(dx) < 30 ? 'Quase... a vela ficou ao lado do sol. Vem aí outro!' : 'Cedo ou tarde demais: espera que a vela tape o sol.'));
+      this.hint(ok ? ['Que fotografia! Vem aí outro veleiro.', 'Linda! Esta vai para a moldura.', 'Em cheio, com o sol na vela!', 'Perfeita! Parece um postal.', 'Mais uma para o álbum!'][this.n % 5] : (Math.abs(dx) < 30 ? 'Quase... a vela ficou ao lado do sol. Vem aí outro!' : 'Cedo ou tarde de mais: espera que a vela tape o sol.'));
     } else if (!b.shot && (b.x - g.sunX) * b.dir > 34) { b.shot = true; this.hint('Esse já passou... Vem aí outro: toca quando a vela tapar o sol.'); }
     if (b.x < -30 || b.x > v.w + 30) this.novo(v);
   }

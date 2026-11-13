@@ -13,8 +13,6 @@ export const save = {
       const raw = localStorage.getItem(SAVE_KEY);
       const old = raw ? JSON.parse(raw) : null;
       if (old && typeof old === 'object') {
-        // gravações antigas tinham um só botão de som, que desligava tudo
-        if (old.musicMuted === undefined) old.musicMuted = !!old.muted;
         this.data = Object.assign(defaults(), old);
       }
     } catch (err) { /* modo privado, armazenamento bloqueado ou gravação estragada */ }

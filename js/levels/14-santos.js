@@ -1,5 +1,5 @@
 // Nível 14 — «Santos»: os Santos Populares em Lisboa. Sardinhas e bifanas na banca, dançar
-// música pimba no arraial e, na noite de Santo António, o mega arraial na praceta em frente ao
+// música pimba no arraial e, na noite de Santo António, o mega-arraial na praceta em frente ao
 // Xafarix, com música ao vivo — onde a Mi e o Leal começaram a namorar. (O Lourenço está na
 // Austrália: só aparece no telefonema do fim.)
 import { Talk } from '../acts/base.js';
@@ -26,7 +26,7 @@ export default {
   id: 'santos',
   title: 'Santos',
   music: 'pimba',
-  story: 'A Inês adora os Santos Populares em Lisboa: arraiais na rua, dançar música pimba, beber imperiais, comer sardinhas e bifanas... A noite de Santo António acabava sempre num mega arraial na praceta em frente ao Xafarix, com música ao vivo. E foi numa dessas noites que a Mi e o Leal começaram a namorar.',
+  story: 'A Inês adora os Santos Populares em Lisboa: arraiais na rua, dançar música pimba, beber imperiais, comer sardinhas e bifanas... A noite de Santo António acabava sempre num mega-arraial na praceta em frente ao Xafarix, com música ao vivo. E foi numa dessas noites que a Mi e o Leal começaram a namorar.',
   help: 'Na banca, toca no ecrã (ou Espaço) quando a barra estiver na zona verde, para tirar a sardinha no ponto. A dançar, toca do lado da nota (ou usa as setas ← →) quando ela chegar ao círculo.',
   outro: 'Viva o Santo António!',
   acts: [
@@ -65,7 +65,7 @@ export default {
     },
     // o telefonema da Austrália (ver js/acts/call.js)
     {
-      act: Call, animal: 'emus', when: 'De madrugada, de manjerico debaixo do braço, o telefone toca...',
+      act: Call, animal: 'emus', when: 'De madrugada, com a Inês de manjerico debaixo do braço, o telefone toca...',
       lines: [
         'Inês: «Novidade da noite: a Mi e o Leal namoram! E guardei-te um manjerico.»',
         'Lourenço: «Sardinhas, bifanas, arraiais... Que saudades de Lisboa!»',

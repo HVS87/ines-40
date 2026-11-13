@@ -1,5 +1,5 @@
 // Cena de fundo do menu principal: a Inês ao pôr do sol sobre o Tejo, com balões de festa.
-import { getCharacter, getSprites } from '../sprites.js';
+import { getCharacter } from '../sprites.js';
 import { Particles } from '../fx.js';
 import { mkR, sky, disc, stars, hash } from '../draw.js';
 
@@ -10,7 +10,6 @@ export class MenuScene {
     this.game = game;
     this.music = 'menu';
     this.ines = getCharacter('ines', 'festa');
-    this.heart = getSprites().heart;
     this.fx = new Particles();
     this.t = 0;
     this.next = 0.5;

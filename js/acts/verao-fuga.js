@@ -51,7 +51,10 @@ export class VeraoFuga extends Act {
     else if (this.st === 'stir') { if (this.stT > 0.7) { this.setAvo('awake', 1.3 + Math.random() * 0.6); this.sfx('toc'); } }
     else if (this.st === 'awake') { if (this.stT > this.stDur) this.setAvo('sleep', 2 + Math.random() * 1.4); }
     else if (this.stT > 2.4) { this.setAvo('sleep', 3.2); this.hint(QUIETAS); }
-    if (this.st === 'grumble' || !I.actionPressed) return;
+    // sem ninguém a tocar durante muito tempo, vão avançando sozinhas com o avô a dormir (ninguém fica preso)
+    this.idle = I.actionPressed ? 0 : (this.idle || 0) + dt;
+    const sozinhas = this.idle > 20 && this.st === 'sleep';
+    if (this.st === 'grumble' || (!I.actionPressed && !sozinhas)) return;
     if (this.st === 'awake' && this.stT > 0.12) {
       // apanhadas: recuam e o próximo coração perde-se
       this.setAvo('grumble'); this.sfx('buzz');

@@ -197,7 +197,7 @@ export class Pesca extends Act {
       this.strain += dt;
       if (this.strain > 0.8) {                             // linha esticada demais: o peixe ganha terreno
         this.strain = 0; this.prog = Math.max(0, this.prog - 0.15); this.tens = 0.55; this.shake = 0.4; this.sfx('buzz');
-        this.hint('A linha está esticada demais! Larga um bocadinho.');
+        this.hint('A linha está esticada de mais! Larga um bocadinho.');
       }
     } else this.strain = Math.max(0, this.strain - dt);
     if (!this.helped && this.el > LIMITE) { this.helped = true; this.hint(this.sk.ajuda || 'Os amigos dão uma ajuda: já vem!'); }

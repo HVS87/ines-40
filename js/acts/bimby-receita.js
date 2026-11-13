@@ -14,7 +14,7 @@ const PIADAS = {
   meia: 'Bárbara: «Uma meia?! Isso não vem na receita!»',
   agrafador: 'Isabel: «O agrafador não, que ainda faz falta!»',
   rato: 'Bárbara: «O rato do computador não se come, Inês!»',
-  postit: 'Isabel: «Creme de post-its? Hmm... é melhor não.»',
+  postit: 'Isabel: «Creme de post-its? Hum... é melhor não.»',
 };
 const QUEDA = 2.3;      // segundos que uma coisa demora a cair
 const LIMITE = 55;      // ao fim deste tempo, as colegas tratam do resto

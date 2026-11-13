@@ -95,7 +95,7 @@ export default {
       lines: [
         'Lourenço: «Casa pronta! Quem é que encomendou a pizza?»',
         'Tomás: «Eu! E enquanto não acaba... uma partida na PlayStation?»',
-        'Lourenço: «Só uma! ... Está bem, à melhor de cinco.»',
+        'Lourenço: «Só uma!... Está bem, à melhor de cinco.»',
         'Inês: «Pizza e PlayStation: estes dois foram feitos um para o outro!»',
         'Inês: «A nossa casa. Os três. Não mudava nada!»',
         'Lourenço: «Nem a peça que sobrou?»',

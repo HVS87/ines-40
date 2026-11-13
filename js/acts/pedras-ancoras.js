@@ -23,7 +23,7 @@ export class PedrasAncoras extends Act {
     this.fam = familia();
     this.tom = getCharacter('tomasc');
     this.ix = v.w * 0.3; this.face = 1; this.walk = 0; this.moving = false;
-    this.tw = 0; this.onda = -1; this.conchas = []; this.n = 0; this.fase = 'jogo'; this.tf = 0; this.flash = 0;
+    this.tw = 0; this.conchas = []; this.n = 0; this.fase = 'jogo'; this.tf = 0; this.flash = 0;
     this.hint('Arrasta o dedo (ou usa as setas) e apanha as conchas antes de a onda as levar!');
   }
 
@@ -56,7 +56,6 @@ export class PedrasAncoras extends Act {
         // a onda leva as conchas que ficaram e, ao recuar, deixa outras
         if (this.conchas.some((c) => !c.got)) this.sfx('slurp');
         this.conchas = [];
-        this.onda = k;
         if (k >= ONDAS.length) { this.fase = 'foto'; this.tf = 0; this.hint(TESOURO); this.sfx('kiss'); return; }
         const n = ONDAS[k], lado = this.ix > v.w / 2 ? -1 : 1, lim = Math.min(150, v.w * 0.42);
         const x1 = clamp(this.ix + lado * (45 + hash(k * 3.7) * (lim - 45)), 18, v.w - 18);

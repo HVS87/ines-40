@@ -1,5 +1,8 @@
 // Lista ordenada dos níveis: um ficheiro por capítulo da história, pela ordem em que se jogam.
 // Cada ficheiro é carregado à parte: se um falhar, o jogo continua com um aviso nesse nível.
+// A lista LEVELS começa vazia e fica cheia quando a promessa `ready` se cumpre; o js/main.js
+// espera por ela antes de arrancar. (Não se usa «await» de topo: em versões antigas do Safari, um
+// módulo assim, importado por vários outros, pode nunca chegar a arrancar.)
 import { Talk } from '../acts/base.js';
 
 const FILES = [
@@ -17,10 +20,11 @@ const missing = (file, err) => ({
   acts: [{ act: Talk, lines: ['Este capítulo ainda está em construção.'] }],
 });
 
-export const LEVELS = await Promise.all(FILES.map((file) => import(`./${file}.js`).then(
+export const LEVELS = [];
+export const ready = Promise.all(FILES.map((file) => import(`./${file}.js`).then(
   (m) => m.default,
   (err) => { console.error('nível ' + file, err); return missing(file, err); },
-)));
+))).then((list) => { LEVELS.push(...list); return LEVELS; });
 
 // Etiqueta de cada nível: "Nível 3", ...
 export const levelLabel = (index) => 'Nível ' + (index + 1);

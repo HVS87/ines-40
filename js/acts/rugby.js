@@ -15,7 +15,7 @@ function bancada(R, x0, bw, by, rows, t, festa, k0 = 0) {
     const y = by - 2 - r * 8;
     R(x0, y, bw, 1, '#6a6f80');
     for (let i = 0, x = x0 + 4 + (r % 2) * 4; x < x0 + bw - 7; x += 9, i++) {
-      const k = k0 + i + r * 31;
+      const k = Math.abs(k0 + i + r * 31);
       if (hash(k * 1.3 + 0.7) < 0.18) continue;          // lugares vazios
       const up = festa ? Math.round(Math.abs(Math.sin(t * 7 + k)) * 2) : 0;
       R(x - 1, y - 3 - up, 7, 3, ROUPAS[k % 5]);
@@ -260,7 +260,7 @@ export class Pontape extends Act {
           this.hint(this.good ? 'Apito final! Vitória da Agronomia, com os pontapés do Tomás.' : 'Apito final! Os pontapés não entraram, mas o jogo foi um espetáculo.');
         } else {
           this.fase = 'mira'; this.ft = 0; this.pos = 0; this.dir = 1;
-          this.hint('Mais um ensaio da Agronomia! Toca com o marcador entre os postes.');
+          this.hint('Mais um ensaio da Agronomia! Toca quando o marcador estiver entre os postes.');
         }
       }
     } else if (this.ft > 2.6 || (this.ft > 1.2 && I.actionPressed)) this.done();

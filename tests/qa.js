@@ -2,7 +2,10 @@
 // http://localhost:8090/?qa) e os testes correm sozinhos, com o resultado num painel e em
 // window.__qa ({ results, bad, errors, done }).
 //
-//   ?qa&only=<nome>   corre só um grupo (dados, jogo, fluxo, textos, fontes, offline, monkey)
+//   ?qa&only=<nome>   corre só um grupo (dados, jogo, textos, ausente, fluxo, toque, teclado, app,
+//                     fontes, musica, monkey)
+//   ?qa&report=http://localhost:8092/&tag=nome   no fim, envia o resultado para esse endereço
+//                     (só para este computador; é o que usa o tests/matrix.mjs)
 //   ?qa&seed=7        semente do teste de toques ao acaso (monkey)
 //   ?qa&touch         joga em modo tátil (por omissão, teclado)
 //
@@ -13,10 +16,12 @@
 //   3. Textos: tudo o que os níveis mostram (histórias, instruções e falas), sem marcadores por
 //      substituir, sem palavras de PT-BR, e a caber no ecrã.
 //   4. Menus, gravação do progresso, ficheiros para jogar sem rede e toques ao acaso.
+//   5. Ecrã tátil (toques, dois dedos, arrastar, gestos do sistema, tamanho dos botões), teclado,
+//      instalação como app (Android e iPhone) e dados cruzados (personagens, roupas e sons pedidos).
 // Atenção: os testes apagam o progresso guardado neste browser.
 import { LEVELS, levelLabel } from '../js/levels/index.js';
 import { SAVE_KEY } from '../js/config.js';
-import { seen } from '../js/sprites.js';
+import { seen, missing } from '../js/sprites.js';
 
 const STEP = 1 / 60;
 const results = [];
@@ -64,7 +69,11 @@ function frames(n, bot = true) {
 }
 
 // ---------- Textos ----------
-const BR = /(^|[^a-záéíóúâêôãõçA-Z])(voc[êe]|tela|celular|[ôo]nibus|trem|banheiro|geladeira|café da manhã|galera|grama|gol|equipe|contato|registro|usuário|mouse|deletar|acessar|aterrissar|a gente vai|pra|tá bom|cadê|moça|garot[oa]s?|xícara|suco|sorvete|fato de que|est[áa] (fazendo|indo|vindo|dando|ficando|querendo)|estou [a-z]+ndo|est[ãa]o [a-z]+ndo)(?![a-záéíóúâêôãõç])/i;
+const BR = /(^|[^a-záéíóúâêôãõçA-Z])(voc[êe]|tela|celular|[ôo]nibus|trem|banheiro|geladeira|café da manhã|galera|grama|gol|equipe|contato|registro|usuário|mouse|deletar|acessar|aterrissar|a gente vai|pra|tá bom|cadê|moça|garot[oa]s?|xícara|suco|sorvete|de fato|fato de que|bebê|econômic[oa]s?|gênero|esporte|caminhão|sanduíche|pedágio|est[áa] (fazendo|indo|vindo|dando|ficando|querendo)|estou [a-z]+ndo|est[ãa]o [a-z]+ndo)(?![a-záéíóúâêôãõç])/i;
+// grafias anteriores ao Acordo Ortográfico de 1990 (em Portugal já não se usam)
+const PRE_AO = /(^|[^a-záéíóúâêôãõç])(ac[çc][ãõ][oe]s?|actua\w*|acto[s]?|óptim\w*|direc[çt]\w*|electr\w*|objec[çt]\w*|adop[çt]\w*|excep[çt]\w*|baptis\w*|baptiz\w*|projec[çt]\w*|colec[çt]\w*|correc[çt]\w*|afect\w*|espectácul\w*|recep[çt]\w*|concep[çt]\w*|percep[çt]\w*|aspecto\w*|respectiv\w*|perspectiv\w*|Egipto|activ\w*|factur\w*|lectiv\w*|selec[çt]\w*)(?![a-záéíóúâêôãõç])/i;
+// nada do jogo que serviu de base pode aparecer neste
+const ANTIGO = /Lu[ií]sa|S[ée]rgio|luisa-e-sergio/i;
 const BAD_TOKENS = /undefined|NaN|\[object|\{\w*\}|\$\{|null\b/;
 
 function collectStrings(obj, out, depth = 0) {
@@ -80,6 +89,9 @@ function textProblems(s) {
   const out = [];
   if (BAD_TOKENS.test(s)) out.push('marcador por substituir');
   if (BR.test(s)) out.push('PT-BR: ' + BR.exec(s)[2]);
+  if (PRE_AO.test(s)) out.push('grafia antiga: ' + PRE_AO.exec(s)[2]);
+  if (ANTIGO.test(s)) out.push('nome do jogo antigo: ' + ANTIGO.exec(s)[0]);
+  if (/\s[,.;:!?»]|«\s|\s»/.test(s.replace(/\.\.\./g, '…').replace(/ : /g, ':'))) out.push('espaço antes de pontuação');
   if ((s.match(/«/g) || []).length !== (s.match(/»/g) || []).length) out.push('aspas «» desencontradas');
   if (/  /.test(s)) out.push('dois espaços');
   if (/[\u0000-\u0008�]|Ã©|Ã£|Ã§/.test(s)) out.push('carateres estragados');
@@ -173,7 +185,8 @@ async function testGame() {
 // Joga-se cada um desses níveis sem os telefonemas e vê-se que personagens foram pedidas.
 async function testAway() {
   const bad = [];
-  for (let i = 7; i <= 13; i++) {
+  const de = LEVELS.findIndex((L) => L.id === 'croco'), ate = LEVELS.findIndex((L) => L.id === 'santos');
+  for (let i = de; i <= ate; i++) {
     const L = LEVELS[i];
     if (!L || L.broken) continue;
     const acts = L.acts;
@@ -187,7 +200,7 @@ async function testAway() {
     await tick();
   }
   check('níveis 8 a 14: o Lourenço só aparece ao telefone', !bad.length, bad.join(', '));
-  check('níveis 10 a 14 acabam com um telefonema da Austrália', [9, 10, 11, 12, 13].every((i) => LEVELS[i] && (LEVELS[i].acts || []).some((a) => a.act.name === 'Call')));
+  check('níveis 10 a 14 acabam com um telefonema da Austrália', ['bimby', 'pedras', 'xafarix', 'jantares', 'santos'].every((id) => ((LEVELS.find((L) => L.id === id) || {}).acts || []).some((a) => a.act.name === 'Call')));
 }
 
 // Toca cada faixa «em seco» e mede-a: nenhuma pode ficar muda nem distorcer (pico acima de 1).
@@ -248,7 +261,7 @@ function testFlow() {
   game.save.write();
   game.debug = keep;
   // recomeçar a meio de um nível volta ao princípio
-  game.startLevel(9);
+  game.startLevel(LEVELS.findIndex((L) => L.id === 'bimby'));
   game.ui.act('start');
   frames(600);
   game.scene.togglePause();
@@ -271,6 +284,194 @@ function testFlow() {
   game.goMenu();
 }
 
+// ---------- Dados cruzados: tudo o que os níveis pedem tem de existir ----------
+function testCross() {
+  const semBoneco = [...missing];
+  check('dados cruzados: todas as personagens e roupas pedidas existem no elenco', !semBoneco.length, semBoneco.join(', '));
+  const semSom = [...game.audio.unknown];
+  check('dados cruzados: todos os sons pedidos existem', !semSom.length, semSom.join(', '));
+  game.goMenu();
+}
+
+// ---------- Ecrã tátil: toques, gestos e tamanho dos botões ----------
+async function testTouch(mobile) {
+  const cv = document.getElementById('game'), era = I.touch;
+  if (typeof PointerEvent !== 'function') { check('toque: o browser tem eventos de ponteiro', false, 'sem PointerEvent'); return; }
+  const PE = (type, id, fx, fy, extra = {}) => {
+    const r = cv.getBoundingClientRect();
+    const ev = new PointerEvent(type, { pointerId: id, pointerType: 'touch', isPrimary: id === 11, button: 0, buttons: type === 'pointerup' ? 0 : 1, bubbles: true, cancelable: true, clientX: r.left + r.width * fx, clientY: r.top + r.height * fy, ...extra });
+    cv.dispatchEvent(ev);
+    return ev;
+  };
+  const perto = (a, b) => Math.abs(a - b) < 0.02;
+  const impedido = (alvo, tipo) => { const ev = new Event(tipo, { bubbles: true, cancelable: true }); alvo.dispatchEvent(ev); return ev.defaultPrevented; };
+  const toca = (el) => { for (const t of ['pointerdown', 'pointerup']) el.dispatchEvent(new PointerEvent(t, { pointerId: 21, pointerType: 'touch', bubbles: true, cancelable: true })); el.click(); };
+
+  // 1. no menu, tocar no fundo não mexe no jogo
+  game.goMenu();
+  I.reset();
+  PE('pointerdown', 11, 0.5, 0.5);
+  const quieto = !I.action && !I.actionPressed;
+  PE('pointerup', 11, 0.5, 0.5);
+  check('toque: no menu, tocar no fundo não mexe no jogo', quieto);
+
+  // 2. os botões respondem ao toque: menu → níveis → voltar → nível → pausa → continuar
+  toca($('[data-action="levels"]'));
+  const lista = game.ui.current === 'levels';
+  toca($('[data-screen="levels"] [data-action="back"]'));
+  const volta = game.ui.current === 'menu';
+  toca($('[data-action="levels"]'));
+  toca($('#level-list .level-btn'));
+  const historia = game.ui.current === 'story' && game.scene.level.id === LEVELS[0].id;
+  toca($('[data-action="start"]'));
+  const joga = document.body.classList.contains('playing') && game.ui.current === null;
+  toca($('[data-action="pause"]'));
+  const pausa = game.ui.current === 'pause' && game.scene.paused;
+  toca($('[data-action="resume"]'));
+  const retoma = game.ui.current === null && !game.scene.paused;
+  check('toque: os botões respondem (níveis, voltar, escolher nível, começar, pausa, continuar)', lista && volta && historia && joga && pausa && retoma, JSON.stringify({ lista, volta, historia, joga, pausa, retoma }));
+
+  // 3. tocar, manter, arrastar e largar na área de jogo
+  I.setTouch(false);
+  I.reset(); I.endFrame();
+  window.dispatchEvent(new Event('touchstart'));
+  const modo = I.touch;
+  I.setTouch(false);
+  const d = PE('pointerdown', 11, 0.25, 0.75);
+  check('toque: tocar na área de jogo é a ação, na posição certa, e passa a modo tátil', modo && I.action && I.actionPressed && I.touch && perto(I.pointerX, 0.25) && perto(I.pointerY, 0.75) && d.defaultPrevented,
+    JSON.stringify({ modo, a: I.action, p: I.actionPressed, t: I.touch, x: I.pointerX, y: I.pointerY, dp: d.defaultPrevented }));
+  PE('pointermove', 11, 0.8, 0.3);
+  const arrasta = perto(I.pointerX, 0.8) && perto(I.pointerY, 0.3) && I.action;
+  I.endFrame();
+  check('toque: arrastar segue o dedo e manter premido não repete o toque', arrasta && I.action && !I.actionPressed);
+  PE('pointerdown', 12, 0.5, 0.5);
+  PE('pointerup', 11, 0.8, 0.3);
+  const dois = I.action;
+  PE('pointerup', 12, 0.5, 0.5);
+  check('toque: com dois dedos, só larga quando saem os dois', dois && !I.action && I.pointerX === -1 && I.pointerY === -1);
+  PE('pointerdown', 13, 0.5, 0.5); PE('pointercancel', 13, 0.5, 0.5);
+  const cancela = !I.action;
+  PE('pointerdown', 14, 0.5, 0.5); window.dispatchEvent(new Event('blur'));
+  const sai = !I.action, parou = game.scene.paused && game.ui.current === 'pause';
+  PE('pointerup', 14, 0.5, 0.5);
+  check('toque: um toque interrompido (chamada, gesto do sistema) larga a ação; sair da página põe o jogo em pausa', cancela && sai && parou, JSON.stringify({ cancela, sai, parou }));
+  if (game.scene.paused) game.scene.togglePause();
+  PE('pointerdown', 15, 0.5, 0.5); PE('pointermove', 15, 1.4, -0.3);
+  const limite = I.pointerX === 1 && I.pointerY === 0;
+  PE('pointerup', 15, 1.4, -0.3);
+  check('toque: arrastar para fora do ecrã não dá posições impossíveis', limite, `${I.pointerX}, ${I.pointerY}`);
+  I.reset(); I.endFrame();
+  PE('pointerdown', 16, 0.5, 0.5, { pointerType: 'mouse', button: 2, buttons: 2 });
+  const direito = !I.action;
+  PE('pointerup', 16, 0.5, 0.5, { pointerType: 'mouse', button: 2 });
+  PE('pointerdown', 17, 0.5, 0.5, { pointerType: 'pen' });
+  const caneta = I.action;
+  PE('pointerup', 17, 0.5, 0.5, { pointerType: 'pen' });
+  check('toque: caneta conta como toque; botão direito do rato não', direito && caneta);
+
+  // 4. gestos do sistema: sem zoom, sem menu de contexto, sem arrastar a página
+  const gestos = ['dblclick', 'contextmenu', 'gesturestart', 'touchmove'].filter((t) => !impedido(cv, t));
+  check('gestos: toque duplo, toque longo, pinça e arrastar não mexem na página', !gestos.length, gestos.join(', '));
+  game.goMenu();
+  game.ui.act('levels');
+  const rol = document.querySelector('[data-screen="levels"] .scroll'), item = rol && rol.querySelector('button');
+  check('gestos: a lista de níveis desliza com o dedo', !!item && !impedido(item, 'touchmove') && /auto|scroll/.test(getComputedStyle(rol).overflowY));
+  const cb = getComputedStyle(document.body), cc = getComputedStyle(cv);
+  check('CSS tátil: sem seleção de texto nem gestos do browser por cima do jogo', [cb.touchAction, cc.touchAction].includes('none') && [cb.userSelect, cb.webkitUserSelect].includes('none'), `${cb.touchAction}/${cc.touchAction}/${cb.userSelect}`);
+
+  // 5. tamanho e posição dos botões em todos os ecrãs
+  const pequenos = [], fora = [], minimo = mobile ? 40 : 24;
+  const mede = (onde) => {
+    for (const b of document.querySelectorAll('button, a[href], [data-action]')) {
+      const cs = getComputedStyle(b), r = b.getBoundingClientRect(), ecra = b.closest('.screen');
+      if (cs.display === 'none' || cs.visibility === 'hidden' || !r.width || !r.height || b.closest('[hidden]') || (ecra && !ecra.classList.contains('active'))) continue;
+      const nome = (b.id || b.dataset.action || b.textContent.trim()).slice(0, 22);
+      if (Math.min(r.width, r.height) < minimo) pequenos.push(`${onde}: ${nome} ${Math.round(r.width)}x${Math.round(r.height)}`);
+      const rola = !!b.closest('.scroll');
+      if (r.left < -1 || r.right > innerWidth + 1 || (!rola && (r.top < -1 || r.bottom > innerHeight + 1))) fora.push(`${onde}: ${nome}`);
+    }
+  };
+  I.setTouch(mobile);
+  game.goMenu(); mede('menu');
+  game.ui.act('levels'); mede('níveis');
+  game.ui.act('back'); game.ui.act('howto'); mede('como jogar');
+  game.ui.act('back'); game.ui.showInstallHelp(game.installer.steps()); mede('instalar');
+  const passos = game.installer.steps(), ua = navigator.userAgent;
+  const sistema = /iPad|iPhone|iPod/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : (/Safari/.test(ua) && !/Chrome|Chromium|Edg|OPR/.test(ua)) ? 'Safari' : 'computador';
+  check(`instalar: instruções certas para este dispositivo (${sistema})`, passos.lead.includes(sistema) && passos.steps.length >= 2 && [passos.lead, ...passos.steps].every((x) => !textProblems(x).length), passos.lead);
+  game.startLevel(LEVELS.findIndex((L) => L.id === 'tomas')); mede('história');
+  game.ui.act('start'); mede('nível');
+  game.scene.togglePause(); mede('pausa');
+  game.scene.togglePause();
+  for (let n = 0; n < 60 * 400 && game.ui.current !== 'complete'; n += 60) frames(60);
+  if (game.ui.current === 'complete') mede('nível concluído'); else fora.push('não cheguei ao ecrã de nível concluído');
+  check(`botões: todos com pelo menos ${minimo} px (para o dedo)`, !pequenos.length, [...new Set(pequenos)].slice(0, 8).join(' | '));
+  check('botões: todos dentro do ecrã, em todos os menus', !fora.length, [...new Set(fora)].slice(0, 8).join(' | '));
+  I.setTouch(era);
+  game.goMenu();
+}
+
+// ---------- Teclado ----------
+function testKeys() {
+  const era = I.touch, tecla = (type, code) => { const ev = new KeyboardEvent(type, { code, key: code, bubbles: true, cancelable: true }); window.dispatchEvent(ev); return ev; };
+  game.startLevel(0);
+  game.ui.act('start');
+  I.reset(); I.endFrame();
+  I.setTouch(true);
+  const sp = tecla('keydown', 'Space');
+  const acao = I.action && I.actionPressed && !I.touch && sp.defaultPrevented;
+  tecla('keyup', 'Space');
+  tecla('keydown', 'ArrowLeft'); const esq = I.left; tecla('keyup', 'ArrowLeft');
+  tecla('keydown', 'ArrowRight'); const dir = I.right; tecla('keyup', 'ArrowRight');
+  tecla('keydown', 'ArrowUp'); const cima = I.up; tecla('keyup', 'ArrowUp');
+  tecla('keydown', 'ArrowDown'); const baixo = I.down; tecla('keyup', 'ArrowDown');
+  check('teclado: Espaço é a ação, as setas mexem e o jogo sai do modo tátil', acao && esq && dir && cima && baixo && !I.left && !I.right && !I.up && !I.down && !I.action, JSON.stringify({ acao, esq, dir, cima, baixo }));
+  tecla('keydown', 'KeyP');
+  const p = game.scene.paused && game.ui.current === 'pause';
+  tecla('keydown', 'Escape');
+  const esc = !game.scene.paused && game.ui.current === null;
+  const mus = game.audio.musicMuted;
+  document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyM', key: 'm', bubbles: true, cancelable: true }));
+  const m = game.audio.musicMuted !== mus;
+  if (m) game.ui.act('music');
+  check('teclado: P pausa, Esc retoma e M liga/desliga a música', p && esc && m, JSON.stringify({ p, esc, m }));
+  I.setTouch(era);
+  game.scene.togglePause();
+  game.goMenu();
+}
+
+// ---------- Instalar como app, som e gravação (o que cada browser tem de ter) ----------
+async function testApp() {
+  const vp = (document.querySelector('meta[name=viewport]') || {}).content || '';
+  check('página: viewport de telemóvel (sem zoom, até às margens do ecrã) e língua pt-PT', /width=device-width/.test(vp) && /viewport-fit=cover/.test(vp) && /user-scalable=no/.test(vp) && document.documentElement.lang === 'pt-PT', vp);
+  const man = document.querySelector('link[rel=manifest]'), maca = document.querySelector('link[rel="apple-touch-icon"]');
+  let ok = false, info = '';
+  try {
+    const m = await (await fetch(man.href)).json();
+    const urls = [maca.href, ...m.icons.map((i) => new URL(i.src, man.href).href)];
+    const pngs = await Promise.all(urls.map((u) => fetch(u).then((r) => r.ok)));
+    ok = !!m.start_url && /fullscreen|standalone/.test(m.display) && m.orientation === 'any' && m.lang === 'pt-PT' && m.icons.some((i) => /512/.test(i.sizes)) && m.icons.some((i) => /192/.test(i.sizes)) && m.icons.some((i) => i.purpose === 'maskable') && pngs.every(Boolean);
+    info = JSON.stringify({ display: m.display, orientation: m.orientation, pngs });
+    if (ANTIGO.test(JSON.stringify(m))) { ok = false; info = 'nome do jogo antigo no manifesto'; }
+  } catch (err) { info = String(err); }
+  check('app: manifesto e ícones para instalar no Android e no iPhone', ok && !!document.querySelector('meta[name="apple-mobile-web-app-capable"]') && !!document.querySelector('meta[name="mobile-web-app-capable"]'), info);
+  check('som: o browser tem AudioContext (ou o do Safari antigo)', !!(window.AudioContext || window.webkitAudioContext));
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+    let reg = null;
+    for (let i = 0; i < 40 && !reg; i++) { reg = await navigator.serviceWorker.getRegistration().catch(() => null); if (!reg) await new Promise((r) => setTimeout(r, 100)); }
+    check('sem rede: o service worker fica registado (o jogo abre sem ligação)', !!reg);
+  }
+  let grava = false;
+  try { localStorage.setItem('qa-x', '1'); grava = localStorage.getItem('qa-x') === '1'; localStorage.removeItem('qa-x'); } catch (err) { /* sem gravação */ }
+  check('gravação: o browser deixa guardar o progresso', grava);
+  // a área de jogo cobre o ecrã (telemóvel/tablet) ou a moldura (computador), sem barras de deslocamento
+  const c = document.getElementById('game').getBoundingClientRect(), L = game.layout, v = game.view;
+  const cobre = Math.abs(c.left - L.x) < 1 && Math.abs(c.top - L.y) < 1 && c.width >= L.w - 0.5 && c.height >= L.h - 0.5 && c.width < L.w + v.k && c.height < L.h + v.k;
+  const semBarras = document.documentElement.scrollWidth <= innerWidth && document.documentElement.scrollHeight <= innerHeight;
+  const medidas = v.portrait ? (v.w >= 200 && v.w <= 340 && v.h >= 300) : (v.h >= 150 && v.h <= 300 && v.w >= 280);
+  check(`ecrã: a área de jogo cobre ${Math.round(L.w)}x${Math.round(L.h)} sem barras, em ${v.w}x${v.h} píxeis de jogo`, cobre && semBarras && medidas, JSON.stringify({ cobre, semBarras, medidas, k: v.k }));
+}
+
 // ---------- Código-fonte e ficheiros para jogar sem rede ----------
 async function testSources() {
   const files = performance.getEntriesByType('resource').map((r) => new URL(r.name)).filter((u) => u.origin === location.origin && /\.js$/.test(u.pathname) && !/\/tests\//.test(u.pathname)).map((u) => u.pathname.replace(/^.*?\/js\//, 'js/'));
@@ -283,9 +484,19 @@ async function testSources() {
     const src = await (await fetch(f)).text();
     if (/[\u0000-\u0008�]/.test(src)) bad.push(f + ': carateres estragados');
     if (/console\.log|debugger/.test(src)) bad.push(f + ': console.log');
+    if (ANTIGO.test(src)) bad.push(f + ': nome do jogo antigo');
     if (/fillText|\.font\s*=/.test(src)) bad.push(f + ': texto fora das letras de píxeis');
   }
-  check('código: sem restos de depuração nem carateres estragados', !bad.length, bad.slice(0, 8).join(' | '));
+  for (const f of ['index.html', 'css/style.css', 'sw.js', 'manifest.webmanifest']) {
+    const src = await (await fetch(f)).text();
+    if (ANTIGO.test(src)) bad.push(f + ': nome do jogo antigo');
+    if (/[\u0000-\u0008�]/.test(src)) bad.push(f + ': carateres estragados');
+  }
+  check('código: sem restos de depuração, carateres estragados nem nomes do jogo antigo', !bad.length, bad.slice(0, 8).join(' | '));
+  // o que a página mostra (menus e «Como jogar») também passa pela revisão de texto
+  const pagina = [...document.querySelectorAll('.screen h1, .screen h2, .screen p, .screen li, .screen button, noscript')].map((el) => el.textContent.trim().replace(/\s+/g, ' ')).filter(Boolean);
+  const erros = pagina.flatMap((s) => textProblems(s).map((p) => `${p} ⟶ ${s.slice(0, 50)}`));
+  check(`textos dos menus (${pagina.length}): sem PT-BR, grafias antigas nem nomes do jogo antigo`, pagina.length > 20 && !erros.length, erros.slice(0, 6).join(' | '));
 }
 
 // ---------- Toques e teclas ao acaso ----------
@@ -346,7 +557,11 @@ export async function run(g) {
     if (!only || only === 'jogo') await testGame();
     if (!only || only === 'jogo' || only === 'textos') testShown();
     if (!only || only === 'ausente') await testAway();
+    if (!only || only === 'jogo') testCross();
     if (!only || only === 'fluxo') testFlow();
+    if (!only || only === 'toque') await testTouch(q.has('touch'));
+    if (!only || only === 'teclado') testKeys();
+    if (!only || only === 'app') await testApp();
     if (!only || only === 'fontes' || only === 'offline') await testSources();
     if (!only || only === 'musica') await testMusic();
     if (!only || only === 'monkey') await testMonkey(seed);
@@ -361,5 +576,10 @@ export async function run(g) {
   const bad = results.filter((r) => !r.ok);
   window.__qa.bad = bad.map((r) => r.name + (r.info ? ' — ' + r.info : ''));
   window.__qa.done = true;
+  // relatório para o tests/matrix.mjs (só para este computador)
+  const rep = q.get('report');
+  if (rep && /^http:\/\/(localhost|127\.0\.0\.1):\d+\//.test(rep)) {
+    fetch(rep, { method: 'POST', body: JSON.stringify({ tag: q.get('tag') || '', ua: navigator.userAgent, size: `${innerWidth}x${innerHeight}`, dpr: devicePixelRatio, view: `${game.view.w}x${game.view.h}`, touch: q.has('touch'), total: results.length, bad: window.__qa.bad, errors }) }).catch(() => {});
+  }
   log(`\n${results.length - bad.length}/${results.length} verificações passaram.` + (bad.length ? '\nFALHAS:\n' + window.__qa.bad.join('\n') : ''));
 }

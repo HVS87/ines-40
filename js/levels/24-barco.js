@@ -8,7 +8,7 @@ export default {
   id: 'barco',
   title: 'Passeios de Barco',
   music: 'mar',
-  story: 'A Inês adora os passeios de barco com os amigos. Alugam um barco e vai o Pi ao leme, que é quem tem a carta de marinheiro; a bordo seguem também o Carlos, a Mi, o Leal e o Lourenço. Sair da marina, pescar, ancorar numa enseada... dias em grande.',
+  story: 'A Inês adora os passeios de barco com os amigos. Alugam um barco e ao leme vai o Pi, que é quem tem a carta de marinheiro; a bordo seguem também o Carlos, a Mi, o Leal e o Lourenço. Sair da marina, pescar, ancorar numa enseada... dias em grande.',
   help: 'A navegar: arrasta o dedo para cima e para baixo (ou setas ↑ ↓). Na pesca: toca (ou Espaço) para lançar e quando a boia afundar; depois mantém premido para puxar. Nos mergulhos: toca no momento certo.',
   outro: 'Dias em grande, no mar e com os amigos!',
   ending: 'Mar, amigos e ninguém com pressa de voltar.',

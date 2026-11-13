@@ -4,7 +4,7 @@
 import { INK, hash, sky, disc, sign, person, shadow } from '../draw.js';
 import { flip } from '../sprites.js';
 
-export const PAL_X = 25, PAL_W = 470;    // onde começa e quanto mede o palácio, em píxeis de mundo
+export const PAL_X = 25;    // onde começa o palácio, em píxeis de mundo
 const WALL = '#eaa9a0', WALL_S = '#d48e86', STONE = '#f4e8d2', STONE_S = '#cdb898';
 const ROOF = '#b5523a', ROOF_S = '#8e3d2a', GLASS = '#34466e';
 

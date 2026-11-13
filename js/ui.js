@@ -54,7 +54,7 @@ export class UI {
     if (b) b.focus();
   }
 
-  // inLevel: mostra o HUD · playing: mostra os controlos táteis e capta as teclas de jogo
+  // inLevel: mostra o HUD · playing: a área de jogo responde a toques e teclas
   setLevelMode(inLevel, playing) {
     if (!inLevel) this.setHint('');
     document.body.classList.toggle('in-level', inLevel);
@@ -78,11 +78,13 @@ export class UI {
   }
 
   // A jogar com teclado, «Toca para...» passa a «Carrega em Espaço para...» (e também «Toca quando...»,
-  // «Toca a um ritmo...»). Frases como «Toca nos presentes (ou usa as setas...)» já dizem as teclas.
+  // «Toca só quando...», «Toca a um ritmo...», «Toca muitas vezes...»). Frases como «Toca nos
+  // presentes (ou usa as setas...)» já dizem as teclas.
   local(text) {
     if (this.game.input.touch) return text;
     return text
-      .replace(/\b([Tt])oca (para|quando|a um ritmo)\b/g, (m, t, rest) => (t === 'T' ? 'Carrega' : 'carrega') + ' em Espaço ' + rest)
+      .replace(/\b([Tt])oca (para|quando|só quando|mesmo quando|a um ritmo)\b/g, (m, t, rest) => (t === 'T' ? 'Carrega' : 'carrega') + ' em Espaço ' + rest)
+      .replace(/\b([Tt])oca muitas vezes\b/g, (m, t) => (t === 'T' ? 'Carrega' : 'carrega') + ' muitas vezes em Espaço')
       .replace(/\bToca-lhe!/g, 'Carrega em Espaço!');
   }
 

@@ -29,7 +29,7 @@ export default {
         'Inês: «Ufa... correu tudo bem. E ninguém deu pelo projetor!»',
         'Bárbara: «Tudo bem? Correu lindamente, como sempre!»',
         'Trrrim, trrrim! O telefone da Inês...',
-        'Inês: «Estou? ... A próxima convenção? Outra viagem? Claro que sim!»',
+        'Inês: «Estou?... A próxima convenção? Outra viagem? Claro que sim!»',
         'Isabel: «Nem tirou o auricular... e lá vai ela fazer a mala outra vez.»',
       ],
     },

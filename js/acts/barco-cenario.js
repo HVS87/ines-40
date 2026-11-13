@@ -1,7 +1,7 @@
 // Cenários dos passeios de barco (nível 24): a costa vista do mar, a enseada, a lancha alugada
 // (desenhada à escala u = 1 ou 2) e a «pele» da pesca no mar português.
 import { INK, hash, sky } from '../draw.js';
-import { tom, casco } from './pesca.js';
+import { casco } from './pesca.js';
 
 function nuvem(R, x, y, w, c) {
   R(x, y, w, 4, c); R(x + 3, y - 3, w - 8, 3, c); R(x + Math.round(w * 0.3), y - 5, Math.round(w * 0.35), 2, c);

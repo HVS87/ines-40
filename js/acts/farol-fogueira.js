@@ -96,7 +96,7 @@ export class FarolFogueira extends Act {
   }
 
   draw(ctx, v, R) {
-    const L = this.lay(v), { P, cx, fy } = L, t = this.t, top = this.top(v);
+    const L = this.lay(v), { P, cx, fy } = L, top = this.top(v);
     if (this.fase === 'dormir' || this.fase === 'fim') {
       if (this.sl < 0.5) this.jantar(ctx, v, R, L); else this.sono(ctx, v, R, L);
       const a = clamp(1 - Math.abs(this.sl - 0.5) * 2, 0, 1);

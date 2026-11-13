@@ -26,7 +26,7 @@ function arvore(ctx, R, x, gy, big, dusk) {
 // A esplanada: céu (dusk 0 = tarde de sol, 1 = pôr do sol), o café com o toldo e o letreiro,
 // árvores e calçada. cx = centro do café, gy = chão, top = limite de cima.
 export function esplanada(ctx, v, R, o) {
-  const { gy, top, cx, t } = o, dusk = o.dusk || 0, big = v.portrait;
+  const { gy, top, cx } = o, dusk = o.dusk || 0, big = v.portrait;
   sky(ctx, v.w, v.h, gy, DIA.map((c, i) => mixHex(c, TARDE[i], dusk)));
   disc(ctx, Math.round(cx + (o.half || 100) * 0.9), Math.round(lerp(top + 16, gy - 34, dusk)), big ? 14 : 11, dusk > 0.5 ? '#ffe2a0' : '#fff6c8');
   const bw = Math.min(200, (o.half || 100) * 2 - 8), wt = Math.max(top + 4, gy - (big ? 150 : 122));
@@ -95,7 +95,7 @@ export function sentados(ctx, R, list, o) {
     front.forEach((m, i) => draw(m, Math.round(x0 + 22 + ((x1 - x0 - 44) * i) / Math.max(1, front.length - 1)), gy));
     mesa(R, x0 + 14, x1 - 14, gy - 17, Math.max(0, drinks - half), o.cafe ? 0.5 : 0);
   } else {
-    list.forEach((m, i) => draw(m, Math.round(x0 + 14 + ((x1 - x0 - 28) * i) / (list.length - 1)), gy));
+    list.forEach((m, i) => draw(m, Math.round(x0 + 14 + ((x1 - x0 - 28) * i) / Math.max(1, list.length - 1)), gy));
     mesa(R, x0, x1, gy - 17, drinks, o.cafe ? 0.4 : 0);
   }
 }

@@ -211,7 +211,7 @@ export const LOOKS = {
     casual: { t: '#5a8fd0', T: '#3f6fb0', b: '#2b1d2e' }, teen: { t: '#ff8a6a', T: '#e06a4a', b: '#ffffff' }, night: { t: '#c0392b', T: '#96281b', b: '#2b1d2e' },
     praia: { t: '#3fa6a0', T: '#ffffff', b: '#efbd94' }, festa: { t: '#3f6fb5', T: '#2f5795', b: '#2b1d2e' } } },
   maisa: { def: F, rows: FRANJA, base: { h: '#5a3a26', H: '#7a5236', v: '#5a3a26', e: '#4a3a2a' }, outfits: {
-    casual: { t: '#ffb347', T: '#e09030', b: '#2b1d2e' }, teen: { t: '#c79bff', T: '#a878e0', b: '#ffffff' }, night: { t: '#7a3fa0', T: '#5a2f80', b: '#2b1d2e' },
+    casual: { t: '#ffb347', T: '#e09030', b: '#2b1d2e' }, night: { t: '#7a3fa0', T: '#5a2f80', b: '#2b1d2e' },
     praia: { t: '#ff5d8f', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#ff8a4b', T: '#e06a2b', b: '#2b1d2e' } } },
   soft: { def: F, base: { h: '#7a5236', H: '#96704a', v: '#7a5236', e: '#55803f' }, outfits: {
     casual: { t: '#7be0b0', T: '#4fb888', b: '#2b1d2e' }, teen: { t: '#ffd166', T: '#e0a820', b: '#ffffff' }, night: { t: '#3fa6a0', T: '#2f8680', b: '#2b1d2e' },
@@ -229,7 +229,7 @@ export const LOOKS = {
     casual: { t: '#ff8a4b', T: '#e06a2b', b: '#2b1d2e' }, teen: { t: '#ff5d8f', T: '#d63f72', b: '#ffffff' }, night: { t: '#5a8fd0', T: '#3f6fb0', b: '#2b1d2e' },
     praia: { t: '#7be0b0', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#7a3fa0', T: '#5a2f80', b: '#2b1d2e' } } },
   pipoca: { def: M, base: { h: '#4a2f1e', d: '#6b4a3a', e: '#4a3a2a' }, outfits: {
-    casual: { t: '#ffd166', k: '#ffd166', p: '#3b4a7a', b: '#2b1d2e' }, teen: { t: '#ff8a4b', k: '#ff8a4b', p: '#4a6a9a', b: '#ffffff', d: NOBEARD }, night: { t: '#5a6aa8', k: '#ffffff', p: '#2a2f4a', b: '#2b1d2e' },
+    casual: { t: '#ffd166', k: '#ffd166', p: '#3b4a7a', b: '#2b1d2e' }, night: { t: '#5a6aa8', k: '#ffffff', p: '#2a2f4a', b: '#2b1d2e' },
     avental: { t: '#ffffff', k: '#ffd166', p: '#3b4a7a', b: '#2b1d2e' }, festa: { t: '#5a6aa8', k: '#ffffff', p: '#2a2f4a', b: '#111122' } } },
   leal: { def: M, base: { h: '#3a2418', d: '#6b4a3a', e: '#4a3a2a' }, outfits: {
     casual: { t: '#3fa672', k: '#3fa672', p: '#3a3f55', b: '#2b1d2e' }, night: { t: '#f2f2f7', k: '#f2f2f7', p: '#2a2f4a', b: '#2b1d2e' },
@@ -237,7 +237,7 @@ export const LOOKS = {
   nuno: { def: M, base: { h: '#b8956a', d: NOBEARD, e: '#3f7fd0' }, outfits: { casual: { t: '#a8324a', k: '#ffffff', p: '#3a3f55', b: '#2b1d2e' }, night: { t: '#2a3358', k: '#ffffff', p: '#2a3358', b: '#111122' }, festa: { t: '#2a3358', k: '#ffffff', p: '#2a3358', b: '#111122' } } },
   ze: { def: M, base: { h: '#6b4a2e', d: NOBEARD }, outfits: { casual: { t: '#7a8a5a', k: '#7a8a5a', p: '#3b4a7a', b: '#2b1d2e' }, bata: { t: '#3fae8a', k: '#3fae8a', p: '#3fae8a', b: '#ffffff', q: '#3fae8a', Q: '#2f8a6c', cap: true } } },
   zebras: { def: M, base: { h: '#4a2f1e', d: '#6b4a36', e: '#4a3a2a' }, outfits: { casual: { t: '#ff8a4b', k: '#ff8a4b', p: '#7a6a4a', b: '#5a3a22' }, praia: { t: '#7be0b0', k: '#7be0b0', p: '#c0392b', b: '#eebb8e' }, festa: { t: '#ff8a4b', k: '#ffffff', p: '#3a3f55', b: '#111122' } } },
-  pi: { def: M, base: { h: '#5a3a22', s: '#e0a878', d: NOBEARD, e: '#4a3a2a' }, outfits: { casual: { t: '#f2f2f7', k: '#f2f2f7', p: '#c9a86a', b: '#5a3a22', shades: true }, festa: { t: '#f2f2f7', k: '#f2f2f7', p: '#c9a86a', b: '#5a3a22', shades: true } } },   // quase sempre de óculos escuros
+  pi: { def: M, base: { h: '#5a3a22', s: '#e0a878', d: NOBEARD, e: '#4a3a2a' }, outfits: { casual: { t: '#f2f2f7', k: '#f2f2f7', p: '#c9a86a', b: '#5a3a22', shades: true }, praia: { t: '#f2f2f7', k: '#f2f2f7', p: '#3f6fb5', b: '#e0a878', shades: true }, festa: { t: '#f2f2f7', k: '#f2f2f7', p: '#c9a86a', b: '#5a3a22', shades: true } } },   // quase sempre de óculos escuros
   // o Kiko (Francisco), namorado da Ana — não confundir com o irmão da Inês, que é o `irmao2`
   kiko: { def: M, base: { h: '#5a3a26', d: NOBEARD, e: '#4a3a2a' }, outfits: {
     casual: { t: '#8fb4e0', k: '#ffffff', p: '#c9a86a', b: '#5a3a22' }, work: { t: '#dfe8f4', k: '#2a3358', p: '#2a3358', b: '#111122' }, festa: { t: '#8fb4e0', k: '#ffffff', p: '#2a3358', b: '#111122' } } },
@@ -273,6 +273,8 @@ export const LOOKS = {
 const cache = new Map();
 // nomes de todas as personagens pedidas (os testes usam isto para ver quem aparece em cada nível)
 export const seen = new Set();
+// pedidos de personagens ou roupas que não existem (ficam com o aspeto por omissão; os testes avisam)
+export const missing = new Set();
 
 // Devolve os fotogramas { stand, a, b } de uma personagem, cada um com versão direita (r) e esquerda (l).
 // Um asterisco no fim da roupa ('casual*') põe óculos de sol a qualquer personagem.
@@ -281,6 +283,8 @@ export function getCharacter(name, outfit = 'casual') {
   if (sol) outfit = outfit.slice(0, -1);
   seen.add(name);
   if (cache.has(key)) return cache.get(key);
+  if (!LOOKS[name]) missing.add(name);
+  else if (!LOOKS[name].outfits[outfit]) missing.add(name + ':' + outfit);
   const look = LOOKS[name] || LOOKS.ines;
   const { cap, shades, rows, ...clothes } = look.outfits[outfit] || look.outfits.casual;
   const pal = { ...BASE, ...look.base, ...clothes };
@@ -334,7 +338,6 @@ export function getSprites() {
   if (!sprites) {
     sprites = {
       heart: makeSprite(HEART, { o: '#2b1d2e', r: '#ff5d8f', w: '#ffffff' }),
-      heartGold: makeSprite(HEART, { o: '#2b1d2e', r: '#ffd166', w: '#ffffff' }),
       heartOff: makeSprite(HEART, { o: '#2b1d2e', r: '#9a93ad', w: '#d8d3e6' }),
     };
   }

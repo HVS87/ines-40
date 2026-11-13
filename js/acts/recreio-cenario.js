@@ -213,9 +213,9 @@ export function interior(ctx, v, R, gy, cam, top, t, o = {}) {
     const my = top + Math.round(livre * 0.52);
     for (let i = Math.floor((cam - 130) / 230); i <= Math.floor((cam + v.w + 130) / 230); i++) {
       const bx = i * 230 + 130 - cam;
-      R(bx - 54, 0, 1, my - 10, '#7fa680'); R(bx + 54, 0, 1, my - 10, '#7fa680');
-      R(bx - 61, my - 11, 122, 22, INK); R(bx - 60, my - 10, 120, 20, '#fff6e6'); R(bx - 60, my - 10, 120, 2, PINK); R(bx - 60, my + 8, 120, 2, PINK);
-      text(ctx, 'PARABÉNS INÊS!', bx, my - 5, '#c0392b', { scale: 2, align: 'center' });
+      R(bx - 58, 0, 1, my - 10, '#7fa680'); R(bx + 58, 0, 1, my - 10, '#7fa680');
+      R(bx - 65, my - 11, 130, 22, INK); R(bx - 64, my - 10, 128, 20, '#fff6e6'); R(bx - 64, my - 10, 128, 2, PINK); R(bx - 64, my + 8, 128, 2, PINK);
+      text(ctx, 'PARABÉNS, INÊS!', bx, my - 5, '#c0392b', { scale: 2, align: 'center' });
       const px = bx + 115;
       R(px, 0, 1, my - 8, '#7fa680'); R(px - 6, my - 9, 12, 5, VERDE_X);
       disc(ctx, px, my + 2, 9, '#3f7a4a'); disc(ctx, px - 7, my + 7, 5, '#2f6a3f'); disc(ctx, px + 7, my + 8, 5, '#4f8a5a'); R(px - 3, my + 10, 2, 8, '#3f7a4a'); R(px + 4, my + 11, 2, 5, '#2f6a3f');

@@ -127,7 +127,6 @@ export function planta(R, x, gy, vico = 1) {
 }
 
 // A estante por montar: fase 0 (nada) a 4 (pronta, com livros).
-export const ESTANTE_W = 40, ESTANTE_H = 60;
 export function estante(R, x, gy, fase) {
   if (fase <= 0) return;
   x = Math.round(x);

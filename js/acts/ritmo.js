@@ -54,7 +54,7 @@ export class Ritmo extends Act {
     this.len = bars.length * 4 * this.beatLen;
     this.time = -(this.lead + 1);
     this.phrase = 0;
-    this.combo = 0; this.best = 0;
+    this.combo = 0;
     this.missRow = 0; this.assist = false;
     this.energy = 0.3; this.stumble = 0; this.flash = 0;
     this.press = [0, 0, 0];
@@ -153,7 +153,7 @@ export class Ritmo extends Act {
     n.state = 1; n.at = this.time;
     const ph = this.ph[n.phrase];
     ph.pts += pts; ph.judged++;
-    this.combo++; this.best = Math.max(this.best, this.combo);
+    this.combo++;
     this.missRow = 0;
     this.energy = clamp(this.energy + 0.1, 0, 1);
     this.flash = 1;

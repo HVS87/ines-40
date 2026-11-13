@@ -1,10 +1,9 @@
-/* Luísa & Sérgio — interface em estilo pixel art.
+/* Inês 40 — interface em estilo pixel art.
    A unidade --u é calculada em js/main.js a partir do tamanho do ecrã. */
 :root {
   --u: 16px;
   --b: calc(var(--u) * 0.2);
   --ink: #1a1433;
-  --ink-soft: #2d2452;
   --paper: #fff6e6;
   --pink: #ff5d8f;
   --pink-dark: #c93a6b;
@@ -14,7 +13,7 @@
   --sar: env(safe-area-inset-right, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
-  /* área de jogo e zona dos botões, calculadas em js/main.js */
+  /* área de jogo, calculada em js/main.js */
   --gx: 0px;
   --gy: 0px;
   --gw: 100vw;
@@ -115,6 +114,9 @@ ul { list-style: none; }
 .btn[disabled] { opacity: 0.45; cursor: default; }
 .btn[hidden] { display: none; }
 .btn-icon { padding: 0.7em 0.8em; min-width: 44px; min-height: 44px; pointer-events: auto; }
+/* Em telemóveis e tablets, nenhum botão fica mais baixo do que um dedo (44 px). */
+body.mobile .btn { min-height: 44px; }
+@media (pointer: coarse) { .btn { min-height: 44px; } }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: 0.6em; justify-content: center; }
 .menu-buttons { display: flex; flex-direction: column; gap: 0.7em; align-items: stretch; }
@@ -139,7 +141,6 @@ ul { list-style: none; }
   z-index: 10;
 }
 .screen.active { display: flex; }
-/* com os botões táteis, a área de jogo já fica dentro das margens seguras do ecrã */
 
 .panel {
   display: flex;
@@ -338,7 +339,6 @@ body.caption .hint { top: calc(var(--gy) + var(--gh) * 0.42); font-size: 1em; ba
 }
 .victory-actions.ready { visibility: visible; }
 .v-date { margin-top: 0.6em; font-size: 1.25em; letter-spacing: 0.12em; color: var(--pink); text-shadow: 0.12em 0.12em 0 var(--ink); }
-.v-date:not(.on) { display: none; }
 .victory-actions .btn { font-size: 0.68em; }
 body.wide [data-screen="victory"] { padding-top: calc(var(--sat) + var(--gh) * 0.07); }
 body.wide .v-title { font-size: 2em; margin: 0.35em 0 0.3em; }

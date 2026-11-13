@@ -51,7 +51,7 @@ export class PedidoSim extends Act {
       if (this.timer > 1.6 && !this.knelt) { this.knelt = true; this.sfx('plim'); this.hint('Lourenço: «Inês... queres casar comigo?»'); }
       if (this.timer > 4.6 || (this.timer > 2.6 && I.actionPressed)) {
         this.state = 'fill'; this.timer = 0;
-        this.hint('Mantém o dedo no ecrã (ou Espaço) para encher o coração do «SIM!»');
+        this.hint('Mantém o dedo no ecrã (ou Espaço) para encher o coração do «SIM!».');
       }
     } else if (this.state === 'fill') {
       this.idle = down ? 0 : this.idle + dt;

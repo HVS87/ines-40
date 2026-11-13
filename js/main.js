@@ -4,7 +4,7 @@ import { input } from './input.js';
 import { audio } from './audio.js';
 import { save } from './save.js';
 import { UI } from './ui.js';
-import { LEVELS } from './levels/index.js';
+import { LEVELS, ready } from './levels/index.js';
 import { MenuScene } from './scenes/menu.js';
 import { StageScene } from './scenes/stage.js';
 import { VictoryScene } from './scenes/victory.js';
@@ -107,60 +107,71 @@ function resize() {
   root.setProperty('--hud-l', px(L.x));
   root.setProperty('--hud-r', px(W - L.x - L.w));
   document.body.classList.toggle('wide', !portrait);
+  document.body.classList.toggle('mobile', isMobile());
 
   if (game.scene && game.scene.onResize) game.scene.onResize();
 }
 
-save.load();
-audio.setMuted(save.data.muted);
-audio.setMusicMuted(save.data.musicMuted);
-game.ui = new UI(game);
-game.installer = new Installer(game.ui);
-Awake.init();               // o ecrã não se apaga enquanto se joga
-registerServiceWorker();
-input.init({
-  onEscape: () => game.ui.escape(),
-  onPause: () => { if (game.scene && game.scene.togglePause) game.scene.togglePause(); },
-  onModeChange: resize,
-});
+// O arranque: só depois de os níveis estarem carregados.
+function boot() {
+  save.load();
+  audio.setMuted(save.data.muted);
+  audio.setMusicMuted(save.data.musicMuted);
+  game.ui = new UI(game);
+  game.installer = new Installer(game.ui);
+  Awake.init();               // o ecrã não se apaga enquanto se joga
+  registerServiceWorker();
+  input.init({
+    onEscape: () => game.ui.escape(),
+    onPause: () => { if (game.scene && game.scene.togglePause) game.scene.togglePause(); },
+    onModeChange: resize,
+  });
 
-window.addEventListener('resize', resize);
-// Depois de rodar, o Safari do iOS demora um pouco a dar as medidas certas: medir várias vezes.
-const settle = () => [60, 200, 450, 900].forEach((ms) => setTimeout(resize, ms));
-window.addEventListener('orientationchange', settle);
-if (screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener('change', settle);
-window.addEventListener('pageshow', settle);
-if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
-// mudar de janela (clicar noutra app, uma notificação) também faz pausa
-window.addEventListener('blur', () => { if (game.scene && game.scene.autoPause) game.scene.autoPause(); });
-document.addEventListener('visibilitychange', () => {
-  audio.visibility(document.hidden);
-  if (document.hidden && game.scene && game.scene.autoPause) game.scene.autoPause();
-});
+  window.addEventListener('resize', resize);
+  // Depois de rodar, o Safari do iOS demora um pouco a dar as medidas certas: medir várias vezes.
+  const settle = () => [60, 200, 450, 900].forEach((ms) => setTimeout(resize, ms));
+  window.addEventListener('orientationchange', settle);
+  if (screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener('change', settle);
+  window.addEventListener('pageshow', settle);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+  // mudar de janela (clicar noutra app, uma notificação) também faz pausa
+  window.addEventListener('blur', () => { if (game.scene && game.scene.autoPause) game.scene.autoPause(); });
+  document.addEventListener('visibilitychange', () => {
+    audio.visibility(document.hidden);
+    if (document.hidden && game.scene && game.scene.autoPause) game.scene.autoPause();
+  });
 
-game.goMenu();
+  game.goMenu();
 
-// Ciclo principal: lógica a passo fixo (60 por segundo), desenho a cada fotograma.
-const STEP = 1 / 60;
-let last = performance.now(), acc = 0;
-function frame(now) {
-  acc += Math.min(0.1, (now - last) / 1000);
-  last = now;
-  while (acc >= STEP) {
-    game.scene.update(STEP);
-    input.endFrame();
-    acc -= STEP;
+  // Ciclo principal: lógica a passo fixo (60 por segundo), desenho a cada fotograma.
+  const STEP = 1 / 60;
+  let last = performance.now(), acc = 0;
+  function frame(now) {
+    acc += Math.min(0.1, (now - last) / 1000);
+    last = now;
+    while (acc >= STEP) {
+      game.scene.update(STEP);
+      input.endFrame();
+      acc -= STEP;
+    }
+    game.scene.draw(ctx, view);
+    requestAnimationFrame(frame);
   }
-  game.scene.draw(ctx, view);
   requestAnimationFrame(frame);
+
+  // Útil para depuração na consola do browser.
+  window.__game = game;
+
+  // Com ?qa no endereço, corre a suite de testes automáticos (tests/qa.js); com ?dev, carrega as
+  // ferramentas de desenvolvimento (tests/dev.js).
+  const query = new URLSearchParams(location.search);
+  if (query.has('qa')) import('../tests/qa.js').then((m) => m.run(game));
+  if (query.has('dev')) import('../tests/dev.js').then((m) => m.init(game));
 }
-requestAnimationFrame(frame);
-
-// Útil para depuração na consola do browser.
-window.__game = game;
-
-// Com ?qa no endereço, corre a suite de testes automáticos (tests/qa.js); com ?dev, carrega as
-// ferramentas de desenvolvimento (tests/dev.js).
-const query = new URLSearchParams(location.search);
-if (query.has('qa')) import('../tests/qa.js').then((m) => m.run(game));
-if (query.has('dev')) import('../tests/dev.js').then((m) => m.init(game));
+ready.then(boot).catch((err) => {
+  console.error('arranque', err);
+  const p = document.createElement('p');
+  p.textContent = 'O jogo não conseguiu arrancar. Atualiza a página para tentar outra vez.';
+  p.style.cssText = 'position:fixed;left:0;right:0;top:40%;margin:0;padding:1em;text-align:center;color:#fff6e6;font:16px/1.5 sans-serif';
+  document.body.append(p);
+});

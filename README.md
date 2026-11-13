@@ -33,6 +33,7 @@ js/levels/            um ficheiro por nível: textos e a lista de atos com a sua
 js/sprites.js         bonecos em pixel art e o ELENCO (cores de cabelo, olhos e roupa de cada pessoa)
 js/draw.js            ferramentas de desenho (retângulos, céus, letras de píxeis, bonecos)
 js/nomes.js           nomes usados em vários níveis (o do pai da Inês)
+js/convidados.js      quem vai à festa dos 40 anos (abraços, bolo e parabéns finais usam a mesma lista)
 js/audio.js           efeitos sonoros e motor da música · js/musicas.js: as músicas, nota a nota
 js/input.js           teclado e toque · js/save.js: progresso
 tools/                servidor local, página do logótipo e lista de ficheiros do sw.js
@@ -86,6 +87,8 @@ partilhadas por vários níveis, cada um com a sua «pele».
 - **Aspeto de uma pessoa** (cabelo, olhos, roupa): `LOOKS` em `js/sprites.js`. A farda do
   colégio é a constante `FARDA`, no mesmo ficheiro.
 - **Nome do pai da Inês**: `TIO` em `js/nomes.js`.
+- **Convidados da festa**: `js/convidados.js` (quem lá estiver aparece nos abraços, à volta do
+  bolo e nos parabéns finais).
 - **Textos e falas de um nível**: no ficheiro do nível (`js/levels/`) ou nos atos desse nível
   (`js/acts/<nível>-*.js`).
 - **Música**: as faixas estão em `js/musicas.js` (melodia, acordes, baixo e percussão; o formato
@@ -103,8 +106,15 @@ partilhadas por vários níveis, cada um com a sua «pele».
 
 - <http://localhost:8090/?qa> corre a suite automática: os robôs jogam os 27 níveis do princípio
   ao fim (com pausa a meio), e verificam-se os textos, os menus, a gravação do progresso, a lista
-  de ficheiros para jogar sem rede e toques ao acaso. Resultado no painel e em `window.__qa`.
-  Acrescentar `&touch&device=mobile` para testar como num telemóvel.
+  de ficheiros para jogar sem rede e toques ao acaso. Testa também o ecrã tátil (toques, dois
+  dedos, arrastar, gestos do sistema, tamanho dos botões), o teclado, a instalação como app e os
+  dados cruzados (personagens, roupas, sons e músicas pedidos têm de existir). Resultado no painel
+  e em `window.__qa`. Acrescentar `&touch&device=mobile` para testar como num telemóvel e
+  `&only=toque` (ou `jogo`, `fluxo`, `app`...) para correr só um grupo.
+- `node tests/matrix.mjs` corre essa suite em 20 configurações de uma vez, sem abrir janelas:
+  telemóveis e tablets Android, iPhone e iPad (tamanho, densidade e identificação emulados no
+  Edge/Chrome, com toques verdadeiros enviados pelo browser), computador e Firefox. O Safari
+  verdadeiro (motor WebKit) só se pode testar num iPhone ou num Mac.
 - <http://localhost:8090/?dev> dá `window.__dev` na consola: `await __dev.play('garage')`,
   `__dev.goto('garage', 1)`, `__dev.step(3)`, e `await __dev.shot('nome')` /
   `await __dev.sheet('nome', ['garage'])`, que guardam capturas em `tests/shots/` (com

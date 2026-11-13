@@ -97,7 +97,9 @@ export class EscravasSala extends Act {
       }
       return;
     }
-    if (I.action) this.pos += dt / HOP;
+    // sem ninguém a tocar durante muito tempo, o bilhete vai passando sozinho (ninguém fica preso)
+    this.idle = I.action ? 0 : (this.idle || 0) + dt;
+    if (I.action || this.idle > 20) this.pos += dt / HOP;
     else if (this.pos % 1 > 0.001) this.pos = Math.min(Math.ceil(this.pos), this.pos + (dt * 3) / HOP);   // a amiga agarra-o
     if (this.pos >= target) {
       this.pos = target; this.mode = 'read'; this.mt = 0;

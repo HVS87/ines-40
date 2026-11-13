@@ -3,13 +3,8 @@
 import { getCharacter } from '../sprites.js';
 import { Fireworks, Particles } from '../fx.js';
 import { mkR, sky, stars, person, text, PINK, GOLD } from '../draw.js';
+import { CONVIDADOS } from '../convidados.js';
 
-// quem aparece na festa, da esquerda para a direita (a Inês fica ao centro, maior)
-const CROWD = [
-  ['tio', 'hoje'], ['tiafatima', 'hoje'], ['ana', 'festa'], ['kiko', 'festa'], ['soft', 'festa'], ['isabel', 'festa'], ['pipoca', 'festa'],
-  ['tomas', 'festa'], ['lourenco', 'festa'], ['mi', 'festa'], ['leal', 'festa'], ['maria', 'festa'], ['nuno', 'festa'],
-  ['tete', 'festa'], ['maisa', 'festa'], ['moncada', 'festa'], ['marta', 'festa'], ['gonzaga', 'festa'],
-];
 
 export class VictoryScene {
   constructor(game) {
@@ -18,9 +13,8 @@ export class VictoryScene {
     this.fire = new Fireworks();
     this.fx = new Particles();
     this.ines = getCharacter('ines', 'festa');
-    this.crowd = CROWD.map(([who, outfit]) => getCharacter(who, outfit));
+    this.crowd = CONVIDADOS.map(([who, outfit]) => getCharacter(who, outfit));   // todos os da festa (a Inês fica ao centro, maior)
     this.t = 0;
-    this.tapped = 0;
   }
 
   enter() {
@@ -30,7 +24,6 @@ export class VictoryScene {
       if (e.target && e.target.closest && e.target.closest('.btn')) return;
       const v = this.game.view;
       for (let k = 0; k < 2; k++) this.fire.launch(v.w, v.h, v.h * 0.1, v.h * 0.45);
-      this.tapped++;
     };
     document.addEventListener('pointerdown', this.onTap);
     document.addEventListener('keydown', this.onTap);
@@ -60,8 +53,8 @@ export class VictoryScene {
       const y = gy - 62 + Math.round(Math.sin((x / v.w) * Math.PI) * 6);
       R(x, y, 9, 1, '#fff6e6'); R(x + 2, y + 1, 5, 3, ['#ff5d8f', '#ffd166', '#7be0b0', '#6fb0f0'][i % 4]); R(x + 3, y + 4, 3, 2, ['#ff5d8f', '#ffd166', '#7be0b0', '#6fb0f0'][i % 4]);
     }
-    // os convidados, em fila (duas filas quando o ecrã é estreito), aos saltos
-    const n = this.crowd.length, rows = v.w < 300 ? 2 : 1, per = Math.ceil(n / rows);
+    // os convidados, em filas (tantas quantas forem precisas para caberem), aos saltos
+    const n = this.crowd.length, rows = Math.max(1, Math.min(3, Math.ceil((n * 15) / (v.w - 16)))), per = Math.ceil(n / rows);
     this.crowd.forEach((f, i) => {
       const row = Math.floor(i / per), k = i % per, cols = Math.min(per, n - row * per);
       const x = Math.round(((k + 0.5) / cols) * (v.w - 16)) + 8 + (row ? 6 : 0);

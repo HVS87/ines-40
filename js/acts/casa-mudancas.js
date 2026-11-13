@@ -10,7 +10,7 @@ import { INK, PAPER, GOLD, clamp, lerp, person, text, shadow, mark } from '../dr
 const CAIXAS = [
   { nome: 'LIVROS', dur: 1.15, alt: 18 },
   { nome: 'LOUÇA', dur: 0.95, alt: 12 },
-  { nome: 'FRAGIL', dur: 1.3, alt: 24, queda: true },
+  { nome: 'FRÁGIL', dur: 1.3, alt: 24, queda: true },
   { nome: 'BIMBY', dur: 0.85, alt: 10 },
   { nome: 'TOMÁS', dur: 1.05, alt: 20 },
 ];

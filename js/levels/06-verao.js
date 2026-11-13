@@ -11,7 +11,7 @@ export default {
   id: 'verao',
   title: 'Verões em Santo Amaro',
   music: 'verao',
-  story: 'No verão, a Inês e as amigas passavam dias na casa dos avós da Isabel, em Santo Amaro de Oeiras. De dia, piscina. À noite queriam ir ao Garage: o avô da Isabel barricava a porta e até estacionava o carro à frente... e elas fugiam pela janela e iam de comboio.',
+  story: 'No verão, a Inês e as amigas passavam dias em casa dos avós da Isabel, em Santo Amaro de Oeiras. De dia, piscina. À noite queriam ir ao Garage: o avô da Isabel barricava a porta e até estacionava o carro à frente... e elas fugiam pela janela e iam de comboio.',
   help: 'Toca no ecrã (ou Espaço) no momento certo: quando a amiga bate no trampolim, para dar passinhos enquanto o avô ressona e para parar o comboio na marca amarela.',
   outro: 'Ida e volta de comboio... e o avô sempre a ressonar!',
   acts: [

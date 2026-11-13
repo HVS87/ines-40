@@ -53,7 +53,6 @@ export class Estrada extends Act {
     this.seg = 0;             // ... e desde a última paragem
     this.mode = 'run';        // run ⇄ stop → arrive
     this.wait = 0;
-    this.cur = null;
     this.mem = {};            // estado próprio da pele
     if (sk.start) sk.start(this);
     this.hint(this.cfg.intro || sk.intro || 'Toca para mudar de faixa: foge aos obstáculos e apanha os corações!');
@@ -140,7 +139,7 @@ export class Estrada extends Act {
       if (s.done || t < s.at) continue;
       s.done = true; s.t0 = this.t;
       this.time = s.at;
-      this.mode = 'stop'; this.wait = 0; this.cur = s;
+      this.mode = 'stop'; this.wait = 0;
       const ok = this.seg <= (this.cfg.tolerance === undefined ? 1 : this.cfg.tolerance);
       s.ok = ok;
       this.sfx('ring');
@@ -352,7 +351,7 @@ function calcada(night) {
 }
 
 const cities = {};
-// cidade(false) = Lisboa de manhã; cidade(true) = Lisboa à noite. Devolve { back, front, base(a) }.
+// cidade(false) = Lisboa de manhã; cidade(true) = Lisboa à noite. Devolve { back, front }.
 export function cidade(night) {
   const key = night ? 'n' : 'd';
   if (cities[key]) return cities[key];
@@ -361,7 +360,6 @@ export function cidade(night) {
   for (let i = 0; i < 12; i++) { const c = predio(i + (night ? 40 : 0), night); P.push(c); period += c.width; }
   const tile = calcada(night);
   const city = {
-    base: (a) => a.roadTop - 8,       // a linha onde assentam os prédios (o passeio do lado de lá)
     back(ctx, R, a) {
       const base = a.roadTop - 8, cam = Math.round(a.cam);
       sky(ctx, a.w, a.h, base, night ? ['#120e30', '#2a2358', '#4a3a78'] : ['#7fb8e4', '#c4e2f0', '#ffe8c8']);

@@ -1,12 +1,11 @@
-// Integração com o dispositivo: tipo de dispositivo e margens seguras do ecrã, instalar como
-// app (PWA), ecrã inteiro e service worker (para o jogo abrir mesmo sem rede).
+// Integração com o dispositivo: tipo de dispositivo, ecrã sempre aceso, instalar como app (PWA),
+// ecrã inteiro e service worker (para o jogo abrir mesmo sem rede).
 
 const ua = navigator.userAgent || '';
-// O iPad com iPadOS identifica-se como um Mac, mas tem ecrã tátil.
 // Ecrã sempre aceso enquanto o jogo está à vista (Screen Wake Lock API: Chrome/Android, Safari 16.4+,
 // app instalada no iPhone desde o iOS 18.4). O sistema larga o pedido quando a página fica escondida,
 // por isso volta a pedir-se ao regressar e a cada toque. Em poupança de energia alguns telemóveis
-// recusam o pedido: por isso as animações longas também pedem toques pelo meio (ver victory.js).
+// recusam o pedido: volta-se a tentar no toque seguinte.
 export const Awake = {
   lock: null,
   pending: false,
@@ -30,6 +29,7 @@ export const Awake = {
   },
 };
 
+// O iPad com iPadOS identifica-se como um Mac, mas tem ecrã tátil.
 const isIOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 const isAndroid = /Android/.test(ua);
 const isSafari = /Safari/.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS|Android/.test(ua);
@@ -127,7 +127,7 @@ export class Installer {
 // Service worker: guarda os ficheiros do jogo para abrir sem rede e permitir a instalação.
 export function registerServiceWorker() {
   if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => { /* sem modo offline */ });
-  });
+  const register = () => { navigator.serviceWorker.register('sw.js').catch(() => { /* sem modo offline */ }); };
+  // (o jogo pode arrancar já depois de a página ter acabado de carregar)
+  if (document.readyState === 'complete') register(); else window.addEventListener('load', register);
 }
