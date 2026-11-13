@@ -9,7 +9,7 @@ const praia = (ctx, v, R, t, act) => praiaMoz(ctx, v, R, t, { gy: act.ground(v),
 export default {
   id: 'mocambique',
   title: 'Moçambique',
-  music: 'play',
+  music: 'marrabenta',
   story: 'Uma viagem épica: a Inês e o Lourenço, a Mi e o Leal e o Zé Brás foram ter com o Pi, que morava em Moçambique. Praias de areia branca, mar turquesa... e fartaram-se de comer e de pescar.',
   help: 'Na pesca: toca no ecrã (ou Espaço) para lançar e quando a boia afundar; depois mantém premido para puxar e larga para aliviar. No banquete: toca quando o marisco passar à frente da Inês.',
   outro: 'Uma viagem para nunca mais esquecer!',

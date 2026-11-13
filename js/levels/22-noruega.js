@@ -7,7 +7,7 @@ import { Mergulho } from '../acts/noruega-mergulho.js';
 export default {
   id: 'noruega',
   title: 'Roadtrip na Noruega',
-  music: 'calm',
+  music: 'norte',
   story: 'A Inês, o Lourenço e o Tomás fazem-se à estrada na Noruega: de Oslo a Bergen, por montanhas, cascatas e fiordes. À espera deles, um chalé à beira da água... e um mergulho gelado!',
   help: 'Na estrada, toca no ecrã (ou Espaço) para mudar de faixa. No pontão, mantém o dedo no ecrã (ou o Espaço) para ganhar coragem e larga na zona verde!',
   outro: 'Fiordes, renas e um mergulho de coragem!',

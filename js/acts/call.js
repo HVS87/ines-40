@@ -16,6 +16,8 @@ const FLY = 2.3;                       // segundos de viagem de um coração
 const HIT = 0.9;                       // ponto da viagem em que chega ao telefone da Inês
 
 export class Call extends Act {
+  get music() { return 'australia'; }      // a música dos telefonemas (didgeridoo incluído)
+
   constructor(scene, cfg) {
     super(scene, cfg);
     this.ines = getCharacter('ines', cfg.outfit || 'casual');

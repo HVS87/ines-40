@@ -11,7 +11,7 @@ import { EscravasFoto } from '../acts/escravas-foto.js';
 export default {
   id: 'escravas',
   title: 'As Escravas',
-  music: 'play',
+  music: 'recreio',
   story: 'A pequena Inês, já crescidinha, vai para o colégio: o Externato das Escravas do Sagrado Coração de Jesus, em Lisboa. É lá, entre o recreio e as aulas, que conhece algumas das suas grandes amigas: a Ana, a Maísa, a «Soft» (Sofia) e a Isabel.',
   help: 'No recreio, arrasta o dedo (ou usa as setas) para andar. Na corda, toca no ecrã (ou Espaço) para saltar. Na aula, mantém premido para passar o bilhete e larga quando a Irmã se virar.',
   outro: 'Cinco amigas e um recreio inteiro por estrear!',

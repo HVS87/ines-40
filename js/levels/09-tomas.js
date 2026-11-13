@@ -6,7 +6,7 @@ import { corredor } from '../acts/cenarios.js';
 export default {
   id: 'tomas',
   title: 'Nasce o Tomás',
-  music: 'menu',
+  music: 'embalar',
   story: 'A Inês vai ser mãe! Na maternidade, o Zé, o pai, anda de um lado para o outro no corredor. Vem aí o Tomás — e vem com pressa.',
   help: 'Arrasta o dedo (ou usa as setas) para pôr o Zé debaixo do bebé: a sombra no chão mostra onde ele vai cair. Apanha à primeira para ganhares mais corações!',
   outro: 'Bem-vindo, Tomás!',

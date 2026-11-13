@@ -8,7 +8,7 @@ import { PELE_RUGBY, JOGO, Pontape, fundoTreino, fundoJogo } from '../acts/rugby
 export default {
   id: 'rugby',
   title: 'Tomás no Rugby',
-  music: 'play',
+  music: 'estadio',
   story: 'O Tomás joga rugby na Agronomia desde miúdo, e agora já é um adolescente. A Inês leva-o sempre aos treinos, na Tapada da Ajuda, e não perde um jogo: da linha lateral, é a adepta número um!',
   help: 'Na corrida para o ensaio, toca no ecrã (ou Espaço, ou as setas ↑ ↓) para mudar de corredor e fugir às placagens. Nos pontapés, toca quando o marcador estiver na zona verde, entre os postes.',
   outro: 'Ensaio do Tomás! E a adepta número um ficou sem voz.',

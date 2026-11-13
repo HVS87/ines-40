@@ -8,14 +8,14 @@ import { TIO } from '../nomes.js';
 export default {
   id: 'nascimento',
   title: 'O Nascimento',
-  music: 'play',
+  music: 'embalar',
   story: `Lisboa, um sábado de novembro. A Tia Fátima está em trabalho de parto e o ${TIO} acelera pela cidade fora, a caminho da maternidade. Vem aí a Inês — e vem com pressa!`,
   help: 'Toca no ecrã (ou Espaço) para mudar de faixa: foge aos buracos, aos pombos e ao elétrico e apanha os corações. Na maternidade, arrasta o dedo (ou usa as setas) para apanhar a bebé!',
   outro: 'Nasceu a Inês!',
   ending: 'Sábado, 15 de novembro de 1986: bem-vinda, Inês!',
   acts: [
     {
-      act: Estrada, when: 'Lisboa, 15 de novembro de 1986', skin: peleNascimento, secs: 34,
+      act: Estrada, music: 'tense', when: 'Lisboa, 15 de novembro de 1986', skin: peleNascimento, secs: 34,
       course: [
         { at: 3.6, obs: 'buraco', lane: 0 }, { at: 3.7, heart: 1 },
         { at: 5.2, say: `${TIO}: «Aguenta, Fátima! Não tenhas o bebé no carro!»` },

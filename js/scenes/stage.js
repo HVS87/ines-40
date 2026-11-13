@@ -116,12 +116,21 @@ export class StageScene {
     if (this.i >= this.acts.length) { this.endLevel(); return; }
     this.act = this.acts[this.i];
     this.act.got = 0;
+    this.tune();
     if (this.act.cfg.when) {
       // ecrã a negro com a legenda do tempo que passou
       this.state = 'fade';
       document.body.classList.add('caption');
       this.hint(this.act.cfg.when);
     } else this.startAct();
+  }
+
+  // A música do momento: a do ato (se tiver uma própria), senão a do nível. `muffled` abafa-a,
+  // como quem a ouve do lado de fora.
+  tune() {
+    const a = this.act, au = this.game.audio;
+    au.setTrack((a && (a.cfg.music || a.music)) || this.level.music || 'play');
+    au.muffle(!!(a && a.cfg.muffled));
   }
 
   startAct() {

@@ -36,7 +36,7 @@ function ponte(ctx, v, R, t, act) {
 export default {
   id: 'pedras',
   title: 'Pedras d\'El Rei',
-  music: 'calm',
+  music: 'praia',
   story: 'Todos os anos, a Inês passa uma semana de férias no Algarve, em Pedras d\'El Rei, com os pais, a Sofia, a Maria, o Zé Inácio e o Kiko — e, agora, com o pequeno Tomás. Para chegar à praia, atravessa-se a ria e apanha-se um comboio antigo. E na areia nunca falta animação!',
   help: 'Toca no ecrã (ou Espaço) para apitar no comboio e para bater a bola nas raquetes. No fim da tarde, arrasta o dedo (ou usa as setas) para apanhar conchas.',
   outro: 'Mais um verão em Pedras d\'El Rei!',

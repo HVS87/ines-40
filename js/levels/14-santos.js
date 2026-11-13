@@ -25,7 +25,7 @@ function coracoes(i, act) {
 export default {
   id: 'santos',
   title: 'Santos',
-  music: 'party',
+  music: 'pimba',
   story: 'A Inês adora os Santos Populares em Lisboa: arraiais na rua, dançar música pimba, beber imperiais, comer sardinhas e bifanas... A noite de Santo António acabava sempre num mega arraial na praceta em frente ao Xafarix, com música ao vivo. E foi numa dessas noites que a Mi e o Leal começaram a namorar.',
   help: 'Na banca, toca no ecrã (ou Espaço) quando a barra estiver na zona verde, para tirar a sardinha no ponto. A dançar, toca do lado da nota (ou usa as setas ← →) quando ela chegar ao círculo.',
   outro: 'Viva o Santo António!',

@@ -8,13 +8,13 @@ import { peleEntrega } from '../acts/sushi-entrega.js';
 export default {
   id: 'sushi',
   title: 'O Regresso do Lourenço',
-  music: 'play',
+  music: 'japao',
   story: 'O Lourenço volta da Austrália e os dois reatam o namoro. Na bagagem, ele traz uma ideia: o Sushi@Home, sushi entregue em casa. A Inês arregaça as mangas e ajuda!',
   help: 'Na cozinha, toca no ecrã (ou Espaço) quando uma peça do pedido passar debaixo dos hashi. Nas entregas, toca (ou Espaço) para mudar de faixa e fugir aos obstáculos.',
   outro: 'Sushi@Home: entregue com amor!',
   ending: 'Juntos outra vez — e com o jantar tratado.',
   acts: [
-    { act: Reencontro, when: 'O Lourenço está de volta!' },
+    { act: Reencontro, music: 'romance', when: 'O Lourenço está de volta!' },
     { act: Cozinha, when: 'Na cozinha do Sushi@Home...' },
     {
       act: Estrada, when: 'E agora, as entregas!', skin: peleEntrega, secs: 34.2, tolerance: 1,

@@ -3,7 +3,7 @@
 // uma cópia); sem rede, usa-se a cópia guardada. As fontes do Google ficam em cache.
 // Ao mudar a lista de ficheiros, mudar também o nome da cache (a suite ?qa verifica que todos
 // os módulos do jogo estão aqui).
-const CACHE = 'ines-40-v4';
+const CACHE = 'ines-40-v5';
 const CORE = [
   './',
   'index.html',
@@ -133,6 +133,7 @@ const CORE = [
   'js/levels/27-festa.js',
   'js/levels/index.js',
   'js/main.js',
+  'js/musicas.js',
   'js/nomes.js',
   'js/save.js',
   'js/scenes/menu.js',

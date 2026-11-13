@@ -30,6 +30,7 @@ const game = {
     this.scene = scene;
     // música: a da cena, a do nível, ou a dos níveis por omissão
     audio.setTrack(scene.music || (scene.level && scene.level.music) || 'play');
+    audio.muffle(false);
     resize();
     if (scene.enter) scene.enter();
   },

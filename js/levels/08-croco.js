@@ -20,7 +20,7 @@ function fundo(ctx, v, R, t, act) {
 export default {
   id: 'croco',
   title: 'O Crô-Crô',
-  music: 'play',
+  music: 'esplanada',
   story: 'Com o Lourenço do outro lado do mundo, a Inês, as amigas e amigos como o Pipoca, o Pi e o Leal passavam as tardes a conversar na esplanada do Crô-Crô, na Avenida Infante Santo, ao pé da Estrela. Havia café e hambúrgueres, mas na primavera o que sabia mesmo bem eram os caracóis, com umas imperiais.',
   help: 'Mantém premido (ou Espaço) para encher o copo e larga com a espuma na marca verde. Nos caracóis, toca no ecrã (ou Espaço) quando o palito estiver na zona verde.',
   outro: 'Tardes inteiras de conversa, caracóis e imperiais. E só mais um café!',

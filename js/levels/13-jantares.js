@@ -9,15 +9,15 @@ import { JantaresNoite } from '../acts/jantares-noite.js';
 export default {
   id: 'jantares',
   title: 'Jantares com Amigos',
-  music: 'play',
+  music: 'cozinha',
   story: 'A Inês adora ir jantar a casa de amigos. Um clássico eram as quiches em casa do Pipoca, com ele, com a Ana e com a Mi. Uma vez, a ajudar na cozinha, a Inês cortou um dedo — ficou quase aberto ao meio! — e a noite ficou para a história.',
   help: 'Toca no ecrã (ou Espaço) quando a faca passar por cima de cada risca. Nas urgências, toca quando aparecer a senha da Inês e, depois, para ela aguentar o dedo quieto.',
   outro: 'Um dedo ligado, uma noite para a história... e a quiche ficou para o dia seguinte.',
   acts: [
     { act: JantaresQuiche, hearts: 5, when: 'Jantar em casa do Pipoca. Hoje há quiche!' },
-    { act: JantaresCuf, hearts: 4, when: 'Pouco depois, com o dedo quase aberto ao meio, nas urgências da CUF...' },
+    { act: JantaresCuf, hearts: 4, music: 'sorrateiro', when: 'Pouco depois, com o dedo quase aberto ao meio, nas urgências da CUF...' },
     {
-      act: JantaresNoite, hearts: 2, when: 'De dedo ligado... e agora?',
+      act: JantaresNoite, hearts: 2, music: 'noite', when: 'De dedo ligado... e agora?',
       cast: [
         { who: 'pipoca', outfit: 'night', x: 0.16, face: 1, name: 'Pipoca' },
         { who: 'ana', outfit: 'night', x: 0.38, face: 1, name: 'Ana' },

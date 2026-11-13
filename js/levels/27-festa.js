@@ -31,7 +31,7 @@ export default {
       ],
     },
     {
-      act: Bolo,
+      act: Bolo, music: 'parabens',
       crowd: [['tio', 'hoje'], ['tiafatima', 'hoje'], ['ana', 'festa'], ['maisa', 'festa'], ['soft', 'festa'], ['isabel', 'festa'], ['pipoca', 'festa'], ['mi', 'festa'], ['leal', 'festa'], ['maria', 'festa'], ['nuno', 'festa'], ['tete', 'festa'], ['lourenco', 'festa'], ['tomas', 'festa']],
     },
   ],

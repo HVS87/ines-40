@@ -33,7 +33,8 @@ js/levels/            um ficheiro por nível: textos e a lista de atos com a sua
 js/sprites.js         bonecos em pixel art e o ELENCO (cores de cabelo, olhos e roupa de cada pessoa)
 js/draw.js            ferramentas de desenho (retângulos, céus, letras de píxeis, bonecos)
 js/nomes.js           nomes usados em vários níveis (o do pai da Inês)
-js/audio.js           efeitos sonoros e música · js/input.js: teclado e toque · js/save.js: progresso
+js/audio.js           efeitos sonoros e motor da música · js/musicas.js: as músicas, nota a nota
+js/input.js           teclado e toque · js/save.js: progresso
 tools/                servidor local, página do logótipo e lista de ficheiros do sw.js
 tests/                suite automática (?qa) e ferramentas de desenvolvimento (?dev)
 ```
@@ -87,6 +88,11 @@ partilhadas por vários níveis, cada um com a sua «pele».
 - **Nome do pai da Inês**: `TIO` em `js/nomes.js`.
 - **Textos e falas de um nível**: no ficheiro do nível (`js/levels/`) ou nos atos desse nível
   (`js/acts/<nível>-*.js`).
+- **Música**: as faixas estão em `js/musicas.js` (melodia, acordes, baixo e percussão; o formato
+  vem explicado no topo). Cada nível escolhe a sua com `music: 'nome'` e um ato pode ter outra
+  (`{ act: ..., music: 'samba' }`) ou ouvi-la abafada (`muffled: true`, como à porta da
+  discoteca). São originais, «ao estilo de» cada momento; só a canção de embalar (Brahms) e o
+  «Parabéns a você» são melodias conhecidas, ambas de domínio público.
 - **Novo ficheiro de jogo**: correr `node tools/sw-list.mjs` (atualiza a lista do `sw.js`, para
   o jogo continuar a funcionar sem rede) e mudar o nome da cache no `sw.js`.
 - **Logótipo e ícones**: `tools/logo.html` (com o servidor a correr,

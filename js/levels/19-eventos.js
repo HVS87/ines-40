@@ -8,7 +8,7 @@ import { fundoBastidores, frenteBastidores } from '../acts/eventos-bastidores.js
 export default {
   id: 'eventos',
   title: 'Eventos e Viagens',
-  music: 'play',
+  music: 'swing',
   story: 'A Inês é a responsável por organizar vários eventos corporate da Vorwerk, e por isso viaja muito: mala feita num instante, avião... e uma gala inteira para pôr de pé a horas.',
   help: 'Toca nas coisas da lista para as pôr na mala (ou setas e Espaço). Na gala, arrasta o dedo (ou usa as setas) para levar a Inês a cada imprevisto.',
   outro: 'Mais um evento perfeito. E o próximo já vem a caminho!',

@@ -7,7 +7,7 @@ import { corredor } from '../acts/cenarios.js';
 export default {
   id: 'jeanne',
   title: 'Nasce a Jeanne',
-  music: 'menu',
+  music: 'embalar',
   story: 'A família cresce: vem aí a Jeanne, a filha da Inês e do Lourenço! O Lourenço está a postos na sala de partos, e o Tomás, que já anda na faculdade, veio ajudar a receber a mana.',
   help: 'Arrasta o dedo (ou usa as setas) para pôr o Lourenço debaixo da bebé: a sombra no chão mostra onde ela vai cair. O Tomás também tenta lá chegar!',
   outro: 'Bem-vinda, Jeanne!',

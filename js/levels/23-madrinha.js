@@ -37,7 +37,7 @@ function adro(ctx, v, R, t, act) {
 export default {
   id: 'madrinha',
   title: 'Madrinha do Micas',
-  music: 'calm',
+  music: 'igreja',
   story: 'A Mi e o Leal tiveram um menino, o Miguel Francisco — o «Micas» —, e a madrinha de batismo é a Inês! No grande dia há um bebé para embalar junto à pia batismal, uma vela para acender no círio pascal e uma fotografia de grupo para a posteridade.',
   help: 'Toca no ecrã (ou carrega em Espaço) devagar e a compasso para embalar o Micas. Depois, toca no momento certo: quando a chama chega ao pavio e quando todos olham para a câmara.',
   outro: 'Madrinha babada!',
@@ -59,9 +59,9 @@ export default {
     },
     { act: Embalar, hearts: 5 },
     { act: Vela, when: 'Depois da água, a vela do batismo...', hearts: 3 },
-    { act: Foto, when: 'À saída da igreja, chovem pétalas e arroz!', hearts: 4 },
+    { act: Foto, music: 'party', when: 'À saída da igreja, chovem pétalas e arroz!', hearts: 4 },
     {
-      act: Talk, bg: adro, fg: colo('ines'),
+      act: Talk, music: 'menu', bg: adro, fg: colo('ines'),
       cast: [
         { who: 'leal', outfit: 'festa', x: 0.24, face: 1, name: 'Leal' },
         { who: 'ines', outfit: 'festa', x: 0.5, face: -1, name: 'Inês' },

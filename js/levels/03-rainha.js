@@ -36,7 +36,7 @@ function olas(i, act) {
 export default {
   id: 'rainha',
   title: 'O Rainha',
-  music: 'play',
+  music: 'liceu',
   story: 'Na adolescência, a Inês vai para o Liceu Rainha Dona Amélia — «o Rainha» —, num palácio da Rua da Junqueira. A Ana, a Soft e a Isabel também vão; a Maísa segue para outro liceu, mas a amizade continua. Lá conhece novas amigas, como a Mi, a Maria e a Tété... e um rapaz chamado Lourenço Bruschy.',
   help: 'Mantém premido (ou a seta para a direita) para andar e toca no ecrã (ou Espaço) para cumprimentar. Na escadaria, arrasta o dedo (ou usa as setas) para te desviares de quem desce.',
   outro: 'Amigas novas para a vida inteira... e um «olá» que ainda ia dar muito que falar.',
@@ -44,7 +44,7 @@ export default {
     { act: Chegada, when: 'Primeiro dia de aulas no Rainha...', hearts: 3 },
     { act: Escadaria, when: 'A campainha já tocou!', hearts: 5 },
     {
-      act: Talk, when: 'No intervalo, no pátio...', hearts: 2, bg: fundoPatio, onLine: olas,
+      act: Talk, music: 'romance', when: 'No intervalo, no pátio...', hearts: 2, bg: fundoPatio, onLine: olas,
       cast: [
         { who: 'ines', outfit: 'teen', x: 0.64, face: 1, name: 'Inês' },
         { who: 'lourenco', outfit: 'teen', x: 0.84, face: -1, name: 'Lourenço' },

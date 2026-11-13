@@ -96,6 +96,14 @@ function testData() {
   check('todos têm título, história, ajuda e frase final', !noText.length, noText.join(', '));
   const noActs = LEVELS.filter((L) => !Array.isArray(L.acts) || !L.acts.length || L.acts.some((a) => typeof a.act !== 'function')).map((L) => L.id);
   check('todos têm atos válidos', !noActs.length, noActs.join(', '));
+  // a música: faixas bem escritas, e todos os níveis e atos pedem faixas que existem
+  const tracks = new Set(game.audio.tracks), badTracks = game.audio.checkTracks();
+  check(`música: ${tracks.size} faixas bem escritas`, tracks.size >= 30 && !badTracks.length, badTracks.join(' | '));
+  const used = new Set(['menu', 'party', 'australia']), noTrack = [];
+  for (const L of LEVELS) for (const m of [L.music, ...(L.acts || []).map((a) => a.music)]) { if (!m) continue; used.add(m); if (!tracks.has(m)) noTrack.push(`${L.id}: ${m}`); }
+  check('música: todos os níveis e atos pedem faixas que existem', !noTrack.length, noTrack.join(', '));
+  const unused = [...tracks].filter((t) => !used.has(t));
+  check('música: todas as faixas são usadas', !unused.length, unused.join(', '));
   check('etiquetas dos níveis', levelLabel(0) === 'Nível 1' && levelLabel(26) === 'Nível 27');
   const long = LEVELS.filter((L) => (L.story || '').length > 340 || (L.help || '').length > 330).map((L) => L.id);
   check('histórias e ajudas cabem no ecrã (tamanho)', !long.length, long.join(', '));
@@ -180,6 +188,31 @@ async function testAway() {
   }
   check('níveis 8 a 14: o Lourenço só aparece ao telefone', !bad.length, bad.join(', '));
   check('níveis 10 a 14 acabam com um telefonema da Austrália', [9, 10, 11, 12, 13].every((i) => LEVELS[i] && (LEVELS[i].acts || []).some((a) => a.act.name === 'Call')));
+}
+
+// Toca cada faixa «em seco» e mede-a: nenhuma pode ficar muda nem distorcer (pico acima de 1).
+async function testMusic() {
+  const bad = [], vols = [];
+  for (const name of game.audio.tracks) {
+    const m = await game.audio.measure(name, 6);
+    if (!m) { check('música: medir o volume das faixas (sem OfflineAudioContext neste browser)', true); return; }
+    vols.push(`${name} ${m.peak}/${m.rms}`);
+    if (m.peak > 0.9 || m.rms < 0.01 || m.rms > 0.2) bad.push(`${name}: pico ${m.peak}, média ${m.rms}`);
+  }
+  check('música: nenhuma faixa muda nem a distorcer', !bad.length, bad.join(' | '));
+  results[results.length - 1].info = results[results.length - 1].info || vols.join(' · ');
+  // a música muda de ato para ato: à porta do Garage ouve-se abafada (*), na pista já não
+  const tocou = (id) => {
+    game.startLevel(LEVELS.findIndex((L) => L.id === id));
+    game.ui.act('start');
+    const s = game.scene, seq = [];
+    for (let k = 0; k < s.acts.length; k++) { seq.push(game.audio.track + (game.audio.muffled ? '*' : '')); s.nextAct(); }
+    return seq.join(' ');
+  };
+  const garage = tocou('garage'), pedido = tocou('pedido'), bimby = tocou('bimby');
+  check('música: muda de ato para ato (Garage, Pedido, telefonema)', garage === 'house* house* house noite' && pedido === 'flamenco flamenco romance samba' && bimby.endsWith(' australia'), [garage, pedido, bimby].join(' | '));
+  game.goMenu();
+  check('música: de volta ao menu, sem som abafado', game.audio.track === 'menu' && !game.audio.muffled, game.audio.track);
 }
 
 // ---------- Textos mostrados durante o jogo ----------
@@ -315,6 +348,7 @@ export async function run(g) {
     if (!only || only === 'ausente') await testAway();
     if (!only || only === 'fluxo') testFlow();
     if (!only || only === 'fontes' || only === 'offline') await testSources();
+    if (!only || only === 'musica') await testMusic();
     if (!only || only === 'monkey') await testMonkey(seed);
   } catch (err) {
     check('a suite correu até ao fim', false, err && err.stack ? err.stack.split('\n').slice(0, 3).join(' ') : err);

@@ -111,7 +111,7 @@ function arga(ctx, v, R, t, act) {
 export default {
   id: 'lanheses',
   title: 'Lanheses',
-  music: 'party',
+  music: 'minho',
   story: 'O Lourenço tem uma casa de família em Lanheses, entre Ponte de Lima e Viana do Castelo: a Casa do Tinoco, do nome de um famoso antepassado dele. Todos os anos a Inês convida para lá a família — os pais, a Sofia, a Maria, o Zé Inácio e o Kiko — para uns dias de piscina, boa comida e boa bebida. E o Lourenço adora grelhar carne barrosã!',
   help: 'Na eira, arrasta o dedo (ou usa as setas) para a Inês levar o milho ao espigueiro antes da chuva. No churrasco, toca na posta que está no ponto (ou escolhe com as setas e serve com Espaço).',
   outro: 'Dizem que é a maior eira da Península Ibérica!',
@@ -151,7 +151,7 @@ export default {
       ],
     },
     {
-      act: Talk, when: "Ao fim da tarde, no alto da Serra d'Arga...", bg: arga,
+      act: Talk, music: 'calm', when: "Ao fim da tarde, no alto da Serra d'Arga...", bg: arga,
       cast: [
         { who: 'lourenco', outfit: 'casual', x: 0.31, face: 1, name: 'Lourenço' },
         { who: 'ines', outfit: 'casual', x: 0.43, face: 1, name: 'Inês' },

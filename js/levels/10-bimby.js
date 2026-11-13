@@ -9,7 +9,7 @@ import { fundoProva, frenteProva } from '../acts/bimby-comum.js';
 export default {
   id: 'bimby',
   title: 'A Bimby',
-  music: 'play',
+  music: 'cozinha',
   story: 'A Inês trabalha na Vorwerk, a empresa que faz o conhecido robô de cozinha Bimby. Adora o trabalho: no escritório estão sempre a cozinhar e a experimentar receitas novas, com as amigas Bárbara e Isabel.',
   help: 'Arrasta o dedo (ou usa as setas) para apanhar os ingredientes pela ordem da receita. Depois toca no ecrã (ou Espaço) quando cada marcador passar na marca verde.',
   outro: 'Receita aprovada pelo escritório inteiro!',

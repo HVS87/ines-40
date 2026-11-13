@@ -9,13 +9,13 @@ import { GarageAmigos } from '../acts/garage-amigos.js';
 export default {
   id: 'garage',
   title: 'Paradise Garage',
-  music: 'party',
+  music: 'house',
   story: 'Na adolescência da Inês, a discoteca da moda era o Paradise Garage, em Alcântara. Às sextas-feiras havia Ladies Night (as raparigas não pagavam) e o porteiro, que era amigo da Inês, deixava-a sempre entrar com as amigas. Lá dentro, bebia-se Martini Metz, Smirnoff Ice e shots, e todos os amigos se encontravam na pista.',
   help: 'Toca no ecrã (ou carrega em Espaço) no momento certo: para acenar ao porteiro, para dançar ao ritmo quando a luz chega ao círculo e para encontrar os amigos quando o foco os ilumina.',
   outro: 'O grupo todo junto na pista: noites de Garage que ninguém esquece!',
   acts: [
     {
-      act: Talk, when: 'Sexta-feira à noite, em Alcântara...', bg: portaFundo,
+      act: Talk, muffled: true, when: 'Sexta-feira à noite, em Alcântara...', bg: portaFundo,
       cast: [
         { who: 'isabel', outfit: 'night', x: 0.08, name: 'Isabel' },
         { who: 'soft', outfit: 'night', x: 0.17, name: 'Soft' },
@@ -28,8 +28,8 @@ export default {
         'Inês: «Calma. O porteiro é meu amigo: deixa-nos sempre entrar!»',
       ],
     },
-    { act: GaragePorta, hearts: 3 },
+    { act: GaragePorta, hearts: 3, muffled: true },      // cá fora, a música ouve-se abafada
     { act: Ritmo, hearts: 4, when: 'Lá dentro, a pista já está a ferver...', ...PISTA },
-    { act: GarageAmigos, hearts: 5, when: 'A pista encheu e as luzes baixaram. Onde está toda a gente?' },
+    { act: GarageAmigos, hearts: 5, music: 'noite', when: 'A pista encheu e as luzes baixaram. Onde está toda a gente?' },
   ],
 };

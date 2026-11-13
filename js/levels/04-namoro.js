@@ -7,7 +7,7 @@ import { Conta } from '../acts/namoro-conta.js';
 export default {
   id: 'namoro',
   title: 'O Namoro',
-  music: 'calm',
+  music: 'romance',
   story: 'No Rainha, a Inês e o Lourenço apaixonam-se e começam a namorar. Os dates eram quase sempre no Di Casa, um restaurante italiano baratinho: uma pizza para dividir, um esparguete e as moedas contadas para a conta.',
   help: 'Toca no ecrã (ou Espaço) para saltarem e apanharem corações. No jantar, mantém premido só quando o empregado não está a olhar. Na conta, toca nas moedas (ou usa as setas e Espaço).',
   outro: 'O primeiro amor, uma pizza a meias e um beijo à porta do Di Casa.',

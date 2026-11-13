@@ -35,7 +35,7 @@ function cais(ctx, v, R, t, act) {
 export default {
   id: 'farol',
   title: 'Acampar na Ilha do Farol',
-  music: 'play',
+  music: 'acampar',
   story: 'A Inês foi acampar com as amigas para a Ilha do Farol, ao largo de Olhão: nove raparigas, sol, praia e uma noite debaixo das estrelas. O que é que podia correr mal?',
   help: 'Toca no ecrã (ou Espaço) para saltar, dar uma ajuda às amigas e pregar as estacas; mantém premido para soprar a fogueira. De manhã, toca em cada coisa (ou setas e Espaço) para a arrumar.',
   outro: 'Acampamento levantado! E o trolley da Isabel ficou para a história.',
@@ -57,10 +57,10 @@ export default {
     { act: FarolChegada, hearts: 4 },
     { act: FarolTenda, hearts: 3, when: 'No sítio do acampamento...' },
     { act: FarolFogueira, hearts: 4, when: 'Ao cair da noite...' },
-    { act: FarolGNR, hearts: 3, when: 'Na manhã seguinte...' },
+    { act: FarolGNR, hearts: 3, music: 'tense', when: 'Na manhã seguinte...' },
     // e, depois desse verão, o Lourenço vai viver para a Austrália (daqui até ao regresso, só ao telefone)
     {
-      act: Talk, when: 'Entretanto...', bg: partida, cast: [],
+      act: Talk, music: 'saudade', when: 'Entretanto...', bg: partida, cast: [],
       lines: [
         'O Lourenço vai viver para a Austrália, do outro lado do mundo.',
         'Fica a saudade... e o telefone!',
