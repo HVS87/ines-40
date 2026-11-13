@@ -1,6 +1,7 @@
 // Nível 13: jantares com amigos. As quiches em casa do Pipoca, com a Ana e a Mi; o dedo cortado,
 // as urgências da CUF de garrafa de vodka na mão e, no fim, sair à noite a rir de tudo.
-// (O Lourenço está na Austrália: não aparece.)
+// (O Lourenço está na Austrália: só aparece no telefonema do fim.)
+import { Call } from '../acts/call.js';
 import { JantaresQuiche } from '../acts/jantares-quiche.js';
 import { JantaresCuf } from '../acts/jantares-cuf.js';
 import { JantaresNoite } from '../acts/jantares-noite.js';
@@ -31,6 +32,18 @@ export default {
         'Pipoca: «E a quiche? Fica para amanhã. Fria também é boa!»',
         'Inês: «A melhor quiche que nunca chegámos a jantar!»',
       ],
+    },
+    // o telefonema da Austrália (ver js/acts/call.js)
+    {
+      act: Call, animal: 'bumerangue', label: 'DESVIA!', when: 'No dia seguinte, o telefone toca...',
+      lines: [
+        'Inês: «Cortei um dedo a fazer quiche, fui às urgências e depois fui sair!»',
+        'Lourenço: «Só tu, Inês! Quem me dera ter estado aí para ver...»',
+        'Lourenço: «Eu por cá ando a aprender a atirar o bumerangue. Olha só: zás!»',
+      ],
+      alert: 'O bumerangue voltou! Toca muitas vezes para o Lourenço se desviar!',
+      win: 'Lourenço: «Ufa, passou a rasar! Dizem que volta sempre... e é verdade.»',
+      lose: 'O bumerangue voltou... e levou o telefone com ele. Até amanhã, Austrália!',
     },
   ],
 };

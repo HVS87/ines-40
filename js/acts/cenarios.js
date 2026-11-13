@@ -1,5 +1,24 @@
 // Cenários simples usados em mais do que um nível (fundos para o ato Talk).
-import { INK, sign } from '../draw.js';
+import { INK, PAPER, sign, sky, disc } from '../draw.js';
+
+// O céu ao fim da tarde, com um avião a subir a caminho da Austrália.
+export function partida(ctx, v, R, t, act) {
+  const gy = act.ground(v), top = act.top(v), w = v.w;
+  sky(ctx, w, v.h, gy, ['#3a3a78', '#7a4a8a', '#d0607a', '#f09a6a', '#f8cf8a']);
+  disc(ctx, Math.round(w * 0.2), gy - 8, 12, '#fff3c4');
+  for (let i = 0; i < 4; i++) { const cx = ((i * 97 + t * 4) % (w + 60)) - 30, cy = top + 16 + i * 14; R(cx, cy, 26, 4, 'rgba(255,255,255,0.5)'); R(cx + 5, cy - 3, 14, 3, 'rgba(255,255,255,0.5)'); }
+  // os telhados de Lisboa, em silhueta
+  R(0, gy, w, v.h - gy, '#2a2540');
+  for (let x = 0, i = 0; x < w; x += 22, i++) { const h = 8 + ((i * 7) % 5) * 4; R(x, gy - h, 21, h, '#2a2540'); R(x + 4, gy - h + 3, 3, 3, '#ffd98a'); if (i % 2) R(x + 12, gy - h + 6, 3, 3, '#ffd98a'); }
+  // o avião, a subir da esquerda para a direita, com o rasto
+  const f = (t * 0.12) % 1.3, px = Math.round(-20 + f * (w + 40)), py = Math.round(gy - 30 - f * (gy - top - 44));
+  for (let k = 1; k < 9; k++) R(px - 10 - k * 9, py + 3 + k * 2, 6, 1, `rgba(255,255,255,${(0.7 - k * 0.07).toFixed(2)})`);
+  R(px - 12, py, 26, 6, INK); R(px - 11, py + 1, 24, 4, PAPER); R(px + 12, py + 1, 3, 3, PAPER); R(px + 9, py + 1, 3, 2, '#6fb0f0');
+  R(px - 13, py - 5, 5, 6, INK); R(px - 12, py - 4, 3, 5, '#e0392b');
+  R(px - 3, py + 3, 9, 4, INK); R(px - 2, py + 4, 7, 2, '#c9c9d8');
+  for (let k = 0; k < 4; k++) R(px - 6 + k * 4, py + 2, 2, 1, '#6fb0f0');
+  sign(ctx, 'AUSTRÁLIA', Math.round(w * 0.74), Math.max(top + 4, gy - 60), { bg: '#2a2540', color: '#ffd166' });
+}
 
 // Corredor da maternidade: parede clara, porta da sala de partos, cadeiras de espera e um relógio.
 export function corredor(ctx, v, R, t, act) {

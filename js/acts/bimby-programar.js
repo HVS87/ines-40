@@ -1,4 +1,4 @@
-// Nível 11, ato 2: programar a Bimby. Três mostradores seguidos (tempo, temperatura e
+// Nível 10, ato 2: programar a Bimby. Três mostradores seguidos (tempo, temperatura e
 // velocidade): tocar quando o marcador passa na marca verde. Depois a máquina trabalha
 // sozinha (vapor, contagem decrescente) e apita: «pi-pi-pi».
 import { Act } from './base.js';

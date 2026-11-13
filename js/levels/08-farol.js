@@ -1,5 +1,6 @@
 // Nível 8: acampar na Ilha do Farol. Nove raparigas, uma tenda individual, o trolley da Isabel,
 // os pescadores, o jantar de enlatados à volta da fogueira e, de manhã, a lancha da GNR.
+import { partida } from '../acts/cenarios.js';
 import { Talk } from '../acts/base.js';
 import { hills, sign } from '../draw.js';
 import { praia, farol, casinha, tufo, trolley, barcoCarreira } from '../acts/farol-comum.js';
@@ -57,5 +58,13 @@ export default {
     { act: FarolTenda, hearts: 3, when: 'No sítio do acampamento...' },
     { act: FarolFogueira, hearts: 4, when: 'Ao cair da noite...' },
     { act: FarolGNR, hearts: 3, when: 'Na manhã seguinte...' },
+    // e, depois desse verão, o Lourenço vai viver para a Austrália (daqui até ao regresso, só ao telefone)
+    {
+      act: Talk, when: 'Entretanto...', bg: partida, cast: [],
+      lines: [
+        'O Lourenço vai viver para a Austrália, do outro lado do mundo.',
+        'Fica a saudade... e o telefone!',
+      ],
+    },
   ],
 };

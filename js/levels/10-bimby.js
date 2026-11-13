@@ -1,4 +1,4 @@
-// Nível 11: a Bimby. A Inês trabalha na Vorwerk, onde se está sempre a cozinhar e a experimentar
+// Nível 10: a Bimby. A Inês trabalha na Vorwerk, onde se está sempre a cozinhar e a experimentar
 // receitas novas, com a Bárbara e a Isabel. (O Lourenço está na Austrália: só aparece no telefonema do fim.)
 import { Call } from '../acts/call.js';
 import { Talk } from '../acts/base.js';

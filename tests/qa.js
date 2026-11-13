@@ -179,7 +179,7 @@ async function testAway() {
     await tick();
   }
   check('níveis 9 a 14: o Lourenço só aparece ao telefone', !bad.length, bad.join(', '));
-  check('níveis 11, 12 e 14 acabam com um telefonema da Austrália', [10, 11, 13].every((i) => LEVELS[i] && (LEVELS[i].acts || []).some((a) => a.act.name === 'Call')));
+  check('níveis 10 a 14 acabam com um telefonema da Austrália', [9, 10, 11, 12, 13].every((i) => LEVELS[i] && (LEVELS[i].acts || []).some((a) => a.act.name === 'Call')));
 }
 
 // ---------- Textos mostrados durante o jogo ----------

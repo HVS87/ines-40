@@ -146,7 +146,7 @@ export function tigela(R, x, y, t) {
   if (t !== undefined) vapor(R, x, y - 6, t + x, 2);
 }
 
-// ----- A prova (ato de conversa do nível 11): fundo e primeiro plano -----
+// ----- A prova (ato de conversa do nível 10): fundo e primeiro plano -----
 export function fundoProva(ctx, v, R, t, act) {
   const top = act.top(v), gy = act.ground(v);
   ctx.drawImage(cached(act, 'prova' + top + gy, v, (g, r) => cozinha(g, r, v, top, gy)), 0, 0);

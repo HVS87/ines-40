@@ -144,6 +144,9 @@ const MENINO = {
   },
 };
 
+// Penteados (linhas do boneco de mulher que mudam): cabelo ondulado e franja.
+const ONDAS = { 10: '.ovvhsssesseso..', 12: '.ovvhosssmmso...', 14: '.ovvotttttto....' };
+const FRANJA = { 7: '..ovhhhhhhhhho..', 8: '..ovhhhshshsso..' };
 const BASE = { o: '#2b1d2e', s: '#f6c9a0', c: '#f09a8c', e: '#2b1d2e', m: '#c2544c' };
 const F = MULHER, M = HOMEM, GIRL = MENINA, BOY = MENINO;
 const NOBEARD = '#f6c9a0';
@@ -152,18 +155,18 @@ const FARDA = { t: '#3f62b8', T: '#2f4a94', w: '#ffffff', b: '#2b1d2e' };   // a
 // O ELENCO. Aspeto de cada personagem: cores base (cabelo h/H/v, olhos e, pele s, barba d) e roupa
 // por ocasião (mulheres e meninas: t roupa, T bainha, b sapatos · homens e meninos: t camisola,
 // k gola, p calças, b sapatos · q/Q chapéu, com cap: true · shades: true = óculos escuros). Uma roupa também pode mudar o cabelo
-// (por exemplo, grisalho nos níveis mais recentes).
+// (por exemplo, grisalho nos níveis mais recentes). `rows` muda o penteado (ONDAS, FRANJA).
 // Para ajustar a cor do cabelo, dos olhos ou da roupa de alguém, basta mudar aqui.
 export const LOOKS = {
   // ----- a Inês, em várias idades -----
-  inesc: { def: GIRL, base: { h: '#6b4226', e: '#4a3a2a', k: '#a8324a' }, outfits: {
+  inesc: { def: GIRL, base: { h: '#4a2f1e', s: '#efbd94', e: '#4a3a2a', k: '#a8324a' }, outfits: {
     farda: FARDA,
     casual: { t: '#ff8ab8', T: '#e0669a', w: '#ff8ab8', b: '#ffffff' } } },
-  ines: { def: F, base: { h: '#6b4226', H: '#8a5a34', v: '#6b4226', e: '#4a3a2a' }, outfits: {
+  ines: { def: F, rows: ONDAS, base: { h: '#4a2f1e', H: '#6b4630', v: '#4a2f1e', s: '#efbd94', e: '#4a3a2a' }, outfits: {
     casual: { t: '#e0527a', T: '#b83a62', b: '#2b1d2e' },
     teen: { t: '#7ec8f0', T: '#4a8ac0', b: '#ffffff' },           // liceu, anos 2000
     night: { t: '#2b2540', T: '#ff5d8f', b: '#c9c9d8' },          // de sair à noite
-    praia: { t: '#ff8a4b', T: '#ffd166', b: '#f6c9a0' },          // vestido de praia, descalça
+    praia: { t: '#ff8a4b', T: '#ffd166', b: '#efbd94' },          // vestido de praia, descalça
     work: { t: '#3f9f6a', T: '#2f7f52', b: '#2b1d2e' },           // no escritório (verde Bimby)
     inverno: { t: '#c0392b', T: '#96281b', b: '#5a3a22', q: '#fff6e6', Q: '#c0392b', cap: true },   // casaco e gorro
     bata: { t: '#ffc6de', T: '#e89ab8', b: '#ffffff' },           // na maternidade
@@ -175,53 +178,53 @@ export const LOOKS = {
   tiafatima: { def: F, base: { h: '#4a2f1e', H: '#6b4630', v: '#4a2f1e', e: '#4a3a2a' }, outfits: {
     casual: { t: '#8a5ac0', T: '#6a3fa0', b: '#2b1d2e' },                                             // 1986
     hoje: { t: '#2f7f8a', T: '#256670', b: '#2b1d2e', h: '#9a8a7a', H: '#b8a898', v: '#9a8a7a' } } },
-  irma1: { def: F, base: { h: '#7a4f2e', H: '#a87446', v: '#7a4f2e' }, outfits: { casual: { t: '#4f9a5a', T: '#3f7f48', b: '#2b1d2e' }, festa: { t: '#3fa6a0', T: '#2f8680', b: '#2b1d2e' } } },
-  irma2: { def: F, base: { h: '#5a3a22', H: '#7a5236', v: '#5a3a22' }, outfits: { casual: { t: '#ff8a6a', T: '#e06a4a', b: '#7a2e2a' }, festa: { t: '#c79bff', T: '#a878e0', b: '#2b1d2e' } } },
-  irmao: { def: M, base: { h: '#5a3a22', d: NOBEARD }, outfits: { casual: { t: '#5a8fd0', k: '#5a8fd0', p: '#3b4a7a', b: '#2b1d2e' }, festa: { t: '#f2f2f7', k: '#f2f2f7', p: '#2a3358', b: '#111122' } } },
-  irmao2: { def: M, base: { h: '#7a5a34', d: NOBEARD }, outfits: { casual: { t: '#3fa672', k: '#3fa672', p: '#5a4a3a', b: '#2b1d2e' }, festa: { t: '#a8324a', k: '#ffffff', p: '#2a3358', b: '#111122' } } },
+  irma1: { def: F, base: { h: '#d8b25a', H: '#f0d088', v: '#d8b25a', e: '#3f7fd0' }, outfits: { casual: { t: '#4f9a5a', T: '#3f7f48', b: '#2b1d2e' }, festa: { t: '#3fa6a0', T: '#2f8680', b: '#2b1d2e' } } },
+  irma2: { def: F, base: { h: '#cfa650', H: '#e8c880', v: '#cfa650', e: '#3f7fd0' }, outfits: { casual: { t: '#ff8a6a', T: '#e06a4a', b: '#7a2e2a' }, festa: { t: '#c79bff', T: '#a878e0', b: '#2b1d2e' } } },
+  irmao: { def: M, base: { h: '#4a2f1e', d: NOBEARD, e: '#4a3a2a' }, outfits: { casual: { t: '#5a8fd0', k: '#5a8fd0', p: '#3b4a7a', b: '#2b1d2e' }, festa: { t: '#f2f2f7', k: '#f2f2f7', p: '#2a3358', b: '#111122' } } },
+  irmao2: { def: M, base: { h: '#c8a468', d: NOBEARD, e: '#3f7fd0' }, outfits: { casual: { t: '#3fa672', k: '#3fa672', p: '#5a4a3a', b: '#2b1d2e' }, festa: { t: '#a8324a', k: '#ffffff', p: '#2a3358', b: '#111122' } } },
   // ----- o Lourenço -----
-  lourenco: { def: M, base: { h: '#5a3a22', d: NOBEARD, e: '#55803f' }, outfits: {
-    casual: { t: '#3f6fb5', k: '#3f6fb5', p: '#3a3f55', b: '#2b1d2e', d: '#8a6a52' },
+  lourenco: { def: M, base: { h: '#4a3020', s: '#ecb48a', d: NOBEARD, e: '#55803f' }, outfits: {
+    casual: { t: '#3f6fb5', k: '#3f6fb5', p: '#3a3f55', b: '#2b1d2e', d: '#7a5a44' },
     teen: { t: '#f2f2f7', k: '#c0392b', p: '#4a6a9a', b: '#ffffff' },                                 // liceu
     night: { t: '#2b2b3a', k: '#2b2b3a', p: '#3a4a6a', b: '#2b1d2e' },
     praia: { t: '#ffd166', k: '#ffd166', p: '#3fa6a0', b: '#eebb8e' },
-    aussie: { t: '#c9a86a', k: '#c9a86a', p: '#7a6a4a', b: '#5a3a22', q: '#a8884a', Q: '#5a3a22', cap: true, d: '#8a6a52' },   // na Austrália, de chapéu
-    sushi: { t: '#1c1c28', k: '#c0392b', p: '#1c1c28', b: '#111122', q: '#ffffff', Q: '#c0392b', cap: true, d: '#8a6a52' },    // a fazer sushi
-    grelha: { t: '#ffffff', k: '#c0392b', p: '#3a3f55', b: '#2b1d2e', d: '#8a6a52' },                 // avental de churrasco
-    inverno: { t: '#2f6a8a', k: '#ffd166', p: '#2b2b3a', b: '#5a3a22', q: '#2f6a8a', Q: '#1f4a6a', cap: true, d: '#8a6a52' },
-    bata: { t: '#3fae8a', k: '#3fae8a', p: '#3fae8a', b: '#ffffff', q: '#3fae8a', Q: '#2f8a6c', cap: true, d: '#8a6a52' },
-    festa: { t: '#2a3358', k: '#ffffff', p: '#2a3358', b: '#111122', d: '#8a6a52' } } },
+    aussie: { t: '#c9a86a', k: '#c9a86a', p: '#7a6a4a', b: '#5a3a22', q: '#a8884a', Q: '#5a3a22', cap: true, d: '#7a5a44' },   // na Austrália, de chapéu
+    sushi: { t: '#1c1c28', k: '#c0392b', p: '#1c1c28', b: '#111122', q: '#ffffff', Q: '#c0392b', cap: true, d: '#7a5a44' },    // a fazer sushi
+    grelha: { t: '#ffffff', k: '#c0392b', p: '#3a3f55', b: '#2b1d2e', d: '#7a5a44' },                 // avental de churrasco
+    inverno: { t: '#2f6a8a', k: '#ffd166', p: '#2b2b3a', b: '#5a3a22', q: '#2f6a8a', Q: '#1f4a6a', cap: true, d: '#7a5a44' },
+    bata: { t: '#3fae8a', k: '#3fae8a', p: '#3fae8a', b: '#ffffff', q: '#3fae8a', Q: '#2f8a6c', cap: true, d: '#7a5a44' },
+    festa: { t: '#2a3358', k: '#ffffff', p: '#2a3358', b: '#111122', d: '#7a5a44' } } },
   // ----- as amigas do colégio (em pequenas, de farda) -----
-  anac: { def: GIRL, base: { h: '#5a3a22', e: '#4a3a2a', k: '#a8324a' }, outfits: { farda: FARDA } },
+  anac: { def: GIRL, base: { h: '#6b4630', e: '#4a3a2a', k: '#a8324a' }, outfits: { farda: FARDA } },
   maisac: { def: GIRL, base: { h: '#4a2f1e', e: '#4a3a2a', k: '#a8324a' }, outfits: { farda: FARDA } },
   softc: { def: GIRL, base: { h: '#7a5236', e: '#55803f', k: '#a8324a' }, outfits: { farda: FARDA } },
   isabelc: { def: GIRL, base: { h: '#a87a4a', e: '#4a3a2a', k: '#a8324a' }, outfits: { farda: FARDA } },
   // ----- as amigas e os amigos, já crescidos -----
-  ana: { def: F, base: { h: '#5a3a22', H: '#7a5236', v: '#5a3a22', e: '#4a3a2a' }, outfits: {
+  ana: { def: F, rows: ONDAS, base: { h: '#6b4630', H: '#a87a4a', v: '#6b4630', s: '#efbd94', e: '#4a3a2a' }, outfits: {
     casual: { t: '#5a8fd0', T: '#3f6fb0', b: '#2b1d2e' }, teen: { t: '#ff8a6a', T: '#e06a4a', b: '#ffffff' }, night: { t: '#c0392b', T: '#96281b', b: '#2b1d2e' },
-    praia: { t: '#3fa6a0', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#3f6fb5', T: '#2f5795', b: '#2b1d2e' } } },
-  maisa: { def: F, base: { h: '#4a2f1e', H: '#6b4630', v: '#4a2f1e', e: '#4a3a2a' }, outfits: {
+    praia: { t: '#3fa6a0', T: '#ffffff', b: '#efbd94' }, festa: { t: '#3f6fb5', T: '#2f5795', b: '#2b1d2e' } } },
+  maisa: { def: F, rows: FRANJA, base: { h: '#5a3a26', H: '#7a5236', v: '#5a3a26', e: '#4a3a2a' }, outfits: {
     casual: { t: '#ffb347', T: '#e09030', b: '#2b1d2e' }, teen: { t: '#c79bff', T: '#a878e0', b: '#ffffff' }, night: { t: '#7a3fa0', T: '#5a2f80', b: '#2b1d2e' },
     praia: { t: '#ff5d8f', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#ff8a4b', T: '#e06a2b', b: '#2b1d2e' } } },
   soft: { def: F, base: { h: '#7a5236', H: '#96704a', v: '#7a5236', e: '#55803f' }, outfits: {
     casual: { t: '#7be0b0', T: '#4fb888', b: '#2b1d2e' }, teen: { t: '#ffd166', T: '#e0a820', b: '#ffffff' }, night: { t: '#3fa6a0', T: '#2f8680', b: '#2b1d2e' },
     praia: { t: '#ffd166', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#4fb888', T: '#3f9870', b: '#2b1d2e' } } },
-  isabel: { def: F, base: { h: '#a87a4a', H: '#c49a66', v: '#a87a4a', e: '#4a3a2a' }, outfits: {
+  isabel: { def: F, base: { h: '#a87a4a', H: '#d0a870', v: '#a87a4a', e: '#4a3a2a' }, outfits: {
     casual: { t: '#f29ac0', T: '#d877a3', b: '#2b1d2e' }, teen: { t: '#f29ac0', T: '#d877a3', b: '#ffffff' }, night: { t: '#ff5d8f', T: '#d63f72', b: '#2b1d2e' },
     praia: { t: '#c79bff', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#d877a3', T: '#b85783', b: '#2b1d2e' } } },
-  mi: { def: F, base: { h: '#6a4428', H: '#8a6240', v: '#6a4428', e: '#4a3a2a' }, outfits: {
+  mi: { def: F, base: { h: '#4f3220', H: '#7a5236', v: '#4f3220', e: '#4a3a2a' }, outfits: {
     casual: { t: '#c0392b', T: '#96281b', b: '#2b1d2e' }, teen: { t: '#7be0b0', T: '#4fb888', b: '#ffffff' }, night: { t: '#ffd166', T: '#e0a820', b: '#2b1d2e' },
     praia: { t: '#5a8fd0', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#c0392b', T: '#96281b', b: '#2b1d2e' } } },
   maria: { def: F, base: { h: '#4f3220', H: '#6f4a32', v: '#4f3220', e: '#4a3a2a' }, outfits: {
     casual: { t: '#3fa6a0', T: '#2f8680', b: '#2b1d2e' }, teen: { t: '#5a8fd0', T: '#3f6fb0', b: '#ffffff' }, night: { t: '#f2f2f7', T: '#c9c9d8', b: '#2b1d2e' },
     praia: { t: '#ff8a4b', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#f2f2f7', T: '#c9c9d8', b: '#2b1d2e' } } },
-  tete: { def: F, base: { h: '#3f2a1c', H: '#5a4030', v: '#3f2a1c', e: '#4a3a2a' }, outfits: {
+  tete: { def: F, base: { h: '#2f2018', H: '#4a3628', v: '#2f2018', e: '#4a3a2a' }, outfits: {
     casual: { t: '#ff8a4b', T: '#e06a2b', b: '#2b1d2e' }, teen: { t: '#ff5d8f', T: '#d63f72', b: '#ffffff' }, night: { t: '#5a8fd0', T: '#3f6fb0', b: '#2b1d2e' },
     praia: { t: '#7be0b0', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#7a3fa0', T: '#5a2f80', b: '#2b1d2e' } } },
-  pipoca: { def: M, base: { h: '#5a3a22', d: NOBEARD, e: '#4a3a2a' }, outfits: {
-    casual: { t: '#ffd166', k: '#ffd166', p: '#3b4a7a', b: '#2b1d2e' }, teen: { t: '#ff8a4b', k: '#ff8a4b', p: '#4a6a9a', b: '#ffffff' }, night: { t: '#5a6aa8', k: '#ffffff', p: '#2a2f4a', b: '#2b1d2e' },
+  pipoca: { def: M, base: { h: '#4a2f1e', d: '#6b4a3a', e: '#4a3a2a' }, outfits: {
+    casual: { t: '#ffd166', k: '#ffd166', p: '#3b4a7a', b: '#2b1d2e' }, teen: { t: '#ff8a4b', k: '#ff8a4b', p: '#4a6a9a', b: '#ffffff', d: NOBEARD }, night: { t: '#5a6aa8', k: '#ffffff', p: '#2a2f4a', b: '#2b1d2e' },
     avental: { t: '#ffffff', k: '#ffd166', p: '#3b4a7a', b: '#2b1d2e' }, festa: { t: '#5a6aa8', k: '#ffffff', p: '#2a2f4a', b: '#111122' } } },
-  leal: { def: M, base: { h: '#4a2f1e', d: '#8a6a52', e: '#4a3a2a' }, outfits: {
+  leal: { def: M, base: { h: '#3a2418', d: '#6b4a3a', e: '#4a3a2a' }, outfits: {
     casual: { t: '#3fa672', k: '#3fa672', p: '#3a3f55', b: '#2b1d2e' }, night: { t: '#f2f2f7', k: '#f2f2f7', p: '#2a2f4a', b: '#2b1d2e' },
     praia: { t: '#ff8a4b', k: '#ff8a4b', p: '#3f6fb5', b: '#eebb8e' }, festa: { t: '#3a3f55', k: '#ffffff', p: '#3a3f55', b: '#111122' } } },
   nuno: { def: M, base: { h: '#b8956a', d: NOBEARD, e: '#3f7fd0' }, outfits: { casual: { t: '#a8324a', k: '#ffffff', p: '#3a3f55', b: '#2b1d2e' }, night: { t: '#2a3358', k: '#ffffff', p: '#2a3358', b: '#111122' }, festa: { t: '#2a3358', k: '#ffffff', p: '#2a3358', b: '#111122' } } },
@@ -263,7 +266,8 @@ export function getCharacter(name, outfit = 'casual') {
   const look = LOOKS[name] || LOOKS.ines;
   const { cap, shades, ...clothes } = look.outfits[outfit] || look.outfits.casual;
   const pal = { ...BASE, ...look.base, ...clothes };
-  let upper = cap ? look.def.upper.map((row, i) => look.def.cap[i] || row) : look.def.upper;
+  let upper = look.rows ? look.def.upper.map((row, i) => look.rows[i] || row) : look.def.upper;
+  if (cap) upper = upper.map((row, i) => look.def.cap[i] || row);
   // óculos escuros: os olhos e o que fica entre eles passam a ser uma barra escura
   if (shades) { pal.g = '#111122'; upper = upper.map((row) => row.replace(/e.*e/, (m) => 'g'.repeat(m.length))); }
   const frames = {};

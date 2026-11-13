@@ -1,4 +1,4 @@
-// Nível 10 — nasce o Tomás, o filho da Inês. O pai, o Zé, tem de o apanhar!
+// Nível 9 — nasce o Tomás, o filho da Inês. O pai, o Zé, tem de o apanhar!
 import { Talk } from '../acts/base.js';
 import { Catch } from '../acts/catch.js';
 import { corredor } from '../acts/cenarios.js';

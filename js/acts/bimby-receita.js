@@ -1,4 +1,4 @@
-// Nível 11, ato 1: a receita. No escritório-cozinha da Vorwerk chovem ingredientes (e tralha de
+// Nível 10, ato 1: a receita. No escritório-cozinha da Vorwerk chovem ingredientes (e tralha de
 // escritório): a Inês anda de um lado para o outro com o copo da Bimby e apanha os ingredientes
 // pela ordem da receita. Apanhar uma meia ou um agrafador custa o coração desse ingrediente.
 import { Act } from './base.js';

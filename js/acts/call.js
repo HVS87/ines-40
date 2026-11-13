@@ -1,14 +1,16 @@
 // Ato «telefonema da Austrália»: a Inês em Lisboa (de noite) e o Lourenço na Austrália (de dia),
 // cada um no seu lado do ecrã. Os corações viajam pela linha: toca quando chegam ao telefone da
-// Inês para os apanhar. A meio, a Austrália intromete-se — um canguru, uma aranha gigante ou um
-// bando de emus — e é preciso tocar muitas vezes para enxotar o bicho antes que a chamada caia.
+// Inês para os apanhar. A meio, a Austrália intromete-se — um canguru, uma aranha gigante, um
+// bando de emus, um coala ou um bumerangue que volta — e é preciso tocar muitas vezes para
+// enxotar o intruso antes que a chamada caia.
 //
-//   { act: Call, animal: 'canguru' | 'aranha' | 'emus', lines: [3 falas], win: 'fala', lose: 'fala' }
+//   { act: Call, animal: 'canguru' | 'aranha' | 'emus' | 'coala' | 'bumerangue', lines: [3 falas],
+//     win: 'fala', lose: 'fala', alert: 'instrução da interrupção' (opcional), label: 'ENXOTA!' }
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
 import { INK, GOLD, PINK, PAPER, clamp, lerp, sky, stars, disc, text, hash } from '../draw.js';
 
-const NAMES = { canguru: 'o canguru', aranha: 'a aranha', emus: 'os emus' };
+const NAMES = { canguru: 'o canguru', aranha: 'a aranha', emus: 'os emus', coala: 'o coala' };
 const SPAWNS = [1, 3.6, 6.2, 8.8];     // quando parte cada coração
 const FLY = 2.3;                       // segundos de viagem de um coração
 const HIT = 0.9;                       // ponto da viagem em que chega ao telefone da Inês
@@ -78,7 +80,7 @@ export class Call extends Act {
         this.state = 'animal';
         this.timer = 0;
         this.sfx('buzz');
-        this.hint(`Oh, não! Toca muitas vezes para enxotar ${NAMES[this.cfg.animal] || 'o bicho'}!`);
+        this.hint(this.cfg.alert || `Oh, não! Toca muitas vezes para enxotar ${NAMES[this.cfg.animal] || 'o bicho'}!`);
       }
     } else if (this.state === 'animal') {
       this.left -= dt;
@@ -174,7 +176,7 @@ export class Call extends Act {
       // a barra do «enxota!» e o tempo que falta
       const bw = Math.min(120, A.w - 20), bx = A.x + Math.round((A.w - bw) / 2), by = Math.max(A.y + 6, g.top + 4) + (v.portrait ? 0 : 22);
       R(bx - 1, by - 1, bw + 2, 9, INK); R(bx, by, bw, 7, '#3a2f4f'); R(bx, by, Math.round(bw * clamp(this.meter, 0, 1)), 7, '#5cf08a');
-      text(ctx, 'ENXOTA!', bx + bw / 2, by + 1, PAPER, { align: 'center' });
+      text(ctx, this.cfg.label || 'ENXOTA!', bx + bw / 2, by + 1, PAPER, { align: 'center' });
       R(bx, by + 9, Math.round(bw * clamp(this.left / 6.5, 0, 1)), 2, GOLD);
     }
   }
@@ -215,6 +217,36 @@ export class Call extends Act {
       disc(ctx, x, y - 4, 7, INK); disc(ctx, x, y + 4, 5, INK);
       R(x - 2, y - 7, 4, 2, '#c0392b'); R(x - 3, y + 3, 2, 2, '#ff3b3b'); R(x + 1, y + 3, 2, 2, '#ff3b3b'); R(x - 2, y + 7, 1, 2, PAPER); R(x + 1, y + 7, 1, 2, PAPER);
       return { x, y: yLow + 8, k: 2 };
+    }
+    if (kind === 'coala') {
+      // salta do eucalipto para a cabeça dele e agarra-se-lhe à cara; enxotado, volta para a árvore
+      const tx = A.x + Math.round(A.w * 0.12) + 10, ty = A.gy - 46, hx = A.px, hy = A.gy - 36;
+      let f = inF, jump = Math.sin(inF * Math.PI) * 16;
+      if (st === 'end' && this.won) { f = 1 - outF; jump = Math.sin(outF * Math.PI) * 16; }
+      const cx = Math.round(lerp(tx, hx, f)), cy = Math.round(lerp(ty, hy, f) - jump);
+      const G = '#9aa0aa', asleep = st === 'end' && !this.won;
+      for (const d of [-1, 1]) { disc(ctx, cx + d * 6, cy - 5, 4, INK); disc(ctx, cx + d * 6, cy - 5, 3, G); R(cx + d * 6 - 1, cy - 6, 2, 2, '#e8d8d8'); }
+      R(cx - 5, cy + 5, 10, 7, INK); R(cx - 4, cy + 5, 8, 6, '#8a909a');
+      disc(ctx, cx, cy, 7, INK); disc(ctx, cx, cy, 6, G);
+      R(cx - 1, cy - 1, 3, 4, INK);
+      if (asleep) { R(cx - 5, cy - 2, 2, 1, INK); R(cx + 3, cy - 2, 2, 1, INK); text(ctx, 'Z', cx + 9, cy - 13 - (Math.floor(t * 2) % 2), PAPER); text(ctx, 'Z', cx + 13, cy - 19, PAPER); } else { R(cx - 4, cy - 3, 1, 2, INK); R(cx + 3, cy - 3, 1, 2, INK); }
+      for (const d of [-1, 1]) { R(cx + d * 8 - 2, cy + 2, 4, 4, INK); R(cx + d * 8 - 1, cy + 3, 2, 2, G); }
+      return { x: hx, y: hy, k: 2 };
+    }
+    if (kind === 'bumerangue') {
+      // o bumerangue que ele atirou volta e anda às voltas à cabeça dele; se ganha, leva o telefone
+      const cx0 = A.px, cy0 = A.gy - 40;
+      let x, y;
+      if (st === 'animal') { const a = t * 6; x = cx0 + Math.cos(a) * 34 + (1 - inF) * 70; y = cy0 + Math.sin(a) * 12 - 6; }
+      else if (this.won) { x = lerp(cx0 + 34, A.x + A.w + 40, outF); y = cy0 - 10 - outF * 24; }
+      else if (outF < 0.3) { x = lerp(cx0 + 34, A.tel.x, outF / 0.3); y = lerp(cy0, A.tel.y, outF / 0.3); }
+      else { x = lerp(A.tel.x, A.x - 40, (outF - 0.3) / 0.7); y = A.tel.y - (outF - 0.3) * 30; }
+      x = Math.round(x); y = Math.round(y);
+      const d = [[1, 0, 0, 1], [0, 1, -1, 0], [-1, 0, 0, -1], [0, -1, 1, 0]][Math.floor(t * 14) % 4];
+      for (let k = 0; k < 7; k++) { R(x + d[0] * k - 1, y + d[1] * k - 1, 4, 4, INK); R(x + d[2] * k - 1, y + d[3] * k - 1, 4, 4, INK); }
+      for (let k = 0; k < 7; k++) { R(x + d[0] * k, y + d[1] * k, 2, 2, k % 3 === 1 ? '#e0392b' : '#d8a050'); R(x + d[2] * k, y + d[3] * k, 2, 2, k % 3 === 1 ? PAPER : '#d8a050'); }
+      if (st === 'end' && !this.won && outF >= 0.3) { R(x + 2, y + 2, 5, 10, INK); R(x + 3, y + 3, 3, 8, '#c9c9d8'); }
+      return { x: A.px + 10, y: A.gy - 30, k: 1.5 };
     }
     if (kind === 'emus') {
       // um bando a atravessar o ecrã a correr; se ganham, levam o Lourenço às costas
