@@ -1,4 +1,4 @@
-// Nível 16 — Fins de tarde no Clube Naval: o brinde na esplanada, os veleiros ao pôr do sol
+// Nível 17 — Fins de tarde no Clube Naval: o brinde na esplanada, os veleiros ao pôr do sol
 // e a conversa de amigos enquanto as luzes da ponte se acendem.
 import { Talk } from '../acts/base.js';
 import { INK } from '../draw.js';

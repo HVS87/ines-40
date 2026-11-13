@@ -1,4 +1,4 @@
-// Nível 21 «Madrinha do Micas», ato 2: acender a vela do batismo no círio pascal. A chama do
+// Nível 22 «Madrinha do Micas», ato 2: acender a vela do batismo no círio pascal. A chama do
 // círio dança com a corrente de ar; toca-se quando ela se inclina para o pavio da vela. São
 // precisos três toques certos para a chama pegar (cada um, à primeira, vale um coração); à
 // terceira falha seguida o pavio aquece sozinho. O Leal comove-se e a Mi tira fotografias.

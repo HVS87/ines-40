@@ -20,7 +20,7 @@ export default {
   id: 'croco',
   title: 'O Crô-Crô',
   music: 'play',
-  story: 'A Inês, as amigas e amigos como o Pipoca iam sempre beber café e passar as tardes a conversar na esplanada do Crô-Crô. Também lá havia hambúrgueres, mas na primavera o que sabia mesmo bem eram os caracóis, com umas imperiais a acompanhar.',
+  story: 'A Inês, as amigas e amigos como o Pipoca iam sempre beber café e passar as tardes a conversar na esplanada do Crô-Crô, na Avenida Infante Santo, ao pé da Estrela. Também lá havia hambúrgueres, mas na primavera o que sabia mesmo bem eram os caracóis, com umas imperiais a acompanhar.',
   help: 'Mantém premido (ou Espaço) para encher o copo e larga com a espuma na marca verde. Nos caracóis, toca no ecrã (ou Espaço) quando o palito estiver na zona verde.',
   outro: 'Tardes inteiras de conversa, caracóis e imperiais. E só mais um café!',
   acts: [

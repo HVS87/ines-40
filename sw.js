@@ -3,7 +3,7 @@
 // uma cópia); sem rede, usa-se a cópia guardada. As fontes do Google ficam em cache.
 // Ao mudar a lista de ficheiros, mudar também o nome da cache (a suite ?qa verifica que todos
 // os módulos do jogo estão aqui).
-const CACHE = 'ines-40-v1';
+const CACHE = 'ines-40-v2';
 const CORE = [
   './',
   'index.html',
@@ -83,6 +83,7 @@ const CORE = [
   'js/acts/rainha-chegada.js',
   'js/acts/rainha-escadaria.js',
   'js/acts/ritmo.js',
+  'js/acts/santos.js',
   'js/acts/sushi-cozinha.js',
   'js/acts/sushi-entrega.js',
   'js/acts/sushi-reencontro.js',
@@ -115,18 +116,19 @@ const CORE = [
   'js/levels/11-bimby.js',
   'js/levels/12-xafarix.js',
   'js/levels/13-jantares.js',
-  'js/levels/14-sushi.js',
-  'js/levels/15-casa.js',
-  'js/levels/16-naval.js',
-  'js/levels/17-eventos.js',
-  'js/levels/18-mocambique.js',
-  'js/levels/19-lanheses.js',
-  'js/levels/20-noruega.js',
-  'js/levels/21-madrinha.js',
-  'js/levels/22-barco.js',
-  'js/levels/23-pedido.js',
-  'js/levels/24-jeanne.js',
-  'js/levels/25-festa.js',
+  'js/levels/14-santos.js',
+  'js/levels/15-sushi.js',
+  'js/levels/16-casa.js',
+  'js/levels/17-naval.js',
+  'js/levels/18-eventos.js',
+  'js/levels/19-mocambique.js',
+  'js/levels/20-lanheses.js',
+  'js/levels/21-noruega.js',
+  'js/levels/22-madrinha.js',
+  'js/levels/23-barco.js',
+  'js/levels/24-pedido.js',
+  'js/levels/25-jeanne.js',
+  'js/levels/26-festa.js',
   'js/levels/index.js',
   'js/main.js',
   'js/nomes.js',

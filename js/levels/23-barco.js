@@ -1,4 +1,4 @@
-// Nível 22 — Passeios de barco: sair da marina, a pescaria e os mergulhos na enseada.
+// Nível 23 — Passeios de barco: sair da marina, a pescaria e os mergulhos na enseada.
 import { Pesca } from '../acts/pesca.js';
 import { Navegar } from '../acts/barco-navegar.js';
 import { Mergulhos } from '../acts/barco-mergulhos.js';

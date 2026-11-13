@@ -36,15 +36,15 @@ export default {
   id: 'pedras',
   title: 'Pedras d\'El Rei',
   music: 'calm',
-  story: 'Todos os anos, a Inês passa uma semana de férias no Algarve, em Pedras d\'El Rei, com a família e os amigos. Para chegar à praia, atravessa-se a ria e apanha-se um comboio antigo. E na areia nunca falta animação!',
+  story: 'Todos os anos, a Inês passa uma semana de férias no Algarve, em Pedras d\'El Rei, com os pais, a Sofia, a Maria, o Zé Inácio e o Kiko. Para chegar à praia, atravessa-se a ria e apanha-se um comboio antigo. E na areia nunca falta animação!',
   help: 'Toca no ecrã (ou Espaço) para apitar no comboio e para bater a bola nas raquetes. No fim da tarde, arrasta o dedo (ou usa as setas) para apanhar conchas.',
   outro: 'Mais um verão em Pedras d\'El Rei!',
   acts: [
     {
       act: Talk, when: 'Entretanto, o Lourenço vai viver para a Austrália...', bg: ponte,
       cast: [
-        { who: 'irma1', x: 0.1 }, { who: 'tiafatima', x: 0.26, name: 'Tia Fátima' }, { who: 'ines', outfit: 'praia', x: 0.44, name: 'Inês' },
-        { who: 'tio', x: 0.62, face: -1, name: TIO }, { who: 'irmao', x: 0.78, face: -1 }, { who: 'irma2', x: 0.92, face: -1 },
+        { who: 'irma1', x: 0.07 }, { who: 'irmao2', x: 0.2 }, { who: 'tiafatima', x: 0.34, name: 'Tia Fátima' }, { who: 'ines', outfit: 'praia', x: 0.48, name: 'Inês' },
+        { who: 'tio', x: 0.63, face: -1, name: TIO }, { who: 'irmao', x: 0.79, face: -1 }, { who: 'irma2', x: 0.93, face: -1 },
       ],
       lines: [
         'Inês: «Pedras d\'El Rei! A nossa semana de praia de todos os anos.»',
@@ -55,6 +55,6 @@ export default {
     },
     { act: PedrasComboio, hearts: 4 },
     { act: PedrasRaquetes, hearts: 4, when: 'Na praia, com a família...' },
-    { act: PedrasAncoras, hearts: 3, when: 'Ao fim da tarde, no Cemitério das Âncoras...' },
+    { act: PedrasAncoras, hearts: 3, when: 'Uns verões mais tarde, já com o pequeno Tomás, no Cemitério das Âncoras...' },
   ],
 };

@@ -1,4 +1,4 @@
-// Ato «reencontro» (nível 14): nas chegadas do aeroporto, a Inês espera; a porta abre-se, o
+// Ato «reencontro» (nível 15): nas chegadas do aeroporto, a Inês espera; a porta abre-se, o
 // Lourenço aparece de mala e chapéu, correm um para o outro e abraçam-se. As falas avançam com
 // um toque (ou sozinhas). Dá um coração no abraço.
 import { Act } from './base.js';

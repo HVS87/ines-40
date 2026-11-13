@@ -29,7 +29,7 @@ export const SAMBA = {
   // cada nota é o instrumento da sua coluna (pandeiro, cavaquinho, surdo) num disco claro
   note: (ctx, R, x, y, lane, col) => { disc(ctx, x, y, 10, INK); disc(ctx, x, y, 9, col); disc(ctx, x, y, 7, PAPER); instrumento(ctx, R, lane, x + (lane === 1 ? -1 : 0), y + (lane === 1 ? 1 : 0), 1); },
   dancers: [
-    { who: 'tomas', outfit: 'casual', x: 0.05, px: 0.07 },
+    { who: 'ana', outfit: 'casual', x: 0.05, px: 0.07 },
     { who: 'ines', outfit: 'casual', x: 0.17, px: 0.23, off: 1 },
     { who: 'lourenco', outfit: 'casual', x: 0.29, px: 0.39 },
   ],

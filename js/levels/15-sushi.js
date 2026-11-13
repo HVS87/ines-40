@@ -1,4 +1,4 @@
-// Nível 14 — O Regresso do Lourenço. Ele volta da Austrália, reatam o namoro, e ele abre o
+// Nível 15 — O Regresso do Lourenço. Ele volta da Austrália, reatam o namoro, e ele abre o
 // Sushi@Home: o reencontro no aeroporto, a cozinha (montar pedidos) e as entregas de scooter.
 import { Estrada } from '../acts/estrada.js';
 import { Reencontro } from '../acts/sushi-reencontro.js';

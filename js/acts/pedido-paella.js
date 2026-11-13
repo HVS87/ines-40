@@ -1,4 +1,4 @@
-// Nível 23, no catamarã: servir a enorme paella. Os convidados passam, um a um, com o prato na
+// Nível 24, no catamarã: servir a enorme paella. Os convidados passam, um a um, com o prato na
 // mão; toca-se para a concha servir quando o prato está por baixo dela. Quem falhar é servido
 // na mesma pelo cozinheiro (sem coração): nunca se perde.
 import { Act } from './base.js';
@@ -6,7 +6,8 @@ import { getCharacter } from '../sprites.js';
 import { INK, PAPER, GOLD, person, shadow, text } from '../draw.js';
 import { tejoBg } from './pedido-cenario.js';
 
-const GUESTS = [['tomas', 'casual', 44], ['tiafatima', 'hoje', 50], ['tio', 'hoje', 46], ['ana', 'casual', 58], ['pipoca', 'casual', 52], ['mi', 'casual', 64]];
+// a bordo: a Ana, a Mi, o Pi e o Leal (dois deles voltam para repetir)
+const GUESTS = [['ana', 'casual', 44], ['pi', 'casual', 50], ['mi', 'casual', 46], ['leal', 'casual', 58], ['pi', 'casual', 52], ['ana', 'casual', 64]];
 const WIN = 10;          // meia largura (px) da zona onde o prato apanha o arroz
 
 export const convesChao = (v) => Math.round(v.h * (v.portrait ? 0.74 : 0.84));

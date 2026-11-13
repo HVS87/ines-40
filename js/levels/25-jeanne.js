@@ -1,4 +1,4 @@
-// Nível 24 — nasce a Jeanne, a filha da Inês e do Lourenço. O Lourenço apanha-a, e o Tomás,
+// Nível 25 — nasce a Jeanne, a filha da Inês e do Lourenço. O Lourenço apanha-a, e o Tomás,
 // que já anda na faculdade, também ajuda.
 import { Talk } from '../acts/base.js';
 import { Catch } from '../acts/catch.js';

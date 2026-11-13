@@ -1,4 +1,4 @@
-// Nível 15 «Viver Juntos», ato 2: decorar a sala.
+// Nível 16 «Viver Juntos», ato 2: decorar a sala.
 //   1. A tinta: a seta passa pelas latas; toca-se na cor de que se gosta (qualquer uma serve).
 //   2. O sofá: o Lourenço e o Tomás andam com ele de um lado para o outro; toca-se quando
 //      está em cima da marca (vale um coração).

@@ -1,4 +1,4 @@
-// Nível 15 «Viver Juntos», ato 1: as mudanças. As caixas sobem as escadas de mão em mão
+// Nível 16 «Viver Juntos», ato 1: as mudanças. As caixas sobem as escadas de mão em mão
 // (Lourenço → Tomás → Inês); toca-se quando a caixa chega às mãos da Inês. O Tomás, agarrado
 // ao telemóvel, deixa cair uma (a que diz «FRÁGIL», claro). Caixa falhada cai ao chão, mas
 // vai para dentro de casa na mesma: nunca se perde.

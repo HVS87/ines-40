@@ -1,4 +1,4 @@
-// Nível 23, o pedido: no catamarã, o Lourenço ajoelha-se com o anel. Mantém-se o dedo no ecrã
+// Nível 24, o pedido: no catamarã, o Lourenço ajoelha-se com o anel. Mantém-se o dedo no ecrã
 // (ou Espaço) para encher o coração do «SIM!»; quando enche, a Inês diz que sim e há fogo de
 // vista de corações. Não há como falhar: se ninguém tocar, o coração enche-se sozinho, devagar.
 import { Act } from './base.js';
@@ -7,8 +7,8 @@ import { INK, PAPER, PINK, GOLD, clamp, shadow, text } from '../draw.js';
 import { tejoBg } from './pedido-cenario.js';
 import { convesChao } from './pedido-paella.js';
 
-const LEFT = [['tio', 'hoje', 0.05], ['tiafatima', 'hoje', 0.15], ['tomas', 'casual', 0.25]];
-const RIGHT = [['ana', 'casual', 0.77], ['pipoca', 'casual', 0.87], ['mi', 'casual', 0.96]];
+const LEFT = [['pi', 'casual', 0.08], ['ana', 'casual', 0.2]];
+const RIGHT = [['mi', 'casual', 0.8], ['leal', 'casual', 0.92]];
 
 // Forma de coração: para um raio r, as riscas (y, x0, x1) que o preenchem.
 const shapes = {};

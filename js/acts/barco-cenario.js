@@ -1,4 +1,4 @@
-// Cenários dos passeios de barco (nível 22): a costa vista do mar, a enseada, a lancha do Pi e
+// Cenários dos passeios de barco (nível 23): a costa vista do mar, a enseada, a lancha do Pi e
 // do Carlos (desenhada à escala u = 1 ou 2) e a «pele» da pesca no mar português.
 import { INK, hash, sky } from '../draw.js';
 import { tom, casco } from './pesca.js';

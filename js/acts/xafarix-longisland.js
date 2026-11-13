@@ -5,7 +5,7 @@
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
 import { INK, PAPER, GOLD, clamp, person, shadow, text, sign } from '../draw.js';
-import { pedra } from './xafarix-cenario.js';
+import { parede, LETREIRO } from './xafarix-cenario.js';
 
 const PARTS = [
   { name: 'VODKA', label: 'vodka', color: '#dcecff', glass: '#eaf6ff', cap: '#c0392b' },
@@ -106,12 +106,12 @@ export class LongIsland extends Act {
 
   draw(ctx, v, R) {
     const g = this.geo(v), { top, cy, ph, gw, cx, gb, gt } = g, t = this.t, P = v.portrait;
-    // parede de pedra, prateleira de garrafas e letreiro
-    R(0, 0, v.w, top, '#2a1c1a');
-    pedra(R, 0, Math.max(0, top - 30), v.w, cy - Math.max(0, top - 30), 8);
-    R(0, 0, v.w, cy, 'rgba(30,18,30,0.3)');
+    // parede caiada, prateleira de garrafas e letreiro
+    R(0, 0, v.w, top, '#1f1a2a');
+    parede(R, 0, Math.max(0, top - 30), v.w, cy - Math.max(0, top - 30), 8);
+    R(0, 0, v.w, cy, 'rgba(120,40,120,0.12)');
     if (P) {
-      sign(ctx, 'XAFARIX', cx, top + 6, { scale: 2, bg: '#4a2018', color: GOLD, border: '#d09a5c' });
+      sign(ctx, 'XAFARIX', cx, top + 6, LETREIRO);
       const sy = top + 46;
       R(8, sy, v.w - 16, 3, '#4a3020'); R(8, sy + 3, v.w - 16, 1, INK);
       for (let x = 14, i = 0; x < v.w - 18; x += 11, i++) this.bottle(R, x, sy, PARTS[i % 5], 0.75);
@@ -120,7 +120,7 @@ export class LongIsland extends Act {
       const sy = top + 30, sw = cx - gw - 40;
       R(8, sy, sw, 3, '#4a3020'); R(8, sy + 3, sw, 1, INK);
       for (let x = 14, i = 0; x < sw - 2; x += 11, i++) this.bottle(R, x, sy, PARTS[i % 5], 0.75);
-      sign(ctx, 'XAFARIX', Math.round(v.w * 0.82), top + 6, { scale: 2, bg: '#4a2018', color: GOLD, border: '#d09a5c' });
+      sign(ctx, 'XAFARIX', Math.round(v.w * 0.82), top + 6, LETREIRO);
     }
     // o barman, atrás do balcão
     const bx = cx + (P ? 76 : 96);

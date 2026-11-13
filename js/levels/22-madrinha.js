@@ -1,4 +1,4 @@
-// Nível 21 — «Madrinha do Micas»: a Inês é madrinha de batismo do Miguel Francisco (o «Micas»),
+// Nível 22 — «Madrinha do Micas»: a Inês é madrinha de batismo do Miguel Francisco (o «Micas»),
 // filho da Mi e do Leal. Embalar o bebé na pia batismal, acender a vela no círio pascal e a
 // fotografia de grupo à saída da igreja.
 import { Talk } from '../acts/base.js';

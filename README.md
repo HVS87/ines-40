@@ -1,6 +1,6 @@
 # Inês 40 — Quarenta Anos de Aventuras
 
-Jogo de browser em pixel art que conta a vida da Inês em 25 níveis, do dia em que nasceu
+Jogo de browser em pixel art que conta a vida da Inês em 26 níveis, do dia em que nasceu
 (15 de novembro de 1986) à festa dos 40 anos (15 de novembro de 2026). Feito para lhe ser
 oferecido nesse dia.
 
@@ -59,19 +59,20 @@ corações ou tempo, e todos os atos acabam sempre.
 | 10 | `10-tomas.js` | Nasce o Tomás | Talk → Catch |
 | 11 | `11-bimby.js` | A Bimby | BimbyReceita → BimbyProgramar → Talk → Call |
 | 12 | `12-xafarix.js` | O Xafarix | Talk → Ritmo → LongIsland → Talk → Call |
-| 13 | `13-jantares.js` | Jantares com Amigos | JantaresQuiche → JantaresCuf → JantaresNoite → Call |
-| 14 | `14-sushi.js` | O Regresso do Lourenço | Reencontro → Cozinha → Estrada |
-| 15 | `15-casa.js` | Viver Juntos | Mudancas → Decorar → Movel → Talk |
-| 16 | `16-naval.js` | Fins de Tarde no Clube Naval | Brinde → Veleiros → Talk |
-| 17 | `17-eventos.js` | Eventos e Viagens | EventosMala → EventosGala → Talk |
-| 18 | `18-mocambique.js` | Moçambique | Talk → Pesca → Banquete |
-| 19 | `19-lanheses.js` | Lanheses | Talk → Eira → Churrasco → Talk |
-| 20 | `20-noruega.js` | Roadtrip na Noruega | Estrada → Mergulho |
-| 21 | `21-madrinha.js` | Madrinha do Micas | Talk → Embalar → Vela → Foto → Talk |
-| 22 | `22-barco.js` | Passeios de Barco | Navegar → Pesca → Mergulhos |
-| 23 | `23-pedido.js` | O Pedido | Talk → Paella → PedidoSim → Ritmo |
-| 24 | `24-jeanne.js` | Nasce a Jeanne | Talk → Catch |
-| 25 | `25-festa.js` | Os 40 Anos | Abracos → Bolo |
+| 13 | `13-jantares.js` | Jantares com Amigos | JantaresQuiche → JantaresCuf → JantaresNoite |
+| 14 | `14-santos.js` | Santos | Sardinhas → Ritmo → Talk → Call |
+| 15 | `15-sushi.js` | O Regresso do Lourenço | Reencontro → Cozinha → Estrada |
+| 16 | `16-casa.js` | Viver Juntos | Mudancas → Decorar → Movel → Talk |
+| 17 | `17-naval.js` | Fins de Tarde no Clube Naval | Brinde → Veleiros → Talk |
+| 18 | `18-eventos.js` | Eventos e Viagens | EventosMala → EventosGala → Talk |
+| 19 | `19-mocambique.js` | Moçambique | Talk → Pesca → Banquete |
+| 20 | `20-lanheses.js` | Lanheses | Talk → Eira → Churrasco → Talk |
+| 21 | `21-noruega.js` | Roadtrip na Noruega | Estrada → Mergulho |
+| 22 | `22-madrinha.js` | Madrinha do Micas | Talk → Embalar → Vela → Foto → Talk |
+| 23 | `23-barco.js` | Passeios de Barco | Navegar → Pesca → Mergulhos |
+| 24 | `24-pedido.js` | O Pedido | Talk → Paella → PedidoSim → Ritmo |
+| 25 | `25-jeanne.js` | Nasce a Jeanne | Talk → Catch |
+| 26 | `26-festa.js` | Os 40 Anos | Abracos → Bolo |
 
 `Talk` é um momento de história (cenário, personagens e falas); `Catch` é o nascimento (o
 bebé salta e é preciso apanhá-lo); `Call` é um telefonema da Austrália, interrompido por um
@@ -93,7 +94,7 @@ partilhadas por vários níveis, cada um com a sua «pele».
 
 ## Testar
 
-- <http://localhost:8090/?qa> corre a suite automática: os robôs jogam os 25 níveis do princípio
+- <http://localhost:8090/?qa> corre a suite automática: os robôs jogam os 26 níveis do princípio
   ao fim (com pausa a meio), e verificam-se os textos, os menus, a gravação do progresso, a lista
   de ficheiros para jogar sem rede e toques ao acaso. Resultado no painel e em `window.__qa`.
   Acrescentar `&touch&device=mobile` para testar como num telemóvel.

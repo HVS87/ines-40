@@ -3,10 +3,10 @@
 import { getCharacter, makeSprite, flip } from '../sprites.js';
 import { INK, disc } from '../draw.js';
 
-// A família, pela ordem: Inês, Tia Fátima, o pai, as duas irmãs e o irmão.
+// A família, pela ordem: Inês, Tia Fátima, o pai, as irmãs (Sofia e Maria) e os irmãos (Zé Inácio e Kiko).
 export function familia() {
   return [getCharacter('ines', 'praia'), getCharacter('tiafatima', 'casual'), getCharacter('tio', 'casual'),
-    getCharacter('irma1', 'casual'), getCharacter('irma2', 'casual'), getCharacter('irmao', 'casual')];
+    getCharacter('irma1', 'casual'), getCharacter('irma2', 'casual'), getCharacter('irmao', 'casual'), getCharacter('irmao2', 'casual')];
 }
 
 // ---------- Gaivotas ----------

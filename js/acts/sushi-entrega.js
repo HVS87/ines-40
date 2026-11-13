@@ -1,4 +1,4 @@
-// Pele da «estrada» para o nível 14: as entregas do Sushi@Home, de scooter, por Lisboa à noite.
+// Pele da «estrada» para o nível 15: as entregas do Sushi@Home, de scooter, por Lisboa à noite.
 // Carros em segunda fila (de quatro piscas), carris do elétrico e um gato guloso pelo caminho;
 // três portas à espera do jantar.
 import { getCharacter } from '../sprites.js';

@@ -4,9 +4,9 @@ import { Talk } from '../acts/base.js';
 
 const FILES = [
   '01-nascimento', '02-escravas', '03-rainha', '04-namoro', '05-garage', '06-croco', '07-verao',
-  '08-farol', '09-pedras', '10-tomas', '11-bimby', '12-xafarix', '13-jantares', '14-sushi',
-  '15-casa', '16-naval', '17-eventos', '18-mocambique', '19-lanheses', '20-noruega',
-  '21-madrinha', '22-barco', '23-pedido', '24-jeanne', '25-festa',
+  '08-farol', '09-pedras', '10-tomas', '11-bimby', '12-xafarix', '13-jantares', '14-santos',
+  '15-sushi', '16-casa', '17-naval', '18-eventos', '19-mocambique', '20-lanheses', '21-noruega',
+  '22-madrinha', '23-barco', '24-pedido', '25-jeanne', '26-festa',
 ];
 
 const missing = (file, err) => ({

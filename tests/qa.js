@@ -7,7 +7,7 @@
 //   ?qa&touch         joga em modo tátil (por omissão, teclado)
 //
 // O que se testa:
-//   1. Dados: os 25 níveis carregam, têm textos e atos, e os corações batem certo.
+//   1. Dados: os 26 níveis carregam, têm textos e atos, e os corações batem certo.
 //   2. O jogo completo: cada nível jogado do princípio ao fim pelos robôs dos atos, com pausa a
 //      meio, sem erros, e a seguir os parabéns finais.
 //   3. Textos: tudo o que os níveis mostram (histórias, instruções e falas), sem marcadores por
@@ -88,7 +88,7 @@ function textProblems(s) {
 }
 
 function testData() {
-  check('há 25 níveis', LEVELS.length === 25, LEVELS.length);
+  check('há 26 níveis', LEVELS.length === 26, LEVELS.length);
   const broken = LEVELS.filter((L) => L.broken).map((L) => `${L.id}: ${L.broken}`);
   check('todos os níveis carregam', !broken.length, broken.join(' | '));
   check('identificadores únicos', new Set(LEVELS.map((L) => L.id)).size === LEVELS.length);
@@ -96,7 +96,7 @@ function testData() {
   check('todos têm título, história, ajuda e frase final', !noText.length, noText.join(', '));
   const noActs = LEVELS.filter((L) => !Array.isArray(L.acts) || !L.acts.length || L.acts.some((a) => typeof a.act !== 'function')).map((L) => L.id);
   check('todos têm atos válidos', !noActs.length, noActs.join(', '));
-  check('etiquetas dos níveis', levelLabel(0) === 'Nível 1' && levelLabel(24) === 'Nível 25');
+  check('etiquetas dos níveis', levelLabel(0) === 'Nível 1' && levelLabel(25) === 'Nível 26');
   const long = LEVELS.filter((L) => (L.story || '').length > 340 || (L.help || '').length > 330).map((L) => L.id);
   check('histórias e ajudas cabem no ecrã (tamanho)', !long.length, long.join(', '));
   const issues = [];
@@ -161,11 +161,11 @@ async function testGame() {
   results[results.length - 1].info = String(total);
 }
 
-// O Lourenço está na Austrália nos níveis 9 a 13: só pode aparecer nos telefonemas (ato Call).
+// O Lourenço está na Austrália nos níveis 9 a 14: só pode aparecer nos telefonemas (ato Call).
 // Joga-se cada um desses níveis sem os telefonemas e vê-se que personagens foram pedidas.
 async function testAway() {
   const bad = [];
-  for (let i = 8; i <= 12; i++) {
+  for (let i = 8; i <= 13; i++) {
     const L = LEVELS[i];
     if (!L || L.broken) continue;
     const acts = L.acts;
@@ -178,8 +178,8 @@ async function testAway() {
     L.acts = acts;
     await tick();
   }
-  check('níveis 9 a 13: o Lourenço só aparece ao telefone', !bad.length, bad.join(', '));
-  check('níveis 11 a 13 acabam com um telefonema da Austrália', [10, 11, 12].every((i) => LEVELS[i] && (LEVELS[i].acts || []).some((a) => a.act.name === 'Call')));
+  check('níveis 9 a 14: o Lourenço só aparece ao telefone', !bad.length, bad.join(', '));
+  check('níveis 11, 12 e 14 acabam com um telefonema da Austrália', [10, 11, 13].every((i) => LEVELS[i] && (LEVELS[i].acts || []).some((a) => a.act.name === 'Call')));
 }
 
 // ---------- Textos mostrados durante o jogo ----------
@@ -200,7 +200,7 @@ function testFlow() {
   check('todos os botões têm uma ação conhecida', !unknown.length, unknown.join(', '));
   game.ui.act('levels');
   const btns = [...document.querySelectorAll('#level-list .level-btn')];
-  check('lista de níveis: 25 botões com título', btns.length === 25 && btns[0].textContent.includes(LEVELS[0].title));
+  check('lista de níveis: 26 botões com título', btns.length === 26 && btns[0].textContent.includes(LEVELS[0].title));
   // sem progresso e fora do modo de testes, só o primeiro nível está aberto
   const keep = game.debug, saved = JSON.stringify(game.save.data);
   game.debug = false;

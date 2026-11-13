@@ -1,4 +1,4 @@
-// Pele da «estrada» para o nível 20: de carro, de Oslo a Bergen. Montanhas com neve, pinheiros,
+// Pele da «estrada» para o nível 21: de carro, de Oslo a Bergen. Montanhas com neve, pinheiros,
 // cascatas, a igreja de madeira de Borgund, o túnel de Lærdal (com as suas grutas de luz azul),
 // Flåm e o fiorde, e por fim as casas coloridas de Bryggen. Na estrada: renas, ovelhas e pedras.
 //   no nível: { act: Estrada, skin: peleNoruega, tunnel: [18.5, 26], course: [...] }

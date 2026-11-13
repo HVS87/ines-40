@@ -1,4 +1,4 @@
-// Nível 19 «Lanheses», ato 1: a eira. O milho está a secar nas lajes e vem lá uma nuvem!
+// Nível 20 «Lanheses», ato 1: a eira. O milho está a secar nas lajes e vem lá uma nuvem!
 // Arrasta-se o dedo (ou usam-se as setas) para levar a Inês até um monte de espigas (apanha
 // sozinha um cesto) e depois até à porta do espigueiro, onde o Lourenço as guarda. Cada monte
 // guardado antes de a nuvem tapar o sol vale um coração; se chover, a família trata do resto.

@@ -1,4 +1,4 @@
-// Nível 17, ato 3 (conversa): a gala a correr bem, vista dos bastidores. À esquerda, por entre
+// Nível 18, ato 3 (conversa): a gala a correr bem, vista dos bastidores. À esquerda, por entre
 // a cortina, o palco iluminado e a plateia a aplaudir; à direita, a Inês (de auricular) a
 // suspirar de alívio... até o telefone tocar para o evento seguinte.
 import { INK, PAPER, GOLD, PINK, MINT, SKIN, hash, sign } from '../draw.js';

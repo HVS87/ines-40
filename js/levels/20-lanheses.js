@@ -1,4 +1,4 @@
-// Nível 19 — «Lanheses»: os dias de família na Casa do Tinoco, a casa de família do Lourenço,
+// Nível 20 — «Lanheses»: os dias de família na Casa do Tinoco, a casa de família do Lourenço,
 // entre Ponte de Lima e Viana do Castelo. A eira e o espigueiro, o churrasco de carne barrosã
 // e a mesa comprida ao pé da piscina.
 import { Talk } from '../acts/base.js';
@@ -23,8 +23,8 @@ function chegada(ctx, v, R, t, act) {
   espigueiro(R, ex, gy, ew, clamp(gy - top - 22, 46, 96), 0.25);
   eira(R, v, gy);
   for (let k = 0; k < 6; k++) monte(R, w * (0.1 + k * 0.16), gy + 5 + (k % 2) * 3);
-  // as irmãs e o irmão, mais atrás, a tirar as malas
-  const atras = [['irma1', 0.06], ['irmao', 0.14], ['irma2', 0.94]];
+  // os irmãos (Sofia, Zé Inácio, Kiko e Maria), mais atrás, a tirar as malas
+  const atras = [['irma1', 0.06], ['irmao', 0.14], ['irmao2', 0.86], ['irma2', 0.94]];
   for (const [who, fx] of atras) person(ctx, getCharacter(who, 'casual'), Math.round(w * fx), gy + 3, { scale: 1, face: fx < 0.5 ? 1 : -1 });
 }
 
@@ -43,11 +43,11 @@ function piscina(ctx, v, R, t, act) {
     if (fy > v.h - 4) continue;
     R(fx, fy, 3, 1, '#6a9a4a'); if (k % 3 === 0) { R(fx, fy - 2, 2, 2, k % 2 ? '#ffffff' : '#ffd166'); }
   }
-  // a piscina, com as irmãs e o irmão lá dentro
+  // a piscina, com os irmãos da Inês lá dentro
   const px = Math.round(w * 0.08), pw = Math.round(w * 0.84), py = hy + 6, ph = P ? 34 : 20;
   R(px - 3, py - 3, pw + 6, ph + 6, INK); R(px - 2, py - 2, pw + 4, ph + 4, '#e6e0d4'); R(px, py, pw, ph, '#3fb0e0'); R(px, py, pw, 2, '#8fdcf5');
   for (let k = 0; k < 8; k++) R(px + 6 + ((k * 41 + Math.floor(t * 8)) % (pw - 16)), py + 4 + ((k * 7) % Math.max(1, ph - 6)), 6, 1, '#bfeaf8');
-  [['irma1', 0.26], ['irmao', 0.5], ['irma2', 0.74]].forEach(([who, fx], k) => {
+  [['irma1', 0.2], ['irmao', 0.4], ['irmao2', 0.6], ['irma2', 0.8]].forEach(([who, fx], k) => {
     const img = getCharacter(who, 'casual').stand[k % 2 ? 'l' : 'r'], bx = Math.round(px + pw * fx), b = Math.round(Math.sin(t * 2 + k) * 1);
     // só a cabeça e os ombros de fora de água
     ctx.drawImage(img, 0, 0, 16, 15, bx - 8, py + ph - 19 + b, 16, 15);
@@ -79,7 +79,7 @@ export default {
   id: 'lanheses',
   title: 'Lanheses',
   music: 'party',
-  story: 'O Lourenço tem uma casa de família em Lanheses, entre Ponte de Lima e Viana do Castelo: a Casa do Tinoco, do nome de um famoso antepassado dele. Todos os anos a Inês convida para lá a família — os pais, as duas irmãs e o irmão — para uns dias de piscina, boa comida e boa bebida. E o Lourenço adora grelhar carne barrosã!',
+  story: 'O Lourenço tem uma casa de família em Lanheses, entre Ponte de Lima e Viana do Castelo: a Casa do Tinoco, do nome de um famoso antepassado dele. Todos os anos a Inês convida para lá a família — os pais, a Sofia, a Maria, o Zé Inácio e o Kiko — para uns dias de piscina, boa comida e boa bebida. E o Lourenço adora grelhar carne barrosã!',
   help: 'Na eira, arrasta o dedo (ou usa as setas) para a Inês levar o milho ao espigueiro antes da chuva. No churrasco, toca na posta que está no ponto (ou escolhe com as setas e serve com Espaço).',
   outro: 'Dizem que é a maior eira da Península Ibérica!',
   ending: 'Uns bons dias de descanso, em família, na Casa do Tinoco.',

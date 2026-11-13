@@ -1,4 +1,4 @@
-// Nível 15 «Viver Juntos», ato 3: montar a estante das instruções impossíveis. A folha mostra
+// Nível 16 «Viver Juntos», ato 3: montar a estante das instruções impossíveis. A folha mostra
 // uma sequência de peças (tábua, parafuso, chave, martelo); depois repete-se a ordem tocando
 // nas peças (ou com as setas + Espaço). Cada passo certo à primeira vale um coração; ao
 // segundo engano, o Tomás resolve o passo (nunca se fica preso). No fim sobra uma peça...

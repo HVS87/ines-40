@@ -1,4 +1,4 @@
-// Cenários de Moçambique (nível 18): a praia de areia branca com palmeiras e um dhow, o mar
+// Cenários de Moçambique (nível 19): a praia de areia branca com palmeiras e um dhow, o mar
 // visto do barco e a «pele» da pesca (barco, tripulação e cores do Índico).
 import { INK, disc, hash, lerp, sky } from '../draw.js';
 import { tom, casco } from './pesca.js';

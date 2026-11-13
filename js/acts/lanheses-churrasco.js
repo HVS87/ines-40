@@ -1,4 +1,4 @@
-// Nível 19 «Lanheses», ato 2: o churrasco do Lourenço. Seis postas de carne barrosã na grelha,
+// Nível 20 «Lanheses», ato 2: o churrasco do Lourenço. Seis postas de carne barrosã na grelha,
 // cada uma com o seu tempo. Toca-se na posta que está no ponto (barra no verde) para a servir
 // — ou, no teclado, escolhe-se com as setas e serve-se com Espaço. Crua não sai da grelha;
 // se passar do ponto, queima-se. Cada posta no ponto vale um coração (até ao máximo do ato).

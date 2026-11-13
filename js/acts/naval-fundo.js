@@ -1,4 +1,4 @@
-// O cenário do Clube Naval de Lisboa (nível 16): a Doca de Belém ao fim da tarde, com os
+// O cenário do Clube Naval de Lisboa (nível 17): a Doca de Belém ao fim da tarde, com os
 // mastros da marina, o Padrão dos Descobrimentos ao lado, a Ponte 25 de Abril ao fundo, o Tejo
 // e o pôr do sol. É usado pelos três atos do nível.
 import { INK, GOLD, clamp, disc, hash, lerp, sky, sign } from '../draw.js';

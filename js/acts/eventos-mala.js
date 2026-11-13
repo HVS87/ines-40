@@ -1,4 +1,4 @@
-// Nível 17, ato 1: fazer a mala antes de o táxi chegar. Em cima da cama há oito coisas: tocar
+// Nível 18, ato 1: fazer a mala antes de o táxi chegar. Em cima da cama há oito coisas: tocar
 // nas quatro da lista (crachá, portátil, sapatos de gala, carregador) para as pôr na mala. As
 // outras (a boia, os chinelos, a Bimby, o comando) fazem perder tempo. Com o teclado, as setas
 // movem o cursor e o Espaço escolhe. No fim, o aeroporto: «PARTIDAS».

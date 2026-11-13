@@ -1,4 +1,4 @@
-// Nível 21 «Madrinha do Micas», ato 3: a fotografia de grupo à saída da igreja, debaixo de
+// Nível 22 «Madrinha do Micas», ato 3: a fotografia de grupo à saída da igreja, debaixo de
 // pétalas e arroz. A máquina está no tripé; toca-se para disparar quando TODOS estão virados
 // para a câmara e o Micas está a sorrir (balão com coração). São quatro fotografias; cada uma
 // bem apanhada vale um coração. As outras também ficam para o álbum (nunca se perde).

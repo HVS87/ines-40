@@ -1,14 +1,18 @@
 // Pedras d'El Rei, ato 3: fim de tarde no Cemitério das Âncoras. A Inês anda à beira-mar
 // (arrastar o dedo ou setas) a apanhar as conchas que cada onda deixa na areia, antes de a onda
-// seguinte as levar. No fim, a fotografia de família de todos os anos, à frente das âncoras.
+// seguinte as levar, com o pequeno Tomás atrás dela («A mãe tem tesouro!»). No fim, a fotografia
+// de família de todos os anos, à frente das âncoras.
 import { Act } from './base.js';
 import { INK, GOLD, PAPER, clamp, lerp, hash, disc, hills, person, shadow, sign, sky, text } from '../draw.js';
 import { tufo, TARDE } from './farol-comum.js';
+import { getCharacter } from '../sprites.js';
 import { familia, ancora, casaAtum } from './pedras-comum.js';
 
 const CICLO = 4.2;                      // segundos entre ondas
 const ONDAS = [1, 1, 2, 1, 2, 1];       // conchas que cada onda deixa
 const VEL = 95;                         // velocidade da Inês (px/s)
+const TESOURO = 'Tomás: «A mãe tem tesouro!»';
+const D = 3;                            // segundos da fala do Tomás, antes da fotografia
 const FALA1 = 'Tia Fátima: «Todos juntos, à frente das âncoras! A fotografia de todos os anos!»';
 const FALA2 = 'Clique! Mais um verão em Pedras d\'El Rei para o álbum de família.';
 
@@ -17,6 +21,7 @@ export class PedrasAncoras extends Act {
 
   start(v) {
     this.fam = familia();
+    this.tom = getCharacter('tomasc');
     this.ix = v.w * 0.3; this.face = 1; this.walk = 0; this.moving = false;
     this.tw = 0; this.onda = -1; this.conchas = []; this.n = 0; this.fase = 'jogo'; this.tf = 0; this.flash = 0;
     this.hint('Arrasta o dedo (ou usa as setas) e apanha as conchas antes de a onda as levar!');
@@ -52,7 +57,7 @@ export class PedrasAncoras extends Act {
         if (this.conchas.some((c) => !c.got)) this.sfx('slurp');
         this.conchas = [];
         this.onda = k;
-        if (k >= ONDAS.length) { this.fase = 'foto'; this.tf = 0; this.hint(FALA1); this.sfx('click'); return; }
+        if (k >= ONDAS.length) { this.fase = 'foto'; this.tf = 0; this.hint(TESOURO); this.sfx('kiss'); return; }
         const n = ONDAS[k], lado = this.ix > v.w / 2 ? -1 : 1, lim = Math.min(150, v.w * 0.42);
         const x1 = clamp(this.ix + lado * (45 + hash(k * 3.7) * (lim - 45)), 18, v.w - 18);
         const t0 = this.tw + CICLO * 0.18;
@@ -68,8 +73,9 @@ export class PedrasAncoras extends Act {
         }
       }
     } else if (this.fase === 'foto') {
-      if (this.tf > 2.4 && this.tf - dt <= 2.4) { this.flash = 1; this.sfx('plim'); this.hint(FALA2); }
-      if (this.tf > 7.5 || (this.tf > 4 && I.actionPressed)) { this.fase = 'fim'; this.done(); }
+      if (this.tf > D && this.tf - dt <= D) { this.hint(FALA1); this.sfx('click'); }
+      if (this.tf > D + 2.4 && this.tf - dt <= D + 2.4) { this.flash = 1; this.sfx('plim'); this.hint(FALA2); }
+      if (this.tf > D + 7.5 || (this.tf > D + 4 && I.actionPressed)) { this.fase = 'fim'; this.done(); }
     }
   }
 
@@ -103,23 +109,30 @@ export class PedrasAncoras extends Act {
       if (!c.got) R(x, y - 12 - Math.round(Math.abs(Math.sin(t * 5)) * 2), 1, 3, GOLD);
     }
     // a família
-    const sp = Math.min(34, (v.w - 30) / 6), fy2 = dBot + (P ? 16 : 22), ordem = [3, 1, 0, 2, 5, 4];
+    const sp = Math.min(32, (v.w - 30) / 7), fy2 = dBot + (P ? 16 : 22), ordem = [3, 6, 1, 0, 2, 5, 4];
+    const tf = Math.max(0, this.tf - D);                    // tempo desde que a família se junta para a fotografia
     if (!foto) {
       // os outros passeiam junto às âncoras
-      [1, 2, 3, 4, 5].forEach((k, i) => { const x = v.w * (P ? 0.36 : 0.5) + i * (P ? 30 : 34), y = dBot + 6; shadow(ctx, x, y, 12); person(ctx, this.fam[k], x, y, { scale: 2, face: i < 3 ? 1 : -1 }); });
+      [1, 2, 3, 4, 5, 6].forEach((k, i) => { const x = v.w * (P ? 0.3 : 0.44) + i * (P ? 26 : 30), y = dBot + 6; shadow(ctx, x, y, 12); person(ctx, this.fam[k], x, y, { scale: 2, face: i < 3 ? 1 : -1 }); });
       shadow(ctx, this.ix, gy, 14);
+      // o Tomás, pequenino, atrás da mãe
+      const tx = this.ix - this.face * 22;
+      shadow(ctx, tx, gy, 10); person(ctx, this.tom, tx, gy, { scale: 2, face: this.face, moving: this.moving, dist: this.walk });
       person(ctx, this.fam[0], this.ix, gy, { scale: 2, face: this.face, moving: this.moving, dist: this.walk });
     } else {
-      const u = clamp(this.tf / 1.6, 0, 1), cx = v.w / 2;
+      const u = clamp(tf / 1.6, 0, 1), cx = v.w / 2;
       ordem.forEach((k, j) => {
-        const xf = cx + (j - 2.5) * sp, x0 = k === 0 ? this.ix : v.w * (P ? 0.36 : 0.5) + (k - 1) * (P ? 30 : 34), y0 = k === 0 ? gy : dBot + 6;
+        const xf = cx + (j - 3) * sp, x0 = k === 0 ? this.ix : v.w * (P ? 0.3 : 0.44) + (k - 1) * (P ? 26 : 30), y0 = k === 0 ? gy : dBot + 6;
         const x = lerp(x0, xf, u), y = lerp(y0, fy2, u), pronto = u >= 1;
         shadow(ctx, x, y, 14);
-        person(ctx, this.fam[k], x, y, { scale: 2, face: pronto ? (j < 3 ? 1 : -1) : (xf > x0 ? 1 : -1), moving: !pronto, dist: u * 80, hop: pronto && this.tf > 2.4 ? Math.round(Math.abs(Math.sin(t * 6 + j)) * 2) : 0 });
+        person(ctx, this.fam[k], x, y, { scale: 2, face: pronto ? (j < 3 ? 1 : -1) : (xf > x0 ? 1 : -1), moving: !pronto, dist: u * 80, hop: pronto && tf > 2.4 ? Math.round(Math.abs(Math.sin(t * 6 + j)) * 2) : 0 });
       });
+      // o Tomás à frente de todos, aos saltos com as conchas
+      const tx0 = this.ix - this.face * 22, tx = lerp(tx0, cx + 6, u), ty = lerp(gy, fy2 + 7, u);
+      shadow(ctx, tx, ty, 10); person(ctx, this.tom, tx, ty, { scale: 2, face: 1, moving: u < 1 && this.tf > D, dist: u * 60, hop: Math.round(Math.abs(Math.sin(t * 7)) * 3) });
       // a moldura da fotografia
-      if (this.tf > 2.4) {
-        const x0 = Math.round(cx - sp * 3 - 8), x1 = Math.round(cx + sp * 3 + 8), y0 = Math.max(top + 2, fy2 - 64), y1 = fy2 + 8;
+      if (tf > 2.4) {
+        const x0 = Math.round(cx - sp * 3.5 - 8), x1 = Math.round(cx + sp * 3.5 + 8), y0 = Math.max(top + 2, fy2 - 64), y1 = fy2 + 8;
         R(x0 - 6, y0 - 6, x1 - x0 + 12, 6, PAPER); R(x0 - 6, y1, x1 - x0 + 12, 16, PAPER); R(x0 - 6, y0, 6, y1 - y0, PAPER); R(x1, y0, 6, y1 - y0, PAPER);
         R(x0 - 7, y0 - 7, x1 - x0 + 14, 1, INK); R(x0 - 7, y1 + 16, x1 - x0 + 14, 1, INK); R(x0 - 7, y0 - 7, 1, y1 - y0 + 24, INK); R(x1 + 6, y0 - 7, 1, y1 - y0 + 24, INK);
         text(ctx, 'PEDRAS D\'EL REI', cx, y1 + 5, '#a3242c', { align: 'center' });
@@ -137,6 +150,6 @@ export class PedrasAncoras extends Act {
     if (this.fase === 'jogo') {
       const c = this.conchas.find((q) => !q.got && this.tw >= q.t0);
       if (c) { I.pointerX = c.x / v.w; I.pointerY = 0.9; }
-    } else if (this.tf > 4.5) I.actionPressed = true;
+    } else if (this.tf > D + 4.5) I.actionPressed = true;
   }
 }

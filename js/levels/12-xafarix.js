@@ -11,7 +11,7 @@ export default {
   id: 'xafarix',
   title: 'O Xafarix',
   music: 'party',
-  story: 'A Inês adorava dançar com o Pipoca, a Ana e a Mi no Xafarix, o clube de música ao vivo do Luís Represas, com o Mico da Câmara Pereira a tocar guitarra e a cantar. Ao balcão, os Long Island Iced Teas saíam na perfeição. Foi nestas noites que a Mi começou a namorar com o Leal e que o Nuno pediu a Maria em casamento.',
+  story: 'A Inês adorava dançar com o Pipoca, a Ana e a Mi no Xafarix, o bar de música ao vivo do Luís Represas, com o Mico da Câmara Pereira a tocar guitarra e a cantar. Ao balcão, os Long Island Iced Teas saíam na perfeição. Foi nestas noites que a Mi começou a namorar com o Leal e que o Nuno pediu a Maria em casamento.',
   help: 'A dançar: toca do lado da nota (ou usa as setas ← →) quando ela chegar ao círculo. Ao balcão: mantém o dedo no ecrã (ou Espaço) para deitar cada bebida e larga na marca dourada.',
   outro: 'Música ao vivo, amigos e amores: as noites do Xafarix!',
   acts: [

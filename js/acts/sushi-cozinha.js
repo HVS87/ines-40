@@ -1,4 +1,4 @@
-// Ato «cozinha» (nível 14): a cozinha do Sushi@Home. As peças passam num tapete; quando uma
+// Ato «cozinha» (nível 15): a cozinha do Sushi@Home. As peças passam num tapete; quando uma
 // peça do pedido (o talão, em cima) passar debaixo dos hashi do Lourenço, toca: ele apanha-a e
 // a Inês arruma-a na caixa. Cada pedido completo dá um coração (se não houver mais de um engano).
 // Nunca encrava: ao fim de uns segundos, a Inês acaba o pedido (sem coração).

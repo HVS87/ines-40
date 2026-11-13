@@ -1,4 +1,4 @@
-// Nível 15 «Viver Juntos»: a sala da casa nova, partilhada pelos atos do nível (decorar,
+// Nível 16 «Viver Juntos»: a sala da casa nova, partilhada pelos atos do nível (decorar,
 // montar o móvel e o serão no sofá). O que o jogador escolhe (cor da parede, quadros direitos
 // ou tortos) fica guardado na cena, em `scene.casa`, para aparecer igual nos atos seguintes.
 import { INK, PAPER, GOLD, PINK, MINT, hash } from '../draw.js';

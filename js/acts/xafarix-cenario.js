@@ -1,8 +1,40 @@
-// Cenário do Xafarix (nível 12): o bar de música ao vivo colado ao chafariz, com paredes de
-// pedra, um palco pequeno onde o Mico toca guitarra e canta, mesas (onde também se dança) e o
-// letreiro «XAFARIX». Serve de fundo ao jogo de ritmo, ao balcão e aos momentos de história.
-import { getCharacter } from '../sprites.js';
-import { INK, PAPER, GOLD, hash, sign } from '../draw.js';
+// Cenário do Xafarix (nível 12), desenhado a partir de fotografias da sala: paredes brancas,
+// arcos de pedra amarelada, chão de tijoleira, bancos corridos de pele escura, mesas brancas, um
+// palco preto pequeno com a sua grade de projetores (luzes cor-de-rosa e roxas) e o gato de
+// auscultadores do logótipo. Serve de fundo ao jogo de ritmo, ao balcão e aos momentos de história.
+import { getCharacter, makeSprite } from '../sprites.js';
+import { INK, PAPER, hash, text } from '../draw.js';
+
+const WALL = '#efe8dc', WALL_D = '#dcd2c2', STONE = '#c9a35a', STONE_L = '#e0bf7a', STONE_D = '#a07f42';
+const TILE = '#a8482e', TILE_D = '#7e3220', TILE_L = '#bf5a3a', LEATHER = '#3a2a26';
+
+// Estilo do letreiro «XAFARIX» (para sign() de js/draw.js).
+export const LETREIRO = { scale: 2, bg: '#f4eee2', color: '#2b1d2e', border: '#2b1d2e' };
+
+// O gato de auscultadores do logótipo (17x13): w traço, h auscultadores, k olhos, nariz e boca.
+const GATO = [
+  '....hhhhhhhhh....',
+  '...h.........h...',
+  '..h.ww.....ww.h..',
+  '.hh.www...www.hh.',
+  '.hhwwwwwwwwwwwhh.',
+  '.hhwkkkwwwkkkwhh.',
+  '.hhwwwwwwwwwwwhh.',
+  'w..wwwwwkwwwww..w',
+  '.w.wwwwkkkwwww.w.',
+  'w..wwwwwkwwwww..w',
+  '....wwkwwwkww....',
+  '.....wwkkkww.....',
+  '......wwwww......',
+];
+const gatos = new Map();
+// Desenha o gato com o canto em (x, y): fg = cor do traço, bg = cor do fundo (olhos, nariz, boca).
+export function gato(ctx, x, y, fg = '#ffffff', bg = '#141220', scale = 1) {
+  const key = fg + bg;
+  if (!gatos.has(key)) gatos.set(key, makeSprite(GATO, { w: fg, h: fg, k: bg }));
+  const img = gatos.get(key);
+  ctx.drawImage(img, Math.round(x), Math.round(y), img.width * scale, img.height * scale);
+}
 
 // Feixe de luz em riscas (um trapézio).
 function beam(R, x0, y0, x1, y1, w0, w1, color) {
@@ -10,38 +42,45 @@ function beam(R, x0, y0, x1, y1, w0, w1, color) {
   for (let i = 0; i < n; i++) { const f = i / n, w = w0 + (w1 - w0) * f; R(x0 + (x1 - x0) * f - w / 2, y0 + i * 2, w, 2, color); }
 }
 
-// Parede de pedra do chafariz: blocos de calcário com juntas, mais escuros junto ao teto.
-export function pedra(R, x0, y0, w, h, seed = 0) {
-  R(x0, y0, w, h, '#8f8672');
-  const bh = 12;
-  for (let y = y0, j = 0; y < y0 + h; y += bh, j++) {
-    const off = (j % 2) * 13;
-    for (let x = x0 - off, i = 0; x < x0 + w; x += 26, i++) {
-      const s = hash(i * 7.3 + j * 3.1 + seed);
-      const c = s > 0.75 ? '#a39a84' : s > 0.4 ? '#958c78' : s > 0.15 ? '#877e6a' : '#7a725f';
-      const xa = Math.max(x0, x + 1), xb = Math.min(x0 + w, x + 25), hh = Math.min(bh - 1, y0 + h - y - 1);
-      if (xb > xa && hh > 0) { R(xa, y + 1, xb - xa, hh, c); R(xa, y + 1, xb - xa, 1, '#b0a790'); }
-    }
+// Parede branca caiada, com um leve banho de luz cor-de-rosa e roxa a subir dos apliques.
+export function parede(R, x0, y0, w, h, seed = 0) {
+  R(x0, y0, w, h, WALL);
+  for (let i = 0; i < Math.floor(w / 9); i++) R(x0 + hash(i + seed) * w, y0 + hash(i * 3.3 + seed) * h, 2, 1, WALL_D);
+  R(x0, y0, w, Math.min(h, 8), 'rgba(60,30,80,0.18)');
+}
+
+// Aplique de parede: caixa branca com a luz colorida a escorrer para baixo.
+function aplique(R, x, y, color, t) {
+  const a = 0.2 + Math.sin(t * 2 + x) * 0.04;
+  for (let k = 0; k < 9; k++) R(x - 5 - k, y + 8 + k * 2, 10 + k * 2, 2, color.replace('A', (a * (1 - k / 9)).toFixed(2)));
+  R(x - 4, y - 1, 8, 10, WALL_D); R(x - 3, y, 6, 8, '#ffffff');
+}
+
+// Arco de pedra amarelada (pilares e volta), com a sala seguinte, mais escura, lá ao fundo.
+function arco(R, cx, by, w, h) {
+  const r = Math.round(w / 2), top = by - h;
+  // o vão: a outra sala, em penumbra quente
+  for (let y = 0; y < h; y++) {
+    const dy = y < r ? r - y : 0, half = Math.round(Math.sqrt(Math.max(0, r * r - dy * dy)));
+    R(cx - half, top + y, half * 2, 1, y % 2 ? '#5a4038' : '#523a34');
   }
-  R(x0, y0, w, Math.min(h, 10), 'rgba(30,20,30,0.35)');
+  R(cx - 4, by - 26, 8, 2, '#ffd166'); R(cx - 12, by - 14, 24, 14, LEATHER);          // uma luz e um banco ao fundo
+  // os pilares e a volta de pedra
+  for (const d of [-1, 1]) { R(cx + d * r - 3, top + r, 7, h - r, STONE); R(cx + d * r - 3, top + r, 2, h - r, STONE_L); R(cx + d * r + 2, top + r, 2, h - r, STONE_D); }
+  for (let a = 0; a <= 32; a++) {
+    const an = (a / 32) * Math.PI, x = cx - Math.cos(an) * r, y = top + r - Math.sin(an) * r;
+    R(x - 3, y - 3, 7, 7, a % 4 === 0 ? STONE_D : STONE); R(x - 3, y - 3, 7, 2, STONE_L);
+  }
 }
 
-// Arco de pedra com um nicho escuro e um candeeiro lá dentro.
-function arco(R, cx, by, w, h, t) {
-  R(cx - w / 2 - 3, by - h, w + 6, h, '#6a6252');
-  R(cx - w / 2 + 2, by - h - 3, w - 4, 3, '#6a6252');
-  R(cx - w / 2, by - h + 3, w, h - 3, '#2a2030'); R(cx - w / 2 + 3, by - h, w - 6, 3, '#2a2030');
-  const glow = 0.25 + Math.sin(t * 5 + cx) * 0.05;
-  R(cx - 5, by - h + 8, 10, 12, `rgba(255,190,90,${glow.toFixed(2)})`);
-  R(cx - 2, by - h + 10, 4, 6, '#ffd166'); R(cx - 3, by - h + 9, 6, 1, INK); R(cx - 1, by - h + 4, 1, 5, '#5a5248');
-}
-
-// Mesa redonda de madeira (tampo a `th` do chão), com uma vela.
+// Mesa branca de pé central (tampo a MESA_H do chão), com uma vela e pegadas de gato no tampo.
 export const MESA_H = 16;
 export function mesa(R, x, gy, t = 0) {
-  R(x - 18, gy - MESA_H - 1, 36, 5, INK); R(x - 17, gy - MESA_H, 34, 3, '#b07a44'); R(x - 17, gy - MESA_H, 34, 1, '#d09a5c');
-  R(x - 3, gy - MESA_H + 4, 6, MESA_H - 6, INK); R(x - 2, gy - MESA_H + 4, 4, MESA_H - 6, '#7a4f2a');
-  R(x - 9, gy - 3, 18, 3, INK); R(x - 8, gy - 2, 16, 1, '#7a4f2a');
+  R(x - 18, gy - MESA_H - 1, 36, 5, INK); R(x - 17, gy - MESA_H, 34, 3, '#f4eee2'); R(x - 17, gy - MESA_H + 2, 34, 1, '#cfc6b6');
+  R(x - 9, gy - MESA_H, 2, 1, '#3a2a26'); R(x + 5, gy - MESA_H + 1, 2, 1, '#3a2a26');
+  R(x - 2, gy - MESA_H + 4, 4, MESA_H - 6, '#2b2530');
+  R(x - 9, gy - 3, 18, 3, INK); R(x - 8, gy - 2, 16, 1, '#4a4458');
+  R(x - 1, gy - MESA_H - 4, 3, 3, '#fff3c4'); if (Math.floor(t * 6 + x) % 3) R(x, gy - MESA_H - 6, 1, 2, '#ff8a3a');
 }
 
 // O Mico, de guitarra, ao microfone (pés em x, gy).
@@ -61,7 +100,7 @@ export function mico(ctx, R, x, gy, t, beat = t * 2, playing = true) {
   const s = playing ? Math.round(Math.sin(beat * Math.PI * 2) * 2) : 0;
   R(gx - 1, gyy + 2 + s, 4, 4, INK); R(gx, gyy + 3 + s, 2, 2, '#f6c9a0');
   // microfone
-  R(x + 15, gy - 34, 1, 34, '#3a3448'); R(x + 11, gy - 1, 9, 1, '#3a3448'); R(x + 12, gy - 37, 4, 4, INK); R(x + 13, gy - 36, 2, 2, '#c9c9d8');
+  R(x + 15, gy - 34, 1, 34, '#8a8794'); R(x + 11, gy - 1, 9, 1, '#8a8794'); R(x + 12, gy - 37, 4, 4, INK); R(x + 13, gy - 36, 2, 2, '#c9c9d8');
   // notas de música a subir
   if (playing) {
     for (let k = 0; k < 2; k++) {
@@ -71,47 +110,62 @@ export function mico(ctx, R, x, gy, t, beat = t * 2, playing = true) {
   }
 }
 
-// o: { gy, top, beat, pulse, playing, tables: [x...], stage: x do Mico (ou null), bar: desenha só a sala }
+// O chão de tijoleira vermelha, com as juntas escuras.
+export function tijoleira(R, w, gy, h) {
+  R(0, gy, w, h - gy, TILE);
+  for (let y = gy, j = 0; y < h; y += 10, j++) {
+    R(0, y, w, 1, TILE_D);
+    for (let x = (j % 2) * 9; x < w; x += 18) { R(x, y, 1, 10, TILE_D); if (hash(x + j * 7) > 0.7) R(x + 2, y + 2, 14, 6, TILE_L); }
+  }
+}
+
+// o: { gy, top, beat, playing, tables: [x...], stage: x do Mico (ou null), signX }
 export function xafarixBg(ctx, v, R, t, o) {
   const { gy, top } = o, w = v.w, P = v.portrait;
-  // teto de madeira e parede de pedra
-  R(0, 0, w, top, '#2a1c1a');
-  pedra(R, 0, Math.max(0, top - 30), w, gy - Math.max(0, top - 30), 3);
-  for (let x = 6; x < w; x += 46) R(x, 0, 5, top - 28, '#3a2820');
-  // arcos com candeeiros
-  const ah = Math.min(P ? 84 : 56, gy - top - 34), na = P ? 2 : 3;
-  for (let i = 0; i < na; i++) arco(R, Math.round(((i + 0.5) * w) / na + (P ? 0 : 0)), gy - 6, 30, ah, t);
-  // quadros com fotografias de concertos (só ao alto, onde a parede é grande)
-  if (P && gy - top > 150) {
-    for (let i = 0; i < 3; i++) {
-      const fx = Math.round(w * (0.2 + i * 0.3)) - 11, fy = top + 44 + (i % 2) * 8;
-      R(fx - 1, fy - 1, 24, 20, INK); R(fx, fy, 22, 18, '#d09a5c'); R(fx + 2, fy + 2, 18, 14, ['#3a4a6a', '#5a3a4a', '#3a5a4a'][i]);
-      R(fx + 8, fy + 6, 5, 5, '#f6c9a0'); R(fx + 7, fy + 11, 7, 5, PAPER); R(fx + 13, fy + 9, 6, 2, '#c8843c');
-    }
+  // teto escuro e parede caiada
+  R(0, 0, w, top, '#1f1a2a');
+  const wy = Math.max(0, top - 30);
+  parede(R, 0, wy, w, gy - wy, 3);
+  // arcos de pedra, com a sala do fundo
+  const ah = Math.min(P ? 92 : 62, gy - top - 30), aw = P ? 62 : 54, na = P ? 2 : 3;
+  for (let i = 0; i < na; i++) {
+    const cx = Math.round(((i + 0.5) * w) / na);
+    if (o.stage !== null && o.stage !== undefined && Math.abs(cx - o.stage) < aw * 0.8) continue;   // o palco tapa esse arco
+    arco(R, cx, gy - 6, aw, ah);
   }
-  // letreiro
+  // apliques de luz cor-de-rosa e roxa
+  for (let i = 0; i <= na; i++) {
+    const x = Math.round((i * w) / na) + (i === 0 ? 10 : i === na ? -10 : 0);
+    if (o.stage !== null && o.stage !== undefined && Math.abs(x - o.stage) < 44) continue;
+    aplique(R, x, gy - ah - 2, i % 2 ? 'rgba(200,90,255,A)' : 'rgba(255,90,170,A)', t);
+  }
+  // letreiro: o nome em letras escuras sobre branco e o gato ao lado
   const sx = o.signX !== undefined ? o.signX : Math.round(w * (P ? 0.64 : 0.76));
-  sign(ctx, 'XAFARIX', sx, top + 5, { scale: 2, bg: '#4a2018', color: GOLD, border: '#d09a5c' });
-  // fio de luzinhas
-  for (let x = 4, i = 0; x < w; x += 12, i++) {
-    const y = top + 30 + Math.round(Math.sin(x * 0.045) * 3);
-    R(x, y, 2, 2, (i + Math.floor(t * 2)) % 3 ? '#ffd166' : '#ff8a4b');
-  }
-  // rodapé e chão de tábuas
-  R(0, gy - 6, w, 6, '#4a3626'); R(0, gy - 7, w, 1, INK);
-  R(0, gy, w, v.h - gy, '#6a4a2e');
-  for (let y = gy, j = 0; y < v.h; y += 9, j++) {
-    R(0, y, w, 1, '#4a3220');
-    for (let x = (j % 2) * 30 + 10; x < w; x += 60) R(x, y, 1, 9, '#4a3220');
-  }
-  // palco pequeno, com foco de luz, e o Mico
+  R(sx - 47, top + 3, 94, 19, INK); R(sx - 46, top + 4, 92, 17, '#f4eee2');
+  text(ctx, 'XAFARIX', sx - 40, top + 8, '#2b1d2e', { scale: 2 });
+  gato(ctx, sx + 24, top + 6, '#2b1d2e', '#f4eee2');
+  // banco corrido de pele escura ao longo da parede e rodapé
+  R(0, gy - 13, w, 13, INK); R(0, gy - 12, w, 12, LEATHER); R(0, gy - 12, w, 2, '#5a4038');
+  for (let x = 20; x < w; x += 40) R(x, gy - 12, 1, 12, '#2a1c1a');
+  tijoleira(R, w, gy, v.h);
+  // palco preto pequeno, com o pano de fundo, a grade de projetores e o Mico
   if (o.stage !== null && o.stage !== undefined) {
-    const mx = o.stage, sw = 76, sh = 9;
-    beam(R, mx, top + 34, mx, gy - sh, 8, 60, 'rgba(255,220,150,0.16)');
-    R(mx - sw / 2 - 1, gy - sh - 1, sw + 2, sh + 1, INK); R(mx - sw / 2, gy - sh, sw, sh, '#7a4f2a'); R(mx - sw / 2, gy - sh, sw, 2, '#b07a44');
+    const mx = o.stage, sw = 84, sh = 9, ty = Math.max(top + 26, gy - ah - 18);
+    R(mx - sw / 2, ty, sw, gy - sh - ty, '#141220');                                   // pano preto
+    R(mx - sw / 2 + 4, ty + 10, 21, 26, INK); gato(ctx, mx - sw / 2 + 6, ty + 13);      // o cartaz do gato
+    for (let k = 0; k < 4; k++) R(mx - sw / 2 + 5, ty + 29 + k * 2, 19 - k * 2, 1, '#ffffff');
+    // grade de projetores
+    R(mx - sw / 2 - 2, ty - 4, sw + 4, 4, INK);
+    for (let x = mx - sw / 2; x < mx + sw / 2; x += 6) R(x, ty - 3, 3, 2, '#4a4458');
+    ['#ff4f8a', '#ffd166', '#c85aff'].forEach((c, i) => {
+      const lx = mx - 26 + i * 26;
+      R(lx - 3, ty, 7, 6, INK); R(lx - 2, ty + 4, 5, 2, c);
+      beam(R, lx, ty + 6, mx + (i - 1) * 10, gy - sh, 5, 34, c === '#ffd166' ? 'rgba(255,220,150,0.13)' : c === '#ff4f8a' ? 'rgba(255,80,150,0.13)' : 'rgba(200,90,255,0.13)');
+    });
+    R(mx - sw / 2 - 1, gy - sh - 1, sw + 2, sh + 1, INK); R(mx - sw / 2, gy - sh, sw, sh, '#1c1a22'); R(mx - sw / 2, gy - sh, sw, 2, '#3a3448');
     // coluna de som
-    R(mx - 36, gy - sh - 20, 14, 20, INK); R(mx - 35, gy - sh - 19, 12, 18, '#2a2436'); R(mx - 32, gy - sh - 16, 6, 6, '#0d0820'); R(mx - 31, gy - sh - 8, 4, 4, '#0d0820');
-    mico(ctx, R, mx + 2, gy - sh, t, o.beat === undefined ? t * 1.7 : o.beat, o.playing !== false);
+    R(mx - 38, gy - sh - 22, 14, 22, INK); R(mx - 37, gy - sh - 21, 12, 20, '#2a2436'); R(mx - 34, gy - sh - 18, 6, 6, '#0d0820'); R(mx - 33, gy - sh - 9, 4, 4, '#0d0820');
+    mico(ctx, R, mx + 4, gy - sh, t, o.beat === undefined ? t * 1.7 : o.beat, o.playing !== false);
   }
   // mesas
   for (const x of o.tables || []) mesa(R, x, gy, t);

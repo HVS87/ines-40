@@ -1,4 +1,4 @@
-// Pedras d'El Rei, ato 2: raquetes na praia. A Inês e o irmão trocam a bola sem a deixar cair:
+// Pedras d'El Rei, ato 2: raquetes na praia. A Inês e o Kiko trocam a bola sem a deixar cair:
 // toca-se quando a bola chega à raquete da Inês. Contam-se os toques; a família torce, debaixo
 // dos chapéus de sol, e passa o vendedor das bolas de Berlim.
 import { Act } from './base.js';
@@ -18,7 +18,7 @@ export class PedrasRaquetes extends Act {
     this.vend = getCharacter('empregado');
     this.u = 0; this.dir = -1; this.T = 1.3; this.hits = 0; this.arr = 0; this.swing = 0; this.cool = 0; this.pswing = 0;
     this.fase = 'serve'; this.tf = 0; this.from = null; this.festa = 0; this.over = 0;
-    this.hint('Toca quando a bola chegar à raquete da Inês. Não a deixes cair na areia!');
+    this.hint('Raquetes com o Kiko! Toca quando a bola chegar à raquete da Inês.');
   }
 
   lay(v) {
@@ -38,7 +38,7 @@ export class PedrasRaquetes extends Act {
     this.tf += dt;
     if (this.over) { this.over += dt; if (this.over > 3.2 || (this.over > 1.2 && I.actionPressed)) this.done(); return; }
     if (this.fase === 'serve') {
-      // o irmão prepara-se e serve
+      // o Kiko prepara-se e serve
       if (this.tf > 0.9) { this.fase = 'voo'; this.dir = -1; this.u = 0; this.from = null; this.pswing = 1; this.sfx('toc'); }
       return;
     }
@@ -86,10 +86,10 @@ export class PedrasRaquetes extends Act {
     const { sy } = praia(ctx, v, R, t, { ...DIA, gy, sy: gy - (P ? 110 : 36), hy: gy - (P ? 170 : 62) });
     // ao fundo: chapéus de sol, toalhas e a família a torcer
     const by = sy + (P ? 34 : 13), salto = this.festa > 0 ? Math.round(Math.abs(Math.sin(t * 14)) * 3) : 0;
-    const xs = P ? [0.3, 0.44, 0.58, 0.72] : [0.36, 0.45, 0.55, 0.64];
+    const xs = P ? [0.26, 0.38, 0.5, 0.62, 0.74] : [0.34, 0.42, 0.5, 0.58, 0.66];
     R(v.w * xs[0] - 12, by + 1, 30, 4, '#e0527a'); R(v.w * xs[2] - 6, by + 2, 30, 4, '#3fa6a0'); R(v.w * xs[2] - 6, by + 2, 6, 4, '#ffffff');
-    chapeu(R, v.w * xs[0] - 12, by, '#e0572f', '#fff6e6'); chapeu(R, v.w * xs[3] + 12, by, '#2f6fb5', '#ffd166');
-    [1, 2, 3, 4].forEach((k, i) => { shadow(ctx, v.w * xs[i], by + 2, 8); person(ctx, this.fam[k], v.w * xs[i], by + 2, { face: i < 2 ? -1 : 1, hop: salto && (i + Math.floor(t * 7)) % 2 ? salto : 0 }); });
+    chapeu(R, v.w * xs[0] - 12, by, '#e0572f', '#fff6e6'); chapeu(R, v.w * xs[4] + 12, by, '#2f6fb5', '#ffd166');
+    [1, 2, 3, 4, 5].forEach((k, i) => { shadow(ctx, v.w * xs[i], by + 2, 8); person(ctx, this.fam[k], v.w * xs[i], by + 2, { face: i < 2 ? -1 : 1, hop: salto && (i + Math.floor(t * 7)) % 2 ? salto : 0 }); });
     // o vendedor das bolas de Berlim
     const vu = ((t + 4) % 16) / 9;
     if (vu < 1) {
@@ -108,7 +108,7 @@ export class PedrasRaquetes extends Act {
     };
     shadow(ctx, ix, gy, 14); person(ctx, this.fam[0], ix, gy, { scale: 2, face: 1, hop: Math.round(this.swing * 3) });
     raquete(ix, gy, 1, this.swing, janela);
-    shadow(ctx, px, gy, 14); person(ctx, this.fam[5], px, gy, { scale: 2, face: -1, hop: Math.round(this.pswing * 3) });
+    shadow(ctx, px, gy, 14); person(ctx, this.fam[6], px, gy, { scale: 2, face: -1, hop: Math.round(this.pswing * 3) });
     raquete(px, gy, -1, this.pswing, false);
     // a bola (e a sombra na areia)
     let p = null;

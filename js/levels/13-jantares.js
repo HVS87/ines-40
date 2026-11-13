@@ -1,7 +1,6 @@
 // Nível 13: jantares com amigos. As quiches em casa do Pipoca, com a Ana e a Mi; o dedo cortado,
 // as urgências da CUF de garrafa de vodka na mão e, no fim, sair à noite a rir de tudo.
-// (O Lourenço está na Austrália: só aparece no telefonema do fim.)
-import { Call } from '../acts/call.js';
+// (O Lourenço está na Austrália: não aparece.)
 import { JantaresQuiche } from '../acts/jantares-quiche.js';
 import { JantaresCuf } from '../acts/jantares-cuf.js';
 import { JantaresNoite } from '../acts/jantares-noite.js';
@@ -32,17 +31,6 @@ export default {
         'Pipoca: «E a quiche? Fica para amanhã. Fria também é boa!»',
         'Inês: «A melhor quiche que nunca chegámos a jantar!»',
       ],
-    },
-    // o telefonema da Austrália (ver js/acts/call.js)
-    {
-      act: Call, animal: 'emus', when: 'No dia seguinte, o telefone toca...',
-      lines: [
-        'Inês: «Cortei um dedo a fazer quiche, fui às urgências e depois fui sair!»',
-        'Lourenço: «Só tu, Inês! Quem me dera ter estado aí para ver...»',
-        'Lourenço: «Sabes que mais? Acho que está na hora de... que barulho é este?!»',
-      ],
-      win: 'Lourenço: «Eram emus! Um bando inteiro! Já chega: vou voltar para Lisboa!»',
-      lose: 'Os emus levaram o Lourenço às costas! Decidido: está na hora de voltar para Lisboa.',
     },
   ],
 };
