@@ -8,8 +8,8 @@ import { tejoBg } from './pedido-cenario.js';
 import { convesChao } from './pedido-paella.js';
 
 // os amigos a bordo, dos dois lados (fila 1 = um passo atrás, para caberem todos)
-const LEFT = [['moncada', 'casual', 0.04, 1], ['pi', 'casual', 0.11, 0], ['kiko', 'casual', 0.19, 1], ['ana', 'casual', 0.27, 0]];
-const RIGHT = [['mi', 'casual', 0.73, 0], ['leal', 'casual', 0.81, 1], ['marta', 'casual', 0.89, 0], ['gonzaga', 'casual', 0.96, 1]];
+const LEFT = [['moncada', 'casual*', 0.04, 1], ['pi', 'casual', 0.11, 0], ['kiko', 'casual*', 0.19, 1], ['ana', 'casual*', 0.27, 0]];
+const RIGHT = [['mi', 'casual*', 0.73, 0], ['leal', 'casual*', 0.81, 1], ['marta', 'casual*', 0.89, 0], ['gonzaga', 'casual*', 0.96, 1]];
 
 // Forma de coração: para um raio r, as riscas (y, x0, x1) que o preenchem.
 const shapes = {};
@@ -38,8 +38,8 @@ export class PedidoSim extends Act {
     this.timer = 0;
     this.fill = 0; this.given = 0; this.idle = 0;
     this.boomT = 0;
-    this.ines = getCharacter('ines', 'casual');
-    this.lourenco = getCharacter('lourenco', 'casual');
+    this.ines = getCharacter('ines', 'barco');          // no momento do pedido, sem óculos de sol
+    this.lourenco = getCharacter('lourenco', 'barco');
     this.guests = [...LEFT, ...RIGHT].map(([who, outfit, x, row]) => ({ x, row, frames: getCharacter(who, outfit), face: x < 0.5 ? 1 : -1 })).sort((a, b) => b.row - a.row);
     this.hint('Lourenço: «Inês, tenho uma coisa muito importante para te perguntar...»');
   }

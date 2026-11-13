@@ -7,7 +7,8 @@ import { INK, PAPER, GOLD, person, shadow, text } from '../draw.js';
 import { tejoBg } from './pedido-cenario.js';
 
 // a bordo: a Ana e o Kiko, a Mi e o Leal, o Pi, o Moncada, a Marta e o Gonzaga
-const GUESTS = [['ana', 'casual', 44], ['kiko', 'casual', 50], ['mi', 'casual', 46], ['leal', 'casual', 56], ['pi', 'casual', 50], ['moncada', 'casual', 58], ['marta', 'casual', 52], ['gonzaga', 'casual', 62]];
+// (de óculos de sol, como na fotografia desse dia)
+const GUESTS = [['ana', 'casual*', 44], ['kiko', 'casual*', 50], ['mi', 'casual*', 46], ['leal', 'casual*', 56], ['pi', 'casual', 50], ['moncada', 'casual*', 58], ['marta', 'casual*', 52], ['gonzaga', 'casual*', 62]];
 const WIN = 10;          // meia largura (px) da zona onde o prato apanha o arroz
 
 export const convesChao = (v) => Math.round(v.h * (v.portrait ? 0.74 : 0.84));
@@ -25,8 +26,8 @@ export class Paella extends Act {
     this.good = 0;
     this.over = 0;
     this.cook = getCharacter('empregado');
-    this.ines = getCharacter('ines', 'casual');
-    this.lourenco = getCharacter('lourenco', 'casual');
+    this.ines = getCharacter('ines', 'barco*');
+    this.lourenco = getCharacter('lourenco', 'barco*');
     this.hint('Toca para servir a paella quando o prato passar por baixo da concha!');
   }
 

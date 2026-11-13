@@ -72,9 +72,9 @@ corações ou tempo, e todos os atos acabam sempre.
 | 22 | `22-noruega.js` | Roadtrip na Noruega | Estrada → Mergulho |
 | 23 | `23-madrinha.js` | Madrinha do Micas | Talk → Embalar → Vela → Foto → Talk |
 | 24 | `24-barco.js` | Passeios de Barco | Navegar → Pesca → Mergulhos |
-| 25 | `25-pedido.js` | O Pedido | Talk → Paella → PedidoSim → Ritmo |
+| 25 | `25-pedido.js` | O Pedido | Talk → Paella → PedidoSim → Ritmo → Talk |
 | 26 | `26-jeanne.js` | Nasce a Jeanne | Talk → Catch |
-| 27 | `27-festa.js` | Os 40 Anos | Abracos → Bolo |
+| 27 | `27-festa.js` | Os 40 Anos | Abracos → Ritmo → Bolo |
 
 `Talk` é um momento de história (cenário, personagens e falas); `Catch` é o nascimento (o
 bebé salta e é preciso apanhá-lo); `Call` é um telefonema da Austrália, interrompido por um

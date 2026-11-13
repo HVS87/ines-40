@@ -210,7 +210,7 @@ async function testMusic() {
     return seq.join(' ');
   };
   const garage = tocou('garage'), pedido = tocou('pedido'), bimby = tocou('bimby');
-  check('música: muda de ato para ato (Garage, Pedido, telefonema)', garage === 'house* house* house noite' && pedido === 'flamenco flamenco romance samba' && bimby.endsWith(' australia'), [garage, pedido, bimby].join(' | '));
+  check('música: muda de ato para ato (Garage, Pedido, telefonema)', garage === 'house* house* house noite' && pedido === 'flamenco flamenco romance samba romance' && bimby.endsWith(' australia'), [garage, pedido, bimby].join(' | '));
   game.goMenu();
   check('música: de volta ao menu, sem som abafado', game.audio.track === 'menu' && !game.audio.muffled, game.audio.track);
 }

@@ -147,6 +147,8 @@ const MENINO = {
 // Penteados (linhas do boneco de mulher que mudam): cabelo ondulado e franja.
 const ONDAS = { 10: '.ovvhsssesseso..', 12: '.ovvhosssmmso...', 14: '.ovvotttttto....' };
 const FRANJA = { 7: '..ovhhhhhhhhho..', 8: '..ovhhhshshsso..' };
+// Camisa às flores (linhas do boneco de homem): k = as flores.
+const FLORES = { 13: '...otkttttkto...', 14: '...ostkttktso...', 15: '...osttkttkso...', 16: '....otkttkto....' };
 // Camisola de rugby às riscas (linhas do boneco de homem): k = risca branca.
 const RUGBY = { 12: '....ottkktto....', 13: '...okkkkkkkko...', 14: '...osttttttso...', 15: '...oskkkkkkso...', 16: '....otttttto....' };
 const BASE = { o: '#2b1d2e', s: '#f6c9a0', c: '#f09a8c', e: '#2b1d2e', m: '#c2544c' };
@@ -173,6 +175,7 @@ export const LOOKS = {
     work: { t: '#3f9f6a', T: '#2f7f52', b: '#2b1d2e' },           // no escritório (verde Bimby)
     inverno: { t: '#c0392b', T: '#96281b', b: '#5a3a22', q: '#fff6e6', Q: '#c0392b', cap: true },   // casaco e gorro
     bata: { t: '#ffc6de', T: '#e89ab8', b: '#ffffff' },           // na maternidade
+    barco: { t: '#ffffff', T: '#e4e6f0', b: '#efbd94' },          // o dia do pedido: de branco, descalça
     festa: { t: '#ffd166', T: '#e0a820', b: '#c0392b' } } },      // a festa dos 40 anos
   // ----- os pais e os irmãos da Inês: irma1 = Sofia, irma2 = Maria, irmao = Zé Inácio, irmao2 = Kiko -----
   tio: { def: M, base: { h: '#d8b25a', d: NOBEARD, e: '#3f7fd0' }, outfits: {
@@ -196,6 +199,7 @@ export const LOOKS = {
     grelha: { t: '#ffffff', k: '#c0392b', p: '#3a3f55', b: '#2b1d2e', d: '#7a5a44' },                 // avental de churrasco
     inverno: { t: '#2f6a8a', k: '#ffd166', p: '#2b2b3a', b: '#5a3a22', q: '#2f6a8a', Q: '#1f4a6a', cap: true, d: '#7a5a44' },
     bata: { t: '#3fae8a', k: '#3fae8a', p: '#3fae8a', b: '#ffffff', q: '#3fae8a', Q: '#2f8a6c', cap: true, d: '#7a5a44' },
+    barco: { t: '#f29ab0', k: '#fff2f5', p: '#b9a878', b: '#ecb48a', d: '#7a5a44', rows: FLORES },   // o dia do pedido: camisa cor-de-rosa às flores
     festa: { t: '#2a3358', k: '#ffffff', p: '#2a3358', b: '#111122', d: '#7a5a44' } } },
   // ----- as amigas do colégio (em pequenas, de farda) -----
   anac: { def: GIRL, base: { h: '#6b4630', e: '#4a3a2a', k: '#a8324a' }, outfits: { farda: FARDA } },
@@ -271,8 +275,10 @@ const cache = new Map();
 export const seen = new Set();
 
 // Devolve os fotogramas { stand, a, b } de uma personagem, cada um com versão direita (r) e esquerda (l).
+// Um asterisco no fim da roupa ('casual*') põe óculos de sol a qualquer personagem.
 export function getCharacter(name, outfit = 'casual') {
-  const key = name + ':' + outfit;
+  const key = name + ':' + outfit, sol = outfit.endsWith('*');
+  if (sol) outfit = outfit.slice(0, -1);
   seen.add(name);
   if (cache.has(key)) return cache.get(key);
   const look = LOOKS[name] || LOOKS.ines;
@@ -282,7 +288,7 @@ export function getCharacter(name, outfit = 'casual') {
   if (rows) upper = upper.map((row, i) => rows[i] || row);     // a roupa também pode mudar linhas (riscas)
   if (cap) upper = upper.map((row, i) => look.def.cap[i] || row);
   // óculos escuros (tipo Wayfarer): duas lentes com reflexo, a ponte entre elas e a haste até à orelha
-  if (shades) {
+  if (shades || sol) {
     pal.g = '#111122'; pal.G = '#7f93b8';
     let n = 0;
     upper = upper.map((row) => {
