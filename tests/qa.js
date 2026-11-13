@@ -303,6 +303,9 @@ export async function run(g) {
       if (r.width && (r.left < -0.5 || r.right > innerWidth + 0.5 || r.bottom > c.top + c.height * 0.36)) hintIssues.push(`${id}: ${s.slice(0, 40)} (${Math.round(r.bottom - c.top)} px de ${Math.round(c.height)})`);
     }
   };
+  // Durante os testes, o jogo não se pausa sozinho se a janela passar para segundo plano
+  // (senão os robôs ficavam presos num nível em pausa).
+  document.addEventListener('visibilitychange', (e) => e.stopImmediatePropagation(), true);
   window.__qa = { results, bad: [], errors, done: false };
   log(`QA — ${innerWidth}x${innerHeight}, ${I.touch ? 'tátil' : 'teclado'}, vista ${game.view.w}x${game.view.h}`);
   try {
