@@ -4,6 +4,7 @@
 //   node tests/matrix.mjs            corre tudo
 //   node tests/matrix.mjs iphone     só as configurações cujo nome contém «iphone»
 //   node tests/matrix.mjs --only=toque   passa ?only=... à suite (mais rápido)
+//   node tests/matrix.mjs --base=https://hvs87.github.io/ines-40/   testa o jogo publicado
 //
 // Usa os browsers instalados neste computador: Edge ou Chrome (motor Chromium) e Firefox (motor
 // Gecko). No Chromium, os telemóveis e tablets são emulados pelo protocolo de depuração: tamanho
@@ -20,8 +21,8 @@ import { spawn, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = 'http://localhost:8090/', PORT = 8092, PARALLEL = 3, TIMEOUT = 300000;
-const args = process.argv.slice(2), only = (args.find((a) => a.startsWith('--only=')) || '').slice(7), filter = args.find((a) => !a.startsWith('--')) || '';
+const PORT = 8092, PARALLEL = 3, TIMEOUT = 300000;
+const args = process.argv.slice(2), BASE = (args.find((a) => a.startsWith('--base=')) || '--base=http://localhost:8090/').slice(7), only = (args.find((a) => a.startsWith('--only=')) || '').slice(7), filter = args.find((a) => !a.startsWith('--')) || '';
 
 const first = (list) => list.find((p) => p && fs.existsSync(p));
 const PF = process.env.ProgramFiles || '', PF86 = process.env['ProgramFiles(x86)'] || '', LAD = process.env.LOCALAPPDATA || '';
@@ -132,7 +133,11 @@ async function dedos(cdp, run) {
   const estado = () => cdp.eval(`(() => { const g = window.__game, I = g.input; return { ecra: g.ui.current, joga: document.body.classList.contains('playing'), pausa: !!(g.scene && g.scene.paused), acao: I.action, tatil: I.touch, x: I.pointerX, y: I.pointerY, zoom: window.visualViewport ? visualViewport.scale : 1, sy: scrollY, sx: scrollX, movel: document.body.classList.contains('mobile') }; })()`);
 
   await cdp.send('Page.navigate', { url: BASE });
-  for (let i = 0; i < 50 && !(await cdp.eval('!!(window.__game && window.__game.ui && window.__game.ui.current === "menu")').catch(() => false)); i++) await sleep(200);
+  // espera pela página nova (não a dos testes), pelo jogo no menu e pela letra dos menus (quando
+  // esta chega, os botões mudam de sítio)
+  const pronto = '!location.search.includes("qa") && !!(window.__game && window.__game.ui && window.__game.ui.current === "menu") && (!document.fonts || document.fonts.status === "loaded")';
+  for (let i = 0; i < 100 && !(await cdp.eval(pronto).catch(() => false)); i++) await sleep(200);
+  await sleep(300);
   let e = await estado();
   if (e.ecra !== 'menu') { fail('o jogo não abriu no menu', JSON.stringify(e)); return bad; }
   if (!e.movel) fail('o dispositivo não foi reconhecido como telemóvel/tablet');
@@ -253,6 +258,7 @@ async function firefox(run, dir) {
     waiting.set(run.tag, resolve);
     setTimeout(() => resolve(null), TIMEOUT);
     child.on('error', () => resolve(null));
+    child.on('exit', () => setTimeout(() => resolve(null), 1500));     // fechou-se sem responder
   });
   waiting.delete(run.tag);
   kill(child);
@@ -275,16 +281,22 @@ function limpa(nome) {
 async function one(run) {
   const exe = run.engine === 'chromium' ? CHROMIUM : FIREFOX;
   if (!exe) return { ...run, skipped: `sem ${run.engine} instalado` };
-  const dir = path.join(tmp, run.tag), t0 = Date.now();
-  fs.mkdirSync(dir, { recursive: true });
+  // o Firefox entrega o resultado a este computador por HTTP, o que uma página HTTPS não deixa fazer
+  if (run.engine === 'firefox' && !BASE.includes('localhost')) return { ...run, skipped: 'Firefox só se testa com o servidor local' };
+  const t0 = Date.now();
   let report = null;
-  try { report = await (run.engine === 'chromium' ? chromium(run, dir) : firefox(run, dir)); } catch (err) { report = null; run.erro = err.message; }
-  limpa(path.basename(tmp) + path.sep + run.tag);
+  // se o browser não responder (acontece ao arrancar vários ao mesmo tempo), tenta-se mais uma vez
+  for (let vez = 0; vez < 2 && !report; vez++) {
+    const dir = path.join(tmp, run.tag + (vez ? '-b' : ''));
+    fs.mkdirSync(dir, { recursive: true });
+    try { report = await (run.engine === 'chromium' ? chromium(run, dir) : firefox(run, dir)); } catch (err) { report = null; run.erro = err.message; }
+    limpa(path.basename(tmp) + path.sep + run.tag);
+  }
   return { ...run, report, secs: Math.round((Date.now() - t0) / 1000) };
 }
 
 let own = null;
-if (!(await serverUp())) {
+if (BASE.includes('localhost') && !(await serverUp())) {
   own = spawn(process.execPath, [path.join(ROOT, 'tools/serve.mjs')], { stdio: 'ignore', cwd: ROOT });
   for (let i = 0; i < 30 && !(await serverUp()); i++) await new Promise((r) => setTimeout(r, 200));
 }

@@ -20,11 +20,23 @@ const missing = (file, err) => ({
   acts: [{ act: Talk, lines: ['Este capítulo ainda está em construção.'] }],
 });
 
+// Carrega um nível; se a rede falhar, tenta mais duas vezes (com um endereço ligeiramente
+// diferente, porque alguns browsers guardam a falha) antes de desistir.
+async function load(file) {
+  let erro = null;
+  for (let n = 0; n < 3; n++) {
+    try { return (await import(`./${file}.js${n ? '?t=' + n : ''}`)).default; } catch (err) {
+      erro = err;
+      if (err instanceof SyntaxError) break;        // erro no próprio ficheiro: não adianta repetir
+      await new Promise((r) => setTimeout(r, 500 * (n + 1)));
+    }
+  }
+  console.error('nível ' + file, erro);
+  return missing(file, erro);
+}
+
 export const LEVELS = [];
-export const ready = Promise.all(FILES.map((file) => import(`./${file}.js`).then(
-  (m) => m.default,
-  (err) => { console.error('nível ' + file, err); return missing(file, err); },
-))).then((list) => { LEVELS.push(...list); return LEVELS; });
+export const ready = Promise.all(FILES.map(load)).then((list) => { LEVELS.push(...list); return LEVELS; });
 
 // Etiqueta de cada nível: "Nível 3", ...
 export const levelLabel = (index) => 'Nível ' + (index + 1);
