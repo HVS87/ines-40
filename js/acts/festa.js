@@ -1,54 +1,23 @@
-// Atos do último nível, a festa dos 40 anos no Recreio:
-//   Abracos — a Inês atravessa a festa e vai sendo recebida por cada grupo de família e amigos;
-//   Bolo    — o bolo com 40 velas: tocar muitas vezes para ajudar a soprá-las todas.
+// Atos do último nível, a festa dos 40 anos no Recreio de Miraflores (o cenário está em
+// recreio-cenario.js):
+//   Abracos  — a Inês atravessa a festa e vai sendo recebida por cada grupo de família e amigos;
+//   CONCERTO — «pele» do jogo de ritmo: a banda toca ao vivo e toda a gente dança;
+//   Bolo     — o bolo com 40 velas: tocar muitas vezes para ajudar a soprá-las todas.
 import { Act } from './base.js';
 import { getCharacter, charFrame } from '../sprites.js';
-import { INK, GOLD, PINK, PAPER, MINT, clamp, text, sign, disc, hash, shadow } from '../draw.js';
+import { INK, GOLD, PINK, PAPER, MINT, clamp, text, disc, hash, shadow } from '../draw.js';
+import { interior, mesa, matraquilhos, escorrega, ROSA } from './recreio-cenario.js';
 
-const WALL = '#bfe8d8', WALLD = '#9fd4c0', FLOOR = '#e8dcc8', ROSA = '#ff9fc6';
 const GAP = 190;                 // distância entre grupos
+const INICIO = 215;              // onde está o primeiro grupo (antes fica a entrada, com os cartazes)
+const PALCO = INICIO + 7 * GAP + 150;   // onde fica o palco (em coordenadas do mundo), ao fundo da sala
 const BALLOONS = ['#ff5d8f', '#ffd166', '#6fb0f0', '#c79bff', '#ff8a4b'];
-
-// O interior do Recreio (verde-menta, plantas, mesas e cadeiras cor-de-rosa), a deslizar com a câmara.
-function recreio(ctx, v, R, gy, cam, top, t) {
-  R(0, 0, v.w, gy, WALL);
-  for (let x = -(cam % 40); x < v.w; x += 40) R(x, 0, 1, gy, WALLD);
-  R(0, gy - 26, v.w, 26, WALLD); R(0, gy - 26, v.w, 2, '#7fc0a8');
-  // bancas dos restaurantes e letreiros, de 260 em 260 píxeis
-  const names = ['PIZZA', 'BURGERS', 'DUMPLINGS', 'COCKTAILS', 'GELADOS', 'PASTRAMI'];
-  const sy = Math.max(top + 4, gy - 104);
-  for (let i = Math.floor((cam - 120) / 260); i <= Math.floor((cam + v.w + 120) / 260); i++) {
-    const x = i * 260 + 130 - cam;
-    R(x - 50, sy + 16, 100, gy - 26 - sy - 16, '#f6fbf8'); R(x - 50, sy + 16, 100, 3, '#7fc0a8');
-    R(x - 46, sy + 30, 92, 18, '#2f6f62'); R(x - 44, sy + 32, 88, 14, '#3f8f7a');
-    for (let k = 0; k < 5; k++) R(x - 40 + k * 18, sy + 35, 10, 8, ['#ffd166', '#ff8a4b', '#ff5d8f', '#fff6e6', '#c79bff'][(k + i + 50) % 5]);
-    sign(ctx, names[((i % names.length) + names.length) % names.length], x, sy, { bg: '#2f6f62', color: '#ffffff' });
-    // planta pendurada entre bancas
-    const px = x + 130;
-    R(px, 0, 1, sy + 6, '#7fc0a8'); disc(ctx, px, sy + 12, 7, '#3f8f5a'); disc(ctx, px - 5, sy + 16, 4, '#4fa86a'); disc(ctx, px + 5, sy + 17, 4, '#2f7a4a');
-  }
-  // grinalda de bandeirinhas
-  for (let x = -(cam % 9), i = Math.floor(cam / 9); x < v.w; x += 9, i++) {
-    const y = sy - 8 + Math.round(Math.sin(i * 0.5) * 2);
-    if (y < top) break;
-    R(x, y, 9, 1, PAPER); R(x + 2, y + 1, 5, 3, BALLOONS[((i % 5) + 5) % 5]); R(x + 3, y + 4, 3, 2, BALLOONS[((i % 5) + 5) % 5]);
-  }
-  // chão
-  R(0, gy, v.w, v.h - gy, FLOOR); R(0, gy, v.w, 2, '#c8b8a0');
-  for (let x = -(cam % 24); x < v.w; x += 24) R(x, gy + 2, 1, v.h - gy, '#d8c8b0');
-}
-
-// Mesa redonda com duas cadeiras cor-de-rosa.
-function mesa(R, x, gy) {
-  R(x - 10, gy - 16, 20, 3, INK); R(x - 9, gy - 15, 18, 1, ROSA); R(x - 1, gy - 13, 2, 13, INK);
-  for (const d of [-1, 1]) { const cx = x + d * 17; R(cx - 4, gy - 20, 8, 2, ROSA); R(cx - 4, gy - 20, 1, 20, ROSA); R(cx + 3, gy - 20, 1, 20, ROSA); R(cx - 4, gy - 11, 8, 2, ROSA); }
-}
 
 export class Abracos extends Act {
   constructor(scene, cfg) {
     super(scene, cfg);
     this.ines = getCharacter('ines', 'festa');
-    this.groups = (cfg.groups || []).map((g, i) => ({ ...g, x: 150 + i * GAP, done: false, joy: 0, frames: g.people.map(([who, outfit]) => getCharacter(who, outfit)) }));
+    this.groups = (cfg.groups || []).map((g, i) => ({ ...g, x: INICIO + i * GAP, done: false, joy: 0, frames: g.people.map(([who, outfit]) => getCharacter(who, outfit)) }));
   }
 
   get max() { return this.groups.length; }
@@ -63,7 +32,8 @@ export class Abracos extends Act {
     this.hint('Arrasta o dedo (ou usa as setas) para a Inês atravessar a festa. Está cá toda a gente!');
   }
 
-  world() { return 150 + (this.groups.length - 1) * GAP + 110; }
+  palcoX() { return INICIO + (this.groups.length - 1) * GAP + 150; }
+  world() { return this.palcoX() + 80; }
   ground(v) { return Math.round(v.h * (v.portrait ? 0.74 : 0.86)); }
   cam(v) { return clamp(this.x - v.w * 0.35, 0, Math.max(0, this.world() - v.w)); }
 
@@ -94,13 +64,13 @@ export class Abracos extends Act {
 
   draw(ctx, v, R) {
     const gy = this.ground(v), cam = Math.round(this.cam(v)), top = this.top(v), t = this.t;
-    recreio(ctx, v, R, gy, cam, top, t);
-    // o letreiro da casa e os matraquilhos, logo à entrada
-    sign(ctx, 'RECREIO', 60 - cam, Math.max(top + 4, gy - 104) + 22, { scale: 2, bg: '#ff9fc6', color: '#2b1d2e' });
-    for (const g of this.groups) {
+    // a banda, no palco ao fundo, ainda a afinar
+    interior(ctx, v, R, gy, cam, top, t, { entrada: true, stageX: this.palcoX(), beat: t, on: false });
+    this.groups.forEach((g, k) => {
       const gx = g.x - cam;
-      if (gx < -160 || gx > v.w + 160) continue;
-      mesa(R, gx + 62, gy);
+      if (gx < -160 || gx > v.w + 160) return;
+      // entre os grupos: os matraquilhos, o escorrega e as mesas de madeira
+      if (k === 0) matraquilhos(R, gx + 86, gy); else if (k === 3) escorrega(R, gx + 74, gy); else if (k < this.groups.length - 1) mesa(R, gx + 66, gy);
       const n = g.frames.length, sp = n > 3 ? 22 : 26;
       g.frames.forEach((f, i) => {
         const x = Math.round(gx + (i - (n - 1) / 2) * sp), hop = g.joy > 0 ? Math.round(Math.abs(Math.sin(t * 9 + i)) * 4) : 0;
@@ -111,7 +81,7 @@ export class Abracos extends Act {
       if (g.extra === 'bebe') this.carrinho(R, gx + (n - 1) / 2 * sp + 24, gy, t);
       if (g.extra === 'baloes') BALLOONS.forEach((c, i) => { const bx = Math.round(gx - 50 + i * 7), by = gy - 78 - (i % 2) * 8 + Math.round(Math.sin(t * 2 + i) * 2); R(bx, by + 6, 1, gy - by - 6, PAPER); disc(ctx, bx, by, 6, INK); disc(ctx, bx, by, 5, c); });
       if (!g.done && Math.floor(t * 3) % 2) { R(gx - 1, gy - 66, 3, 7, '#e0572f'); R(gx - 1, gy - 57, 3, 3, '#e0572f'); }
-    }
+    });
     // a Inês
     const ix = Math.round(this.x - cam);
     shadow(ctx, ix, gy, 14);
@@ -130,6 +100,35 @@ export class Abracos extends Act {
     if (Math.floor(t * 2) % 2) R(x + 2, gy - 23, 2, 2, PINK);
   }
 }
+
+// A música ao vivo: «pele» do jogo de ritmo (ver ritmo.js). A banda toca no palco e a Inês
+// dança com o Lourenço e os amigos.
+export const CONCERTO = {
+  lanes: 2,
+  bpm: 112,
+  lead: 1.6,
+  colors: ['#ff5d8f', '#ffd166'],
+  sounds: ['click', 'toc'],
+  track: '#1f3a35',
+  pattern: [
+    '1...2...', '1...2...', '1.2.1...',
+    '2...1.1.', '1.2.1.2.', '1...2.2.',
+    '1.1.2...', '2.1.2.1.', '1.2.1...',
+    '2.2.1...', '1.2.1.2.', '2.1.2.1.',
+    '1.1.2.2.', '2.2.1.1.', '1.2.1.2.',
+  ],
+  songs: [{ label: 'AO VIVO NO RECREIO', title: 'PARA A INÊS' }],
+  ground: (v) => Math.round(v.h * (v.portrait ? 0.52 : 0.86)),
+  bg: (ctx, v, R, t, st) => interior(ctx, v, R, st.gy, PALCO - Math.round(v.w * (v.portrait ? 0.27 : 0.17)), st.top, t, { stageX: PALCO, beat: st.beat, on: st.playing || st.over > 0 }),
+  dancers: [
+    { who: 'ines', outfit: 'festa', x: 0.64, px: 0.56 },
+    { who: 'lourenco', outfit: 'festa', x: 0.73, px: 0.7, off: 1 },
+    { who: 'ana', outfit: 'festa', x: 0.83, px: 0.84 },
+    { who: 'pipoca', outfit: 'festa', x: 0.93, px: 0.96, off: 1 },
+  ],
+  intro: 'Música ao vivo! Toca do lado da nota (ou usa as setas ← →) quando ela chegar ao círculo.',
+  end: 'Todos: «Mais uma! Mais uma!»',
+};
 
 export class Bolo extends Act {
   constructor(scene, cfg) {
@@ -179,8 +178,9 @@ export class Bolo extends Act {
 
   draw(ctx, v, R) {
     const gy = Math.round(v.h * (v.portrait ? 0.78 : 0.88)), top = this.top(v), t = this.t;
-    recreio(ctx, v, R, gy, 300, top, t);
-    // os convidados atrás, aos saltinhos
+    // a sala, com a banda (lá atrás, à direita) a tocar os parabéns
+    interior(ctx, v, R, gy - 30, PALCO - Math.round(v.w * 0.8), top, t, { stageX: PALCO, beat: t * 2.3, on: this.state !== 'blow' });
+    // os convidados atrás da mesa, aos saltinhos
     const n = this.crowd.length;
     this.crowd.forEach((f, i) => {
       const x = Math.round(((i + 0.5) / n) * (v.w - 10)) + 5, hop = Math.round(Math.abs(Math.sin(t * 6 + i * 1.1)) * (this.state === 'wish' ? 5 : 2));
