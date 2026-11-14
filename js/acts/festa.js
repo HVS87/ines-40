@@ -1,7 +1,7 @@
 // Atos do último nível, a festa dos 40 anos no Recreio de Miraflores (o cenário está em
 // recreio-cenario.js):
 //   Abracos  — a Inês atravessa a festa e vai sendo recebida por cada grupo de amigos;
-//   CONCERTO — «pele» do jogo de ritmo: a banda toca ao vivo e toda a gente dança;
+//   PISTA — «pele» do jogo de ritmo: o DJ põe música e toda a gente dança;
 //   Bolo     — o bolo com 40 velas: tocar muitas vezes para ajudar a soprá-las todas.
 import { Act } from './base.js';
 import { getCharacter, charFrame } from '../sprites.js';
@@ -10,7 +10,7 @@ import { interior, mesa, matraquilhos, escorrega, ROSA } from './recreio-cenario
 
 const GAP = 190;                 // distância entre grupos
 const INICIO = 215;              // onde está o primeiro grupo (antes fica a entrada, com os cartazes)
-const PALCO = INICIO + 6 * GAP + 150;   // onde fica o palco (em coordenadas do mundo), ao fundo da sala
+const DJ = INICIO + 6 * GAP + 150;      // onde fica o canto do DJ (em coordenadas do mundo), ao fundo da sala
 const BALLOONS = ['#ff5d8f', '#ffd166', '#6fb0f0', '#c79bff', '#ff8a4b'];
 
 // O carrinho da bebé Jeanne.
@@ -43,8 +43,8 @@ export class Abracos extends Act {
     this.hint('Arrasta o dedo (ou usa as setas) para a Inês atravessar a festa. Está cá toda a gente!');
   }
 
-  palcoX() { return INICIO + (this.groups.length - 1) * GAP + 150; }
-  world() { return this.palcoX() + 80; }
+  djX() { return INICIO + (this.groups.length - 1) * GAP + 150; }
+  world() { return this.djX() + 80; }
   ground(v) { return Math.round(v.h * (v.portrait ? 0.74 : 0.86)); }
   cam(v) { return clamp(this.x - v.w * 0.35, 0, Math.max(0, this.world() - v.w)); }
 
@@ -78,8 +78,8 @@ export class Abracos extends Act {
 
   draw(ctx, v, R) {
     const gy = this.ground(v), cam = Math.round(this.cam(v)), top = this.top(v), t = this.t;
-    // a banda, no palco ao fundo, ainda a afinar
-    interior(ctx, v, R, gy, cam, top, t, { entrada: true, stageX: this.palcoX(), beat: t, on: false });
+    // o DJ, no canto ao fundo, ainda a preparar a mesa
+    interior(ctx, v, R, gy, cam, top, t, { entrada: true, djX: this.djX(), beat: t, on: false });
     this.groups.forEach((g, k) => {
       const gx = g.x - cam;
       if (gx < -160 || gx > v.w + 160) return;
@@ -104,9 +104,9 @@ export class Abracos extends Act {
   }
 }
 
-// A música ao vivo: «pele» do jogo de ritmo (ver ritmo.js). A banda toca no palco e a Inês
-// dança com o Lourenço e os amigos.
-export const CONCERTO = {
+// A pista: «pele» do jogo de ritmo (ver ritmo.js). O DJ põe música na banca do canto, com a bola
+// de espelhos a rodar, e a Inês dança com o Lourenço e os amigos.
+export const PISTA = {
   lanes: 2,
   bpm: 112,
   lead: 1.6,
@@ -120,16 +120,16 @@ export const CONCERTO = {
     '2.2.1...', '1.2.1.2.', '2.1.2.1.',
     '1.1.2.2.', '2.2.1.1.', '1.2.1.2.',
   ],
-  songs: [{ label: 'AO VIVO NO RECREIO', title: 'PARA A INÊS' }],
+  songs: [{ label: 'DJ NO RECREIO', title: 'PARA A INÊS' }],
   ground: (v) => Math.round(v.h * (v.portrait ? 0.52 : 0.86)),
-  bg: (ctx, v, R, t, st) => interior(ctx, v, R, st.gy, PALCO - Math.round(v.w * (v.portrait ? 0.27 : 0.17)), st.top, t, { stageX: PALCO, beat: st.beat, on: st.playing || st.over > 0 }),
+  bg: (ctx, v, R, t, st) => interior(ctx, v, R, st.gy, DJ - Math.round(v.w * (v.portrait ? 0.27 : 0.17)), st.top, t, { djX: DJ, beat: st.beat, on: st.playing || st.over > 0 }),
   dancers: [
     { who: 'ines', outfit: 'festa', x: 0.64, px: 0.56 },
     { who: 'lourenco', outfit: 'festa', x: 0.73, px: 0.7, off: 1 },
     { who: 'ana', outfit: 'festa', x: 0.83, px: 0.84 },
     { who: 'pipoca', outfit: 'festa', x: 0.93, px: 0.96, off: 1 },
   ],
-  intro: 'Música ao vivo! Toca do lado da nota (ou usa as setas ← →) quando ela chegar ao círculo.',
+  intro: 'O DJ já está a pôr música! Toca do lado da nota (ou usa as setas ← →) quando ela chegar ao círculo.',
   end: 'Todos: «Mais uma! Mais uma!»',
 };
 
@@ -181,8 +181,8 @@ export class Bolo extends Act {
 
   draw(ctx, v, R) {
     const gy = Math.round(v.h * (v.portrait ? 0.78 : 0.88)), top = this.top(v), t = this.t;
-    // a sala, com a banda (lá atrás, à direita) a tocar os parabéns
-    interior(ctx, v, R, gy - 30, PALCO - Math.round(v.w * 0.8), top, t, { stageX: PALCO, beat: t * 2.3, on: this.state !== 'blow' });
+    // a sala, com o DJ (lá atrás, à direita) a pôr os parabéns
+    interior(ctx, v, R, gy - 30, DJ - Math.round(v.w * 0.8), top, t, { djX: DJ, beat: t * 2.3, on: this.state !== 'blow' });
     // os convidados atrás da mesa, aos saltinhos
     const n = this.crowd.length, filas = n * 14 > v.w - 10 ? 2 : 1;
     for (let fila = filas - 1; fila >= 0; fila--) {        // a fila de trás primeiro

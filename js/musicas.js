@@ -341,11 +341,12 @@ export const TRACKS = {
       'D6 - - - F6 - D6 -', 'D6 - C6 - Bb5 - - -', 'G5 - Bb5 - C6 - E6 -', 'F6 - - - - - . .',
     ],
   },
-  // a banda ao vivo na festa dos 40 anos: pop de dançar, com guitarra e bateria
-  concerto: {
-    bpm: 112, gain: 0.85, lead: 'square', leadVol: 0.028, leadLen: 0.85, arp: 'sawtooth', arpVol: 0.01, comp: '.x.x.xx.', compLen: 0.5,
-    bass: 'r.rR.r.f', bassVol: 0.06, bassLen: 0.9,
-    drums: { k: 'x...x.x.', s: '..x...x.', h: 'xoxoxoxo', c: '......o.' },
+  // o DJ na festa dos 40 anos: música de dança, de bombo a quatro tempos, pratos no contratempo,
+  // palmas e baixo aos saltos de oitava
+  dj: {
+    bpm: 112, gain: 0.8, lead: 'square', leadVol: 0.026, leadLen: 0.8, arp: 'sawtooth', arpVol: 0.012, comp: '.x.x.xx.', compLen: 0.5,
+    bass: 'rRrRrRrR', bassWave: 'square', bassVol: 0.03, bassLen: 0.8,
+    drums: { k: 'X.x.x.x.', o: '.x.x.x.x', c: '..x...x.' },
     chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'Em', 'C'],
     melody: [
       'B5 . B5 D6 . B5 G5 .', 'A5 . A5 D6 . A5 F#5 .', 'G5 . G5 B5 . E6 - D6', 'E6 - C6 - G5 - . .',

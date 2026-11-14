@@ -266,7 +266,6 @@ export const LOOKS = {
   padre: { def: M, base: { h: '#8a8794', d: NOBEARD }, outfits: { casual: { t: '#f2f2f7', k: '#7a3fa0', p: '#f2f2f7', b: '#111122' } } },
   musico: { def: M, base: { h: '#3b2a20', d: NOBEARD }, outfits: { casual: { t: '#c0392b', k: '#ffffff', p: '#2b2b3a', b: '#111122' }, b: { t: '#2f6f8a', k: '#ffffff', p: '#2b2b3a', b: '#111122', h: '#8a8794' } } },   // músicos do arraial
   adversario: { def: M, base: { h: '#3b2a20', d: NOBEARD }, outfits: { casual: { t: '#2a3358', k: '#ffd166', p: '#2a3358', b: '#111122', rows: RUGBY }, b: { t: '#2a3358', k: '#ffd166', p: '#2a3358', b: '#111122', rows: RUGBY, h: '#c8a468' } } },   // a outra equipa, no rugby
-  cantora: { def: F, rows: ONDAS, base: { h: '#2b2b3a', H: '#4a4a5e', v: '#2b2b3a' }, outfits: { casual: { t: '#c0392b', T: '#96281b', b: '#111122' } } },   // a voz da banda, na festa
   sambista: { def: M, base: { h: '#2b2b3a', s: '#b8794a', d: '#b8794a' }, outfits: { casual: { t: '#ffd23e', k: '#3fa672', p: '#f2f2f7', b: '#f2f2f7', q: '#f2f2f7', Q: '#2b2b3a', cap: true } } },
 };
 
