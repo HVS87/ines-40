@@ -7,8 +7,8 @@ import { INK, SKIN, hash, sky, text, recolor } from '../draw.js';
 export const chao = (v) => Math.round(v.h * (v.portrait ? 0.72 : 0.84));
 
 // ---------- As nove raparigas ----------
-// Pela ordem: Inês, Isabel, Ana (as três confirmadas) e as outras seis (a nona é uma amiga sem
-// nome, feita aqui).
+// Pela ordem: Inês, Isabel, Ana, Soft, Maísa, Mi, Maria, Tété e uma amiga sem nome, feita aqui.
+// Confirmadas: a Inês, a Isabel, a Ana e a Maria; as outras foram escolhidas para fazer as nove.
 let grupo = null;
 export const CORES = ['#ff8a4b', '#c79bff', '#3fa6a0', '#ffd166', '#ff5d8f', '#5a8fd0', '#ff8a4b', '#7be0b0', '#f2f2f7'];
 export function raparigas() {
