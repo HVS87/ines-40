@@ -5,7 +5,7 @@
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
 import { INK, GOLD, clamp, lerp, person, shadow, mark } from '../draw.js';
-import { ceu, sol, nuvem, casaGranito, latada, espigueiro, eira, monte } from './lanheses-comum.js';
+import { ceu, sol, nuvem, casaGranito, latada, espigueiro, eira, monte, guarita } from './lanheses-comum.js';
 
 const MONTES = [0.08, 0.21, 0.34, 0.47, 0.6];   // onde estão os montes (fração da largura)
 const TEMPO = 30;                               // segundos até a nuvem tapar o sol
@@ -74,6 +74,7 @@ export class Eira extends Act {
     const cw = Math.min(84, Math.round(w * 0.28)), ch = clamp(gy - L.top - 34, 40, 64);
     casaGranito(ctx, R, 6, gy, cw, ch);
     if (L.ex - cw - 20 > 24) latada(R, cw + 18, L.ex - 12, gy, 26);
+    if (L.ex - cw - 20 > 44) guarita(R, L.ex - 18, gy);
     espigueiro(R, L.ex, gy, L.ew, L.eh, 0.15 + (this.guardados / MONTES.length) * 0.8);
     eira(R, v, gy);
     // escadote à porta e o Lourenço a receber as espigas

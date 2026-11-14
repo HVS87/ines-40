@@ -1,15 +1,15 @@
 // Nível 21 — «Lanheses»: os dias de família na Casa do Tinoco, a casa de família do Lourenço,
 // entre Ponte de Lima e Viana do Castelo. A eira e o espigueiro, o churrasco de carne barrosã
-// e a mesa comprida ao pé da piscina. No fim, o Lourenço leva todos a ver o pôr do sol à Serra d'Arga.
+// e a mesa comprida ao pé da piscina. (Os cenários seguem as fotografias da casa.) No fim, o Lourenço leva todos a ver o pôr do sol à Serra d'Arga.
 import { Talk } from '../acts/base.js';
 import { INK, PAPER, clamp, hash, person, sky, disc, hills } from '../draw.js';
 import { getCharacter } from '../sprites.js';
 import { TIO } from '../nomes.js';
 import { Eira } from '../acts/lanheses-eira.js';
 import { Churrasco } from '../acts/lanheses-churrasco.js';
-import { ceu, sol, nuvem, casaGranito, latada, espigueiro, eira, monte, placa } from '../acts/lanheses-comum.js';
+import { ceu, sol, nuvem, casaGranito, latada, espigueiro, eira, monte, placa, guarita, celeiro, hortensias } from '../acts/lanheses-comum.js';
 
-// A chegada: a casa de granito, a latada, o espigueiro e a eira com o milho a secar.
+// A chegada: a casa caiada, a latada, a guarita, o espigueiro e a eira com o milho a secar.
 function chegada(ctx, v, R, t, act) {
   const gy = act.ground(v) - 8, top = act.top(v), w = v.w, P = v.portrait;
   ceu(ctx, v, R, gy);
@@ -20,6 +20,7 @@ function chegada(ctx, v, R, t, act) {
   placa(ctx, 6 + cw / 2, gy - ch - 16 < top + 2 ? top + 2 : gy - ch - 16);
   const ex = Math.round(w * (P ? 0.4 : 0.48)), ew = Math.round(w * 0.97) - ex;
   if (ex - cw - 22 > 20) latada(R, cw + 18, ex - 12, gy, 26);
+  if (ex - cw - 22 > 44) guarita(R, ex - 18, gy);
   espigueiro(R, ex, gy, ew, clamp(gy - top - 22, 46, 96), 0.25);
   eira(R, v, gy);
   for (let k = 0; k < 6; k++) monte(R, w * (0.1 + k * 0.16), gy + 5 + (k % 2) * 3);
@@ -34,8 +35,10 @@ function piscina(ctx, v, R, t, act) {
   const hy = gy - (P ? 78 : 56);
   ceu(ctx, v, R, hy);
   sol(ctx, Math.round(w * 0.86), top + 12);
-  espigueiro(R, Math.round(w * 0.04), hy, Math.round(w * 0.4), clamp(hy - top - 14, 34, 70), 0.9);
-  casaGranito(ctx, R, Math.round(w * 0.56), hy, Math.round(w * 0.3), clamp(hy - top - 20, 34, 60));
+  // o celeiro de pedra ao lado da piscina, a casa mais atrás e hortênsias
+  celeiro(R, Math.round(w * 0.03), hy, Math.round(w * 0.36), clamp(hy - top - 26, 24, 42));
+  casaGranito(ctx, R, Math.round(w * 0.6), hy, Math.round(w * 0.34), clamp(hy - top - 20, 34, 60));
+  hortensias(ctx, R, Math.round(w * 0.4), Math.round(w * 0.58), hy + 1);
   R(0, hy, w, v.h - hy, '#7fae5a'); R(0, hy, w, 2, '#9fce72');
   // relva com flores (ao alto sobra muito relvado à frente da mesa)
   for (let k = 0; k < 40; k++) {
@@ -45,7 +48,7 @@ function piscina(ctx, v, R, t, act) {
   }
   // a piscina, com os irmãos da Inês lá dentro
   const px = Math.round(w * 0.08), pw = Math.round(w * 0.84), py = hy + 6, ph = P ? 34 : 20;
-  R(px - 3, py - 3, pw + 6, ph + 6, INK); R(px - 2, py - 2, pw + 4, ph + 4, '#e6e0d4'); R(px, py, pw, ph, '#3fb0e0'); R(px, py, pw, 2, '#8fdcf5');
+  R(px - 3, py - 3, pw + 6, ph + 6, INK); R(px - 2, py - 2, pw + 4, ph + 4, '#e6e0d4'); R(px, py, pw, ph, '#35c2cc'); R(px, py, pw, 2, '#9fe8ea');
   for (let k = 0; k < 8; k++) R(px + 6 + ((k * 41 + Math.floor(t * 8)) % (pw - 16)), py + 4 + ((k * 7) % Math.max(1, ph - 6)), 6, 1, '#bfeaf8');
   [['irma1', 0.2], ['irmao', 0.4], ['irmao2', 0.6], ['irma2', 0.8]].forEach(([who, fx], k) => {
     const img = getCharacter(who, 'casual').stand[k % 2 ? 'l' : 'r'], bx = Math.round(px + pw * fx), b = Math.round(Math.sin(t * 2 + k) * 1);
@@ -62,7 +65,8 @@ function piscina(ctx, v, R, t, act) {
 function mesa(ctx, v, R, t, act) {
   const gy = act.ground(v), w = v.w, y = gy - 17;
   R(4, y - 1, w - 8, 26, INK); R(5, y, w - 10, 24, PAPER);
-  for (let x = 5; x < w - 12; x += 8) { R(x, y + 20, 4, 4, '#e86a6a'); R(x + 4, y + 16, 4, 4, '#f6b0b0'); }
+  // toalha às flores
+  for (let x = 8, k = 0; x < w - 10; x += 7, k++) { const fy = y + 9 + ((k * 5) % 13); R(x, fy, 2, 2, k % 2 ? '#e8789a' : '#6f8fd8'); R(x + 2, fy + 1, 1, 1, '#6fae5a'); }
   R(5, y, w - 10, 2, '#ffffff'); R(5, y + 5, w - 10, 1, '#e6dcc8');
   for (const fx of [0.08, 0.92]) R(Math.round(w * fx) - 2, y + 25, 4, Math.min(22, v.h - y - 25), INK);
   // travessa da carne, broa, pratos e garrafas de vinho verde
