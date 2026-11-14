@@ -13,6 +13,17 @@ const INICIO = 215;              // onde está o primeiro grupo (antes fica a en
 const PALCO = INICIO + 6 * GAP + 150;   // onde fica o palco (em coordenadas do mundo), ao fundo da sala
 const BALLOONS = ['#ff5d8f', '#ffd166', '#6fb0f0', '#c79bff', '#ff8a4b'];
 
+// O carrinho da bebé Jeanne.
+export function carrinho(R, x, gy, t) {
+  x = Math.round(x);
+  R(x - 9, gy - 20, 18, 12, INK); R(x - 8, gy - 19, 16, 10, '#ffc6de'); R(x - 8, gy - 19, 8, 5, '#e89ab8');
+  R(x + 8, gy - 28, 2, 12, INK); R(x + 6, gy - 28, 6, 2, INK);
+  R(x - 1, gy - 17, 6, 5, '#f6c9a0'); R(x - 1, gy - 17, 6, 1, '#6b4226'); R(x + 1, gy - 15, 1, 1, INK); R(x + 3, gy - 15, 1, 1, INK);
+  R(x - 7, gy - 8, 2, 4, INK); R(x + 5, gy - 8, 2, 4, INK);
+  R(x - 9, gy - 4, 5, 4, INK); R(x + 4, gy - 4, 5, 4, INK); R(x - 8, gy - 3, 3, 2, '#8a93a7'); R(x + 5, gy - 3, 3, 2, '#8a93a7');
+  if (Math.floor(t * 2) % 2) R(x + 2, gy - 23, 2, 2, PINK);
+}
+
 export class Abracos extends Act {
   constructor(scene, cfg) {
     super(scene, cfg);
@@ -81,7 +92,7 @@ export class Abracos extends Act {
         const img = f.stand[x > this.x - cam ? 'l' : 'r'];
         ctx.drawImage(img, x - img.width, gy - img.height * 2 - hop, img.width * 2, img.height * 2);
       });
-      if (g.extra === 'bebe') this.carrinho(R, gx + (n - 1) / 2 * sp + 24, gy, t);
+      if (g.extra === 'bebe') carrinho(R, gx + (n - 1) / 2 * sp + 24, gy, t);
       if (g.extra === 'baloes') BALLOONS.forEach((c, i) => { const bx = Math.round(gx - 50 + i * 7), by = gy - 78 - (i % 2) * 8 + Math.round(Math.sin(t * 2 + i) * 2); R(bx, by + 6, 1, gy - by - 6, PAPER); disc(ctx, bx, by, 6, INK); disc(ctx, bx, by, 5, c); });
       if (!g.done && Math.floor(t * 3) % 2) { R(gx - 1, gy - 66, 3, 7, '#e0572f'); R(gx - 1, gy - 57, 3, 3, '#e0572f'); }
     });
@@ -90,17 +101,6 @@ export class Abracos extends Act {
     shadow(ctx, ix, gy, 14);
     const img = charFrame(this.ines, this.face, this.moving, false, this.dist);
     ctx.drawImage(img, ix - img.width, gy - img.height * 2, img.width * 2, img.height * 2);
-  }
-
-  // O carrinho da bebé Jeanne.
-  carrinho(R, x, gy, t) {
-    x = Math.round(x);
-    R(x - 9, gy - 20, 18, 12, INK); R(x - 8, gy - 19, 16, 10, '#ffc6de'); R(x - 8, gy - 19, 8, 5, '#e89ab8');
-    R(x + 8, gy - 28, 2, 12, INK); R(x + 6, gy - 28, 6, 2, INK);
-    R(x - 1, gy - 17, 6, 5, '#f6c9a0'); R(x - 1, gy - 17, 6, 1, '#6b4226'); R(x + 1, gy - 15, 1, 1, INK); R(x + 3, gy - 15, 1, 1, INK);
-    R(x - 7, gy - 8, 2, 4, INK); R(x + 5, gy - 8, 2, 4, INK);
-    R(x - 9, gy - 4, 5, 4, INK); R(x + 4, gy - 4, 5, 4, INK); R(x - 8, gy - 3, 3, 2, '#8a93a7'); R(x + 5, gy - 3, 3, 2, '#8a93a7');
-    if (Math.floor(t * 2) % 2) R(x + 2, gy - 23, 2, 2, PINK);
   }
 }
 
