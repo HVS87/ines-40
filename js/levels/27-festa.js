@@ -1,17 +1,16 @@
 // Nível 27 — os 40 anos da Inês: a festa no Recreio de Miraflores (de que o Lourenço é um dos
-// donos), com a família e os amigos todos, música ao vivo e um bolo com 40 velas.
+// donos), com os amigos todos, música ao vivo e um bolo com 40 velas.
 import { Talk } from '../acts/base.js';
 import { Ritmo } from '../acts/ritmo.js';
 import { interior } from '../acts/recreio-cenario.js';
 import { Abracos, Bolo, CONCERTO } from '../acts/festa.js';
-import { TIO } from '../nomes.js';
-import { FAMILIA, COLEGIO, LICEU, O_PIPOCA, BIMBY, MAR, CATAMARA, CASA, CONVIDADOS } from '../convidados.js';
+import { COLEGIO, LICEU, O_PIPOCA, BIMBY, MAR, CATAMARA, CASA, CONVIDADOS } from '../convidados.js';
 
 export default {
   id: 'festa',
   title: 'Os 40 Anos',
   music: 'party',
-  story: `15 de novembro de 2026: a Inês faz 40 anos! A festa é no Recreio de Miraflores, de que o Lourenço é um dos donos, com música ao vivo, e está cá toda a gente: o ${TIO} e a Tia Fátima, a Sofia, a Maria, o Zé Inácio e o Kiko, as amigas de sempre, os amigos de todas as aventuras... e o Lourenço, o Tomás e a Jeanne.`,
+  story: `15 de novembro de 2026: a Inês faz 40 anos! A festa é no Recreio de Miraflores, de que o Lourenço é um dos donos, com música ao vivo, e estão cá as amigas de sempre, os amigos de todas as aventuras... e o Lourenço, o Tomás e a Jeanne.`,
   help: 'Arrasta o dedo (ou usa as setas) para a Inês atravessar a festa e receber os abraços de todos. Quando a banda começar, toca do lado da nota (ou usa as setas ← →) quando ela chegar ao círculo. No fim, toca muitas vezes no ecrã (ou em Espaço) para soprar as 40 velas!',
   outro: 'Parabéns, Inês!',
   ending: 'Parabéns, Inês! Que venham mais 40 anos de aventuras.',
@@ -33,9 +32,7 @@ export default {
     {
       act: Abracos,
       groups: [
-        { people: FAMILIA, extra: 'baloes',
-          line: 'Tia Fátima: «Quarenta anos! E parece que foi ontem a corrida para a maternidade...»' },
-        { people: COLEGIO,
+        { people: COLEGIO, extra: 'baloes',
           line: 'Isabel: «Das Escravas até hoje, sempre juntas! E desta vez não trouxe o trolley.»' },
         { people: LICEU,
           line: 'Mi: «Um brinde à melhor madrinha que o Micas podia ter!»' },
@@ -44,7 +41,7 @@ export default {
         { people: BIMBY,
           line: 'Bárbara: «O bolo? Feito na Bimby, claro. Velocidade 5, com muito amor.»' },
         { people: MAR,
-          line: 'Pi: «Amanhã alugamos um barco! A carta de marinheiro já está no bolso.»' },
+          line: 'Carlos: «Amanhã alugamos um barco! A carta de marinheiro já está no bolso.»' },
         { people: CATAMARA,
           line: 'Moncada: «Parabéns, Inês! Depois do catamarã, uma festa em terra firme.»' },
         { people: CASA, extra: 'bebe',

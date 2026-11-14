@@ -184,22 +184,27 @@ function janela(R, J, noite) {
   R(x - 3, y + h + 2, w + 6, 3, INK); R(x - 2, y + h + 2, w + 4, 2, PAPER);
 }
 
-// O Ginja, o cão da família: de orelhas caídas e cauda a abanar. (x, gy) = as patas; face 1 =
-// virado para a direita; u = escala; hop = salto (píxeis).
+// O Ginja, o cão da família: um American Staffordshire Terrier cinzento-azulado e branco (peito,
+// focinho, risca na testa, «meias» e ponta da cauda brancos), forte, de orelhas dobradas, olhos
+// cor de âmbar e coleira de couro. (x, gy) = as patas; face 1 = virado para a direita; u = escala;
+// hop = salto (píxeis).
 export function ginja(R, x, gy, face = 1, t = 0, u = 2, hop = 0) {
-  const C = '#a8562e', L = '#cf7a44', D = '#7a3a1e';
+  const G = '#8b919e', GL = '#a4aab6', GD = '#666c7a', W = '#f6f3ec', NARIZ = '#3a3038';
   const P = (dx, dy, w, h, c) => R(Math.round(x + (face > 0 ? dx : -dx - w) * u), Math.round(gy - hop + dy * u), w * u, h * u, c);
   const wag = Math.floor(t * 8) % 2;
-  P(-9, -14 - wag, 3, 6, INK); P(-8, -13 - wag, 1, 5, C);                          // cauda
-  P(-3, -4, 3, 4, INK); P(-2, -4, 1, 3, D); P(0, -4, 3, 4, INK); P(1, -4, 1, 3, D);   // patas de trás (lado de lá)
-  P(-7, -10, 14, 7, INK); P(-6, -9, 12, 5, C); P(-6, -9, 12, 1, L);                 // tronco
-  P(-7, -4, 4, 5, INK); P(-6, -4, 2, 4, C); P(2, -4, 4, 5, INK); P(3, -4, 2, 4, C);   // patas
-  P(4, -15, 8, 9, INK); P(5, -14, 6, 7, C); P(5, -14, 6, 1, L);                     // cabeça
-  P(11, -12, 3, 5, INK); P(11, -11, 2, 3, L); P(12, -11, 1, 1, INK);                // focinho
-  P(9, -12, 1, 1, INK);                                                           // olho
-  P(5, -14, 3, 6, D);                                                             // orelha caída
-  P(4, -8, 3, 1, '#d8303a'); P(5, -7, 1, 1, GOLD);                                 // coleira
-  if (wag) P(11, -8, 1, 2, PINK);                                                  // língua de fora
+  P(-10, -14 - wag, 3, 7, INK); P(-9, -11 - wag, 1, 3, G); P(-9, -13 - wag, 1, 2, W);                 // cauda fina, de ponta branca
+  P(-4, -4, 3, 4, INK); P(-3, -4, 1, 2, GD); P(-3, -2, 1, 1, W); P(0, -4, 3, 4, INK); P(1, -4, 1, 2, GD); P(1, -2, 1, 1, W);   // patas do lado de lá
+  P(-8, -11, 15, 8, INK); P(-7, -10, 13, 6, G); P(-7, -10, 13, 1, GL);                                // tronco largo
+  P(2, -9, 4, 5, W); P(-3, -5, 5, 1, W);                                                              // peito e barriga brancos
+  P(-8, -4, 4, 5, INK); P(-7, -4, 2, 3, G); P(-7, -1, 2, 1, W);                                       // pata de trás, com «meia»
+  P(2, -4, 4, 5, INK); P(3, -4, 2, 1, G); P(3, -3, 2, 3, W);                                          // pata da frente, branca
+  P(3, -17, 10, 11, INK); P(4, -16, 8, 9, G); P(4, -16, 8, 1, GL);                                    // cabeça grande
+  P(10, -16, 2, 4, W);                                                                                // risca branca na testa
+  P(11, -13, 4, 7, INK); P(11, -12, 3, 5, W); P(13, -12, 1, 2, NARIZ); P(11, -8, 3, 1, '#d99aa0');    // focinho branco, nariz e boca
+  P(8, -13, 1, 1, '#e0a83a');                                                                         // olho cor de âmbar
+  P(4, -17, 3, 3, GD); P(3, -15, 2, 2, GD);                                                           // orelha dobrada
+  P(3, -8, 4, 1, '#5a3a22'); P(5, -7, 1, 1, GOLD);                                                    // coleira de couro
+  if (wag) P(12, -7, 1, 2, PINK);                                                                     // língua de fora
 }
 
 // A sala inteira: parede (na cor escolhida ou ainda em reboco), janela, chão de madeira e o

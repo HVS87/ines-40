@@ -1,5 +1,5 @@
 // Nível 26 — nasce a Jeanne, a filha da Inês e do Lourenço. O Lourenço apanha-a, e o Tomás,
-// que já anda na faculdade, também ajuda.
+// que está no fim do liceu, também ajuda.
 import { Talk } from '../acts/base.js';
 import { Catch } from '../acts/catch.js';
 import { corredor } from '../acts/cenarios.js';
@@ -8,7 +8,7 @@ export default {
   id: 'jeanne',
   title: 'Nasce a Jeanne',
   music: 'embalar',
-  story: 'A família cresce: vem aí a Jeanne, a filha da Inês e do Lourenço! O Lourenço está a postos na sala de partos, e o Tomás, que já anda na faculdade, veio ajudar a receber a mana.',
+  story: 'A família cresce: vem aí a Jeanne, a filha da Inês e do Lourenço! O Lourenço está a postos na sala de partos, e o Tomás, que está a acabar o liceu, veio ajudar a receber a mana.',
   help: 'Arrasta o dedo (ou usa as setas) para pôr o Lourenço debaixo da bebé: a sombra no chão mostra onde ela vai cair. O Tomás também tenta lá chegar!',
   outro: 'Bem-vinda, Jeanne!',
   ending: 'Inês, Lourenço, Tomás e Jeanne: a família está completa!',

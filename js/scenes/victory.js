@@ -1,4 +1,4 @@
-// O final do jogo: fogo de artifício e a família e os amigos todos a festejar os 40 anos da Inês.
+// O final do jogo: fogo de artifício e os convidados da festa a festejar os 40 anos da Inês.
 // Cada toque no ecrã lança mais foguetes.
 import { getCharacter } from '../sprites.js';
 import { Fireworks, Particles } from '../fx.js';

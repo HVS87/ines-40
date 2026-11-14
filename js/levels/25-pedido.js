@@ -12,7 +12,7 @@ export default {
   id: 'pedido',
   title: 'O Pedido',
   music: 'flamenco',
-  story: 'O Lourenço alugou um catamarã para um passeio no Tejo com os amigos: a Ana e o Kiko, a Mi e o Leal, o Pi, o Moncada, a Marta e o Gonzaga. Serviu-se uma paella enorme e foi aí, a bordo, que ele pediu a Inês em casamento! Nesse preciso momento aproximou-se um segundo barco, com uma roda de samba, e todos dançaram.',
+  story: 'O Lourenço alugou um catamarã para um passeio no Tejo, com o Carlos ao leme e os amigos a bordo: a Ana e o Kiko, a Mi e o Leal, o Pi, o Moncada, a Marta e o Gonzaga. Serviu-se uma paella enorme e foi aí que ele pediu a Inês em casamento! Nesse momento aproximou-se um segundo barco, com uma roda de samba, e todos dançaram.',
   help: 'Toca (ou Espaço) para servir a paella quando o prato estiver por baixo da concha. No pedido, mantém o dedo no ecrã (ou Espaço) para encher o coração. No samba, toca na coluna da nota (ou usa as setas ← ↓ →) quando ela chegar ao círculo.',
   outro: 'Ela disse que sim! E o Tejo inteiro dançou samba.',
   acts: [
@@ -25,7 +25,7 @@ export default {
       ],
       lines: [
         'Inês: «Um catamarã ao pôr do sol, com os amigos todos... O que é que andas a tramar?»',
-        'Lourenço: «Nada, nada... Olha, vem aí a paella! Ajudas a servir?»',
+        'Lourenço: «Nada, nada... O Carlos vai ao leme e vem aí a paella! Ajudas a servir?»',
       ],
     },
     { act: Paella, hearts: 4 },
@@ -40,7 +40,8 @@ export default {
       cast: [
         // atrás
         { who: 'leal', outfit: 'casual*', x: 0.2, dy: 13 }, { who: 'pi', outfit: 'casual', x: 0.38, dy: 13 }, { who: 'moncada', outfit: 'casual*', x: 0.56, dy: 13, face: -1 },
-        { who: 'ana', outfit: 'casual*', x: 0.74, dy: 13, face: -1 }, { who: 'kiko', outfit: 'casual*', x: 0.9, dy: 13, face: -1 },
+        { who: 'ana', outfit: 'casual*', x: 0.72, dy: 13, face: -1 }, { who: 'kiko', outfit: 'casual*', x: 0.86, dy: 13, face: -1 },
+        { who: 'carlos', outfit: 'casual', x: 0.97, dy: 24, face: -1 },      // ao leme, lá atrás
         // à frente: a Inês ao centro, de branco, e o Lourenço ao lado
         { who: 'mi', outfit: 'casual*', x: 0.12 }, { who: 'lourenco', outfit: 'barco*', x: 0.33, name: 'Lourenço' }, { who: 'ines', outfit: 'barco*', x: 0.5, face: -1, name: 'Inês' },
         { who: 'marta', outfit: 'casual*', x: 0.67, face: -1 }, { who: 'gonzaga', outfit: 'casual*', x: 0.85, face: -1 },

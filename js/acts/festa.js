@@ -1,6 +1,6 @@
 // Atos do último nível, a festa dos 40 anos no Recreio de Miraflores (o cenário está em
 // recreio-cenario.js):
-//   Abracos  — a Inês atravessa a festa e vai sendo recebida por cada grupo de família e amigos;
+//   Abracos  — a Inês atravessa a festa e vai sendo recebida por cada grupo de amigos;
 //   CONCERTO — «pele» do jogo de ritmo: a banda toca ao vivo e toda a gente dança;
 //   Bolo     — o bolo com 40 velas: tocar muitas vezes para ajudar a soprá-las todas.
 import { Act } from './base.js';
@@ -10,7 +10,7 @@ import { interior, mesa, matraquilhos, escorrega, ROSA } from './recreio-cenario
 
 const GAP = 190;                 // distância entre grupos
 const INICIO = 215;              // onde está o primeiro grupo (antes fica a entrada, com os cartazes)
-const PALCO = INICIO + 7 * GAP + 150;   // onde fica o palco (em coordenadas do mundo), ao fundo da sala
+const PALCO = INICIO + 6 * GAP + 150;   // onde fica o palco (em coordenadas do mundo), ao fundo da sala
 const BALLOONS = ['#ff5d8f', '#ffd166', '#6fb0f0', '#c79bff', '#ff8a4b'];
 
 export class Abracos extends Act {
@@ -73,7 +73,7 @@ export class Abracos extends Act {
       const gx = g.x - cam;
       if (gx < -160 || gx > v.w + 160) return;
       // entre os grupos: os matraquilhos, o escorrega e as mesas de madeira
-      if (k === 0) matraquilhos(R, gx + 86, gy); else if (k === 3) escorrega(R, gx + 74, gy); else if (k < this.groups.length - 1) mesa(R, gx + 66, gy);
+      if (k === 0) matraquilhos(R, gx + 86, gy); else if (k === 2) escorrega(R, gx + 74, gy); else if (k < this.groups.length - 1) mesa(R, gx + 66, gy);
       const n = g.frames.length, sp = n > 3 ? 22 : 26;
       g.frames.forEach((f, i) => {
         const x = Math.round(gx + (i - (n - 1) / 2) * sp), hop = g.joy > 0 ? Math.round(Math.abs(Math.sin(t * 9 + i)) * 4) : 0;

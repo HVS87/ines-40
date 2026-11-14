@@ -13,10 +13,10 @@ const VOO = 0.55, RAIO = 34, CERTO = 14;
 const NOMES = { ines: 'Inês', mi: 'Mi', leal: 'Leal', lourenco: 'Lourenço' };
 const VEZ = { ines: 'da Inês', mi: 'da Mi', leal: 'do Leal', lourenco: 'do Lourenço' };
 const FALAS = [
-  'Pi: «Âncora no fundo. Ordens do comandante!»',
-  'Carlos: «Qual comandante? O barco é alugado!»',
-  'Pi: «Pois é. Mas quem tem a carta de marinheiro sou eu.»',
-  'Carlos: «Está bem, está bem... Às ordens, comandante Pi!»',
+  'Carlos: «Âncora no fundo. Ordens do comandante!»',
+  'Pi: «Qual comandante? O barco é alugado!»',
+  'Carlos: «Pois é. Mas quem tem a carta de marinheiro sou eu.»',
+  'Pi: «Está bem, está bem... Às ordens, comandante Carlos!»',
   'Inês: «Quem manda é quem traz o almoço. Que dia em grande!»',
 ];
 
