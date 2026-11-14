@@ -36,7 +36,7 @@ export default {
   id: 'farol',
   title: 'Acampar na Ilha do Farol',
   music: 'acampar',
-  story: 'A Inês foi acampar com a Ana, a Isabel, a Maria e as outras amigas para a Ilha do Farol, ao largo de Olhão: nove raparigas, sol, praia e uma noite debaixo das estrelas. O que é que podia correr mal?',
+  story: 'A Inês foi acampar com a Ana, a Soft, a Isabel, a Maria, a Tété e mais três amigas para a Ilha do Farol, ao largo de Olhão: nove raparigas, sol, praia e uma noite debaixo das estrelas. O que é que podia correr mal?',
   help: 'Toca no ecrã (ou Espaço) para saltar, dar uma ajuda às amigas e pregar as estacas; mantém premido para soprar a fogueira. De manhã, toca em cada coisa (ou setas e Espaço) para a arrumar.',
   outro: 'Acampamento levantado! E o trolley da Isabel ficou para a história.',
   acts: [

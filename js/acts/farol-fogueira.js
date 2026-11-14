@@ -10,14 +10,14 @@ const LIMITE = 10;                // segundos por lata (depois vai morna, sem co
 const LATAS = [
   { cor: '#3f7fd0', fala: 'Atum de lata, no ponto! Esta é para a Maria.' },
   { cor: '#d8433c', fala: 'Salsichas de lata, a especialidade da casa! Sai uma para a Ana.' },
-  { cor: '#d8902e', fala: 'Feijão de lata, bem quentinho!' },
-  { cor: '#f0c040', fala: 'E para sobremesa... pêssego em calda!' },
+  { cor: '#d8902e', fala: 'Feijão de lata, bem quentinho! Este vai para a Tété.' },
+  { cor: '#f0c040', fala: 'E para sobremesa... pêssego em calda, para a Soft!' },
 ];
 const DICA = 'Mantém o dedo no ecrã (ou o Espaço) para soprar: com a chama no verde, a lata aquece!';
 // lugares à volta da fogueira: lado (-1 esquerda, 1 direita) e distância (1 = mais perto)
 // ordem: Inês, Isabel, e as outras sete
 const LUGAR = [[-1, 1], [1, 4], [-1, 2], [-1, 3], [-1, 4], [-1, 5], [1, 1], [1, 2], [1, 3]];
-const COMEM = [6, 2, 7, 3];       // quem recebe cada lata (a Maria e a Ana são nomeadas nas falas)
+const COMEM = [6, 2, 7, 3];       // quem recebe cada lata: Maria, Ana, Tété e Soft (como dizem as falas)
 
 export class FarolFogueira extends Act {
   get max() { return this.cfg.hearts || 4; }

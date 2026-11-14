@@ -7,14 +7,19 @@ import { INK, SKIN, hash, sky, text, recolor } from '../draw.js';
 export const chao = (v) => Math.round(v.h * (v.portrait ? 0.72 : 0.84));
 
 // ---------- As nove raparigas ----------
-// Pela ordem: Inês, Isabel, Ana, Soft, Maísa, Mi, Maria, Tété e uma amiga sem nome, feita aqui.
-// Confirmadas: a Inês, a Isabel, a Ana e a Maria; as outras foram escolhidas para fazer as nove.
+// Pela ordem: Inês, Isabel, Ana, Soft, uma amiga, outra amiga, Maria, Tété e mais uma amiga.
+// Quem lá esteve (confirmado): a Inês, a Isabel, a Ana, a Soft, a Maria e a Tété; a Maísa e a Mi
+// não foram. As outras três ficam sem nome: são figurantes feitas aqui, a trocar as cores do
+// cabelo e do vestido a bonecos do elenco, para não se parecerem com ninguém.
 let grupo = null;
 export const CORES = ['#ff8a4b', '#c79bff', '#3fa6a0', '#ffd166', '#ff5d8f', '#5a8fd0', '#ff8a4b', '#7be0b0', '#f2f2f7'];
 export function raparigas() {
   if (!grupo) {
-    grupo = ['ines', 'isabel', 'ana', 'soft', 'maisa', 'mi', 'maria', 'tete'].map((q) => getCharacter(q, 'praia'));
-    grupo.push(recolor(getCharacter('tete', 'praia'), { '#1f1a2a': '#9a5a3a', '#3a3550': '#b87a52', '#7be0b0': '#f2f2f7', '#ffffff': '#5a8fd0' }));
+    const de = (q) => getCharacter(q, 'praia');
+    const loira = recolor(de('isabel'), { '#a87a4a': '#d9ae5c', '#d0a870': '#f2d48a', '#c79bff': '#ff5d8f' });
+    const ruiva = recolor(de('tete'), { '#2f2018': '#9a4a2a', '#4a3628': '#c26a3c', '#7be0b0': '#5a8fd0' });
+    const morena = recolor(de('maria'), { '#4f3220': '#1f1a2a', '#6f4a32': '#3a3550', '#ff8a4b': '#f2f2f7', '#ffffff': '#5a8fd0' });
+    grupo = [de('ines'), de('isabel'), de('ana'), de('soft'), loira, ruiva, de('maria'), de('tete'), morena];
   }
   return grupo;
 }
