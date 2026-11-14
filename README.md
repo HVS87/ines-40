@@ -113,9 +113,11 @@ partilhadas por vários níveis, cada um com a sua «pele».
   e do ecrã final). Joga também todos os níveis sem tocar em nada — têm de acabar sozinhos, e é
   assim que se veem os caminhos de quem falha tudo —, mede o tempo que cada ato leva a desenhar e
   confirma os momentos que dependem do jogador (os cartões do Crôcô, a receita do Long Island,
-  ganhar e perder cada telefonema). Resultado no painel
+  ganhar e perder cada telefonema). Roda ainda o ecrã a meio de cada nível, confirma que todos os
+  ficheiros ficam mesmo guardados para jogar sem rede e que uma gravação de progresso estragada não
+  impede de jogar. Resultado no painel
   e em `window.__qa`. Acrescentar `&touch&device=mobile` para testar como num telemóvel e
-  `&only=toque` (ou `jogo`, `parado`, `momentos`, `fluxo`, `app`...) para correr só um grupo.
+  `&only=toque` (ou `jogo`, `parado`, `momentos`, `rodar`, `semrede`, `fluxo`, `app`...) para correr só um grupo.
 - `node tests/matrix.mjs` corre essa suite em 20 configurações de uma vez, sem abrir janelas:
   telemóveis e tablets Android, iPhone e iPad (tamanho, densidade e identificação emulados no
   Edge/Chrome, com toques verdadeiros enviados pelo browser), computador e Firefox; a tabela diz

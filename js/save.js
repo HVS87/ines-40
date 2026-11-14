@@ -16,7 +16,7 @@ export const save = {
         this.data = Object.assign(defaults(), old);
       }
     } catch (err) { /* modo privado, armazenamento bloqueado ou gravação estragada */ }
-    if (!this.data.done || typeof this.data.done !== 'object') this.data.done = {};
+    if (!this.data.done || typeof this.data.done !== 'object' || Array.isArray(this.data.done)) this.data.done = {};
     for (const [id, r] of Object.entries(this.data.done)) {
       if (!r || !Number.isFinite(r.hearts) || !Number.isFinite(r.total)) delete this.data.done[id];
     }

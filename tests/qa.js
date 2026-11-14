@@ -2,8 +2,8 @@
 // http://localhost:8090/?qa) e os testes correm sozinhos, com o resultado num painel e em
 // window.__qa ({ results, bad, errors, done }).
 //
-//   ?qa&only=<nome>   corre só um grupo (dados, jogo, textos, ausente, parado, momentos, fluxo, toque,
-//                     teclado, app, fontes, musica, monkey)
+//   ?qa&only=<nome>   corre só um grupo (dados, jogo, textos, ausente, parado, momentos, rodar, fluxo,
+//                     toque, teclado, app, semrede, fontes, musica, monkey)
 //   ?qa&report=http://localhost:8092/&tag=nome   no fim, envia o resultado para esse endereço
 //                     (só para este computador; é o que usa o tests/matrix.mjs)
 //   ?qa&seed=7        semente do teste de toques ao acaso (monkey)
@@ -22,6 +22,8 @@
 //      de quem falha tudo), a desenhar muito mais fotogramas, e mede-se o custo de cada desenho.
 //   7. Momentos: os cartões do Crôcô, a receita do Long Island, os telefonemas (ganhar e perder com
 //      cada intruso) e quem aparece na festa e no ecrã final.
+//   8. Rodar o ecrã (ou mudar o tamanho da janela) a meio de cada nível, a cópia guardada para
+//      jogar sem rede e gravações de progresso estragadas.
 // Atenção: os testes apagam o progresso guardado neste browser.
 import { LEVELS, levelLabel } from '../js/levels/index.js';
 import { SAVE_KEY } from '../js/config.js';
@@ -253,6 +255,68 @@ async function testIdle() {
   game.goMenu();
 }
 
+// ---------- Rodar o ecrã a meio do jogo ----------
+// Cada nível jogado pelo robô com o ecrã a mudar de posição de dois em dois segundos e meio (ao
+// alto ↔ deitado no telemóvel e no tablet; janela larga ↔ quase quadrada no computador). Os atos
+// têm de se arrumar outra vez sem erros e o nível tem de chegar ao fim.
+async function testRotate() {
+  const v = game.view, cv = document.getElementById('game'), real = { w: v.w, h: v.h, k: v.k, portrait: v.portrait };
+  const movel = document.body.classList.contains('mobile');
+  const outra = !movel ? { w: 300, h: 225, k: real.k, portrait: false } : real.portrait ? { w: 400, h: 180, k: real.k, portrait: false } : { w: 270, h: 600, k: real.k, portrait: true };
+  const poe = (o) => { Object.assign(v, o); cv.width = o.w; cv.height = o.h; ctx2d().imageSmoothingEnabled = false; if (game.scene && game.scene.onResize) game.scene.onResize(); };
+  const presos = [], erros = [], fracos = [];
+  let tem = 0, ha = 0;
+  for (let i = 0; i < LEVELS.length; i++) {
+    const L = LEVELS[i];
+    if (L.broken) continue;
+    window.__errors = [];
+    poe(real);
+    game.startLevel(i);
+    game.ui.act('start');
+    const s = game.scene, max = Math.round(900 / STEP);
+    let n = 0, lado = 0;
+    while (s.state !== 'done' && n < max) {
+      frames(30);
+      n += 30;
+      if (n % 150 === 0) { lado ^= 1; poe(lado ? outra : real); s.draw(ctx2d(), v); }
+      if (n % 1800 === 0) await tick();
+    }
+    if (s.state !== 'done') presos.push(`${L.id}: preso no ato ${s.i} (${s.act && s.act.constructor.name})`);
+    else { tem += s.got; ha += s.total; if (s.got < s.total * 0.4) fracos.push(`${L.id} ${s.got}/${s.total}`); }
+    if ((window.__errors || []).length) erros.push(`${L.id}: ${window.__errors[0]}`);
+    await tick();
+  }
+  poe(real);
+  window.dispatchEvent(new Event('resize'));
+  const nome = movel ? 'rodar o ecrã' : 'mudar o tamanho da janela';
+  check(`${nome} a meio de cada nível (${real.w}x${real.h} ↔ ${outra.w}x${outra.h}): todos chegam ao fim`, !presos.length, presos.join(' | '));
+  check(`${nome} a meio de cada nível: sem erros`, !erros.length, erros.slice(0, 6).join(' | '));
+  check(`${nome} a meio de cada nível: o robô ainda apanha a maior parte dos corações (${tem}/${ha})`, ha > 0 && tem >= ha * 0.6 && fracos.length <= 2, fracos.join(', '));
+  game.goMenu();
+}
+
+// ---------- Sem rede: a cópia guardada pelo service worker ----------
+async function testOffline() {
+  if (!('serviceWorker' in navigator) || !window.caches || !/^https?:$/.test(location.protocol)) return;
+  const sw = await (await fetch('sw.js', { cache: 'no-store' })).text();
+  const nome = (/const CACHE = '([^']+)'/.exec(sw) || [])[1];
+  const lista = [...(sw.split('const CORE = [')[1] || '').split('];')[0].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+  let pronto = false;
+  for (let i = 0; i < 200 && !pronto; i++) {
+    const reg = await navigator.serviceWorker.getRegistration().catch(() => null);
+    pronto = !!(reg && reg.active && reg.active.state === 'activated' && !reg.installing) && (await caches.keys()).includes(nome);
+    if (!pronto) await new Promise((r) => setTimeout(r, 100));
+  }
+  const faltam = [];
+  if (pronto) {
+    const cache = await caches.open(nome);
+    for (const f of lista) { const hit = await cache.match(new URL(f, location.href).href, { ignoreSearch: true }); if (!hit || !hit.ok) faltam.push(f); }
+  }
+  check(`sem rede: os ${lista.length} ficheiros da lista estão mesmo guardados na cópia «${nome}»`, pronto && lista.length > 100 && !faltam.length, pronto ? faltam.slice(0, 8).join(', ') : 'o service worker não ficou ativo a tempo');
+  const velhas = (await caches.keys()).filter((k) => k !== nome);
+  check('sem rede: não ficam cópias de versões antigas', !velhas.length, velhas.join(', '));
+}
+
 // ---------- Momentos que os robôs não mostram ----------
 // Coisas que dependem do que o jogador faz (ou não faz) e que jogar o nível de fio a pavio não prova.
 async function testMoments() {
@@ -351,8 +415,8 @@ async function testMusic() {
     for (let k = 0; k < s.acts.length; k++) { seq.push(game.audio.track + (game.audio.muffled ? '*' : '')); s.nextAct(); }
     return seq.join(' ');
   };
-  const garage = tocou('garage'), pedido = tocou('pedido'), bimby = tocou('bimby');
-  check('música: muda de ato para ato (Garage, Pedido, telefonema)', garage === 'house* house* house noite' && pedido === 'flamenco flamenco romance samba romance' && bimby.endsWith(' australia'), [garage, pedido, bimby].join(' | '));
+  const garage = tocou('garage'), pedido = tocou('pedido'), bimby = tocou('bimby'), festa = tocou('festa');
+  check('música: muda de ato para ato (Garage, Pedido, telefonema, festa com DJ)', garage === 'house* house* house noite' && pedido === 'flamenco flamenco romance samba romance' && bimby.endsWith(' australia') && festa === 'party party dj parabens', [garage, pedido, bimby, festa].join(' | '));
   game.goMenu();
   check('música: de volta ao menu, sem som abafado', game.audio.track === 'menu' && !game.audio.muffled, game.audio.track);
 }
@@ -386,6 +450,21 @@ function testFlow() {
   check('progresso: guarda o melhor resultado e abre o nível seguinte', game.save.data.done[LEVELS[0].id].hearts === 2 && game.isUnlocked(1) && !game.isUnlocked(2) && game.nextLevel() === 1);
   game.save.load();
   check('progresso: fica gravado no dispositivo', game.save.isDone(LEVELS[0].id));
+  // uma gravação estragada (ou de outro formato) não pode impedir o jogo de abrir nem de voltar a gravar
+  const estragos = ['{isto não é JSON', '"texto"', '[]', '7', 'null', JSON.stringify({ done: 'x' }), JSON.stringify({ done: [1, 2] }), JSON.stringify({ done: { [LEVELS[0].id]: { hearts: 'a', total: 3 }, [LEVELS[1].id]: { hearts: 2, total: 5 } }, muted: 'sim' })];
+  const maus = estragos.filter((raw, k) => {
+    try {
+      localStorage.setItem(SAVE_KEY, raw);
+      game.save.load();
+      const d = game.save.data, limpo = d && d.done && typeof d.done === 'object' && !Array.isArray(d.done);
+      if (!limpo || !game.isUnlocked(0)) return true;
+      if (k === estragos.length - 1) return !(game.save.isDone(LEVELS[1].id) && !game.save.isDone(LEVELS[0].id));     // fica o que está bom
+      game.save.complete(LEVELS[0].id, 1, 3);
+      game.save.load();
+      return !game.save.isDone(LEVELS[0].id);
+    } catch (err) { return true; }
+  });
+  check('progresso: uma gravação estragada não impede de jogar nem de voltar a gravar', !maus.length, maus.join(' | '));
   game.save.data = JSON.parse(saved);
   game.save.write();
   game.debug = keep;
@@ -688,11 +767,13 @@ export async function run(g) {
     if (!only || only === 'ausente') await testAway();
     if (!only || only === 'parado') await testIdle();
     if (!only || only === 'momentos') await testMoments();
+    if (!only || only === 'rodar') await testRotate();
     if (!only || only === 'jogo') testCross();
     if (!only || only === 'fluxo') testFlow();
     if (!only || only === 'toque') await testTouch(q.has('touch'));
     if (!only || only === 'teclado') testKeys();
     if (!only || only === 'app') await testApp();
+    if (!only || only === 'app' || only === 'semrede') await testOffline();
     if (!only || only === 'fontes' || only === 'offline') await testSources();
     if (!only || only === 'musica') await testMusic();
     if (!only || only === 'monkey') await testMonkey(seed);

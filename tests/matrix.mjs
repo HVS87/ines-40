@@ -226,7 +226,7 @@ async function chromium(run, dir) {
     let report = null;
     for (const t0 = Date.now(); Date.now() - t0 < TIMEOUT && !report;) {
       await sleep(1000);
-      report = await cdp.eval(`(() => { const q = window.__qa; if (!q || !q.done) return null; const g = window.__game; return { ua: navigator.userAgent, size: innerWidth + 'x' + innerHeight, dpr: devicePixelRatio, view: g.view.w + 'x' + g.view.h, coarse: matchMedia('(pointer: coarse)').matches, total: q.results.length, bad: q.bad, errors: q.errors, medidas: q.results.filter((r) => /^desenho:/.test(r.name)).map((r) => r.name), pesados: q.pesados }; })()`).catch(() => null);
+      report = await cdp.eval(`(() => { const q = window.__qa; if (!q || !q.done) return null; const g = window.__game; return { ua: navigator.userAgent, size: innerWidth + 'x' + innerHeight, dpr: devicePixelRatio, view: g.view.w + 'x' + g.view.h, coarse: matchMedia('(pointer: coarse)').matches, total: q.results.length, bad: q.bad, errors: q.errors, medidas: q.results.filter((r) => /^desenho:/.test(r.name)).map((r) => r.name), rodar: q.results.filter((r) => /a meio de cada nível/.test(r.name)).map((r) => r.name), pesados: q.pesados }; })()`).catch(() => null);
     }
     if (report && run.touch) {
       const extra = await dedos(cdp, run).catch((err) => ['dedo real: o teste não chegou ao fim — ' + err.message]);
