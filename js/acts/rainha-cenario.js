@@ -1,36 +1,13 @@
 // Cenários do nível «O Rainha»: o palácio da Rua da Junqueira visto da rua (fachada comprida em
 // três corpos, portão ao centro, dois terraços, o elétrico a passar) e o pátio do liceu.
-// Também há aqui duas ajudas para os bonecos: recolorir (colegas anónimos) e ver de costas.
-import { INK, hash, sky, disc, sign, person, shadow } from '../draw.js';
-import { flip } from '../sprites.js';
+// Também há aqui uma ajuda para os bonecos: vê-los de costas.
+import { INK, hash, sky, disc, sign, person, shadow, recolor } from '../draw.js';
 
-export const PAL_X = 25;    // onde começa o palácio, em píxeis de mundo
+const PAL_X = 25;    // onde começa o palácio, em píxeis de mundo
 const WALL = '#eaa9a0', WALL_S = '#d48e86', STONE = '#f4e8d2', STONE_S = '#cdb898';
 const ROOF = '#b5523a', ROOF_S = '#8e3d2a', GLASS = '#34466e';
 
 // ---------- bonecos ----------
-function rgb(c) { const n = parseInt(c.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
-
-// Copia os fotogramas de um boneco trocando cores (mapa { '#de': '#para' }), só nas linhas
-// acima de `rows` (por omissão, todas).
-export function recolor(frames, map, rows = 99) {
-  const pairs = Object.entries(map).map(([a, b]) => [rgb(a), rgb(b)]);
-  const out = {};
-  for (const k of Object.keys(frames)) {
-    const src = frames[k].r, c = document.createElement('canvas');
-    c.width = src.width; c.height = src.height;
-    const g = c.getContext('2d');
-    g.drawImage(src, 0, 0);
-    const im = g.getImageData(0, 0, c.width, Math.min(rows, c.height)), d = im.data;
-    for (let i = 0; i < d.length; i += 4) {
-      if (!d[i + 3]) continue;
-      for (const [a, b] of pairs) if (d[i] === a[0] && d[i + 1] === a[1] && d[i + 2] === a[2]) { d[i] = b[0]; d[i + 1] = b[1]; d[i + 2] = b[2]; break; }
-    }
-    g.putImageData(im, 0, 0);
-    out[k] = { r: c, l: flip(c) };
-  }
-  return out;
-}
 
 // Um boneco visto de costas: a cara fica tapada pelo cabelo (cor `hair`).
 export function costas(frames, hair, eyes) {
@@ -87,7 +64,7 @@ function terraco(ctx, R, x, w, b, u) {
 }
 
 // O palácio visto da rua: x0 = canto esquerdo no ecrã, b = base, u = altura de um andar.
-export function palacio(ctx, R, x0, b, u) {
+function palacio(ctx, R, x0, b, u) {
   const A = 70, T = 90, C = 150;
   // alas das pontas (2 andares)
   corpo(R, x0, A, b, u, 2); fila(R, x0, A, 3, b, u, 2);

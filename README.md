@@ -109,12 +109,17 @@ partilhadas por vários níveis, cada um com a sua «pele».
   ao fim (com pausa a meio), e verificam-se os textos, os menus, a gravação do progresso, a lista
   de ficheiros para jogar sem rede e toques ao acaso. Testa também o ecrã tátil (toques, dois
   dedos, arrastar, gestos do sistema, tamanho dos botões), o teclado, a instalação como app e os
-  dados cruzados (personagens, roupas, sons e músicas pedidos têm de existir). Resultado no painel
+  dados cruzados (personagens, roupas, sons e músicas pedidos têm de existir; os convidados da festa
+  e do ecrã final). Joga também todos os níveis sem tocar em nada — têm de acabar sozinhos, e é
+  assim que se veem os caminhos de quem falha tudo —, mede o tempo que cada ato leva a desenhar e
+  confirma os momentos que dependem do jogador (os cartões do Crôcô, a receita do Long Island,
+  ganhar e perder cada telefonema). Resultado no painel
   e em `window.__qa`. Acrescentar `&touch&device=mobile` para testar como num telemóvel e
-  `&only=toque` (ou `jogo`, `fluxo`, `app`...) para correr só um grupo.
+  `&only=toque` (ou `jogo`, `parado`, `momentos`, `fluxo`, `app`...) para correr só um grupo.
 - `node tests/matrix.mjs` corre essa suite em 20 configurações de uma vez, sem abrir janelas:
   telemóveis e tablets Android, iPhone e iPad (tamanho, densidade e identificação emulados no
-  Edge/Chrome, com toques verdadeiros enviados pelo browser), computador e Firefox. O Safari
+  Edge/Chrome, com toques verdadeiros enviados pelo browser), computador e Firefox; a tabela diz
+  também quanto custa desenhar um fotograma (média e ato mais pesado). O Safari
   verdadeiro (motor WebKit) só se pode testar num iPhone ou num Mac.
 - <http://localhost:8090/?dev> dá `window.__dev` na consola: `await __dev.play('garage')`,
   `__dev.goto('garage', 1)`, `__dev.step(3)`, e `await __dev.shot('nome')` /

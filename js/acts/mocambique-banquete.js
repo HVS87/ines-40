@@ -5,9 +5,8 @@
 //   { act: Banquete, hearts: 5, seq: 'CCKMCC...' }   C camarão · K caranguejo · M malagueta
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
-import { INK, GOLD, clamp, person, text } from '../draw.js';
+import { INK, GOLD, clamp, mix, person, text } from '../draw.js';
 import { praiaMoz } from './mocambique-cenario.js';
-import { tom } from './pesca.js';
 
 const A = '#ff8a5a', B = '#ffd0a0', C = '#ff5d3a', K = '#ff7a2a', KL = '#ffb070', M = '#e0182a', V = '#3fae5a';
 // cada comida: retângulos [x, y, largura, altura, cor] numa grelha com origem no centro
@@ -110,7 +109,7 @@ export class Banquete extends Act {
     R(tx0 - 1, g.ty - 1, tw + 2, 16, INK);
     R(tx0, g.ty, tw, 5, '#fff6e6');
     for (let x = 0; x < tw; x += 8) { R(tx0 + x, g.ty + 5, Math.min(8, tw - x), 9, cores[(x / 8) % 4 | 0]); R(tx0 + x + 3, g.ty + 8, 2, 2, '#fff6e6'); }
-    R(tx0, g.ty + 5, tw, 1, tom('#fff6e6', '#2b1d2e', 0.3));
+    R(tx0, g.ty + 5, tw, 1, mix('#fff6e6', '#2b1d2e', 0.3));
     for (const lx of [10, v.w - 14]) { R(lx - 1, g.ty + 14, 5, 5, INK); R(lx, g.ty + 14, 3, 4, '#8a5a34'); }
     // cervejas 2M e a tigela do piri-piri
     for (const fx of [0.2, 0.4, 0.62, 0.9]) this.garrafa(ctx, R, Math.round(fx * v.w), g.ty + 1);

@@ -4,8 +4,7 @@
 //   { act: Navegar, hearts: 5 }
 import { Act } from './base.js';
 import { getCharacter, getSprites } from '../sprites.js';
-import { INK, clamp, lerp, hash, person } from '../draw.js';
-import { tom } from './pesca.js';
+import { INK, clamp, lerp, mix, hash, person } from '../draw.js';
 import { costa, lancha, TRIPULACAO } from './barco-cenario.js';
 
 const LEN = 92;        // comprimento do barco
@@ -76,7 +75,7 @@ export class Navegar extends Act {
     }
     // o mar, com ondinhas que passam mais depressa à frente do que ao fundo
     const n = 8, H = v.h - hy;
-    for (let i = 0; i < n; i++) R(0, hy + Math.floor((i * H) / n), v.w, Math.ceil(H / n) + 1, tom('#5ab8e0', '#1f5fa8', i / (n - 1)));
+    for (let i = 0; i < n; i++) R(0, hy + Math.floor((i * H) / n), v.w, Math.ceil(H / n) + 1, mix('#5ab8e0', '#1f5fa8', i / (n - 1)));
     for (let i = 0; i < 26; i++) {
       const k = hash(i + 1), y = hy + 4 + k * (H - 8), W = v.w + 30, x = (((hash(i * 3 + 2) * W - this.x * (0.4 + k * 0.6)) % W) + W) % W - 15;
       R(x, y, 5 + k * 8, 1, k > 0.5 ? '#cfeaff' : '#8fd0f0');

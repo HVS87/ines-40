@@ -11,7 +11,7 @@ const KO = 'O sushi chegou... um bocadinho abanado. Foge aos obstáculos!';
 
 // O letreiro «SUSHI@HOME» (a arroba das letras de píxeis comuns lê-se mal: desenha-se aqui).
 const AT = ['.###.', '#.#.#', '#.###', '#....', '.###.'];
-export function arroba(ctx, x, y, color, sc = 1) {
+function arroba(ctx, x, y, color, sc = 1) {
   ctx.fillStyle = color;
   AT.forEach((row, j) => { for (let i = 0; i < 5; i++) if (row[i] === '#') ctx.fillRect(Math.round(x) + i * sc, Math.round(y) + j * sc, sc, sc); });
 }

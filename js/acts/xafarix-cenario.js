@@ -40,7 +40,7 @@ export function gato(ctx, x, y, fg = '#ffffff', bg = '#141220', scale = 1) {
 // a crista espetada, o arco dos auscultadores, a orelha às riscas de um lado e o auscultador em
 // forma de rosa do outro, os olhos semicerrados, o nariz preto, as pintas e os bigodes compridos.
 // (x, y) = canto de cima; fg = cor do traço, bg = cor do fundo.
-export function gatoGrande(R, x, y, fg = '#2b1d2e', bg = '#f4eee2') {
+function gatoGrande(R, x, y, fg = '#2b1d2e', bg = '#f4eee2') {
   x = Math.round(x); y = Math.round(y);
   const P = (dx, dy, w = 1, h = 1, c = fg) => R(x + dx, y + dy, w, h, c);
   const elipse = (cx, cy, rx, ry, c, y0 = -99, y1 = 99) => {

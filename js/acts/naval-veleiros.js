@@ -4,9 +4,8 @@
 //   { act: Veleiros, hearts: 4, boats: 5 }
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
-import { INK, PAPER, GOLD, clamp, disc, person, text } from '../draw.js';
+import { INK, PAPER, GOLD, clamp, mix, disc, person, text } from '../draw.js';
 import { docaBelem, docaGeo } from './naval-fundo.js';
-import { tom } from './pesca.js';
 
 const CERTO = 10;                                   // píxeis de tolerância entre a vela e o sol
 const VELAS = ['#ffffff', '#ff8a8a', '#ffffff', '#8fd0f5', '#ffffff', '#ffd166'];
@@ -66,7 +65,7 @@ export class Veleiros extends Act {
     if (this.foto && this.foto.t < 2.2) {
       const f = this.foto, fw = 46, fh = 44, fx = Math.round(v.w - fw - 10), fy = Math.round(Math.max(this.top(v) + 4, g.hy - fh - 26) + Math.max(0, 0.2 - f.t) * 60);
       R(fx - 1, fy - 1, fw + 2, fh + 2, INK); R(fx, fy, fw, fh, PAPER);
-      R(fx + 3, fy + 3, fw - 6, 26, tom('#f29a5a', '#c8527a', g.dusk)); R(fx + 3, fy + 20, fw - 6, 9, tom('#3a6fa8', '#2a2358', g.dusk));
+      R(fx + 3, fy + 3, fw - 6, 26, mix('#f29a5a', '#c8527a', g.dusk)); R(fx + 3, fy + 20, fw - 6, 9, mix('#3a6fa8', '#2a2358', g.dusk));
       disc(ctx, fx + fw / 2, fy + 16, 6, '#fff6c8');
       const bx = clamp(Math.round(fx + fw / 2 + f.dx * 0.6), fx + 6, fx + fw - 7);
       R(bx, fy + 8, 1, 13, INK); for (let i = 0; i < 11; i++) R(bx + (f.dir > 0 ? 1 : -1 - Math.round(i * 0.7)), fy + 9 + i, Math.round(i * 0.7) + 1, 1, INK); R(bx - 5, fy + 21, 11, 2, INK);
@@ -78,11 +77,11 @@ export class Veleiros extends Act {
   }
 
   veleiro(R, x, wy, dir, cor, contraluz, g) {
-    const casco = contraluz ? INK : '#f2f2f7', vela = contraluz ? tom(cor, '#2b1d2e', 0.75) : tom(cor, '#ff9a5a', g.dusk * 0.5);
+    const casco = contraluz ? INK : '#f2f2f7', vela = contraluz ? mix(cor, '#2b1d2e', 0.75) : mix(cor, '#ff9a5a', g.dusk * 0.5);
     R(x - 10, wy - 3, 21, 4, INK); R(x - 9, wy - 2, 19, 2, casco); R(x + dir * 9, wy - 4, 3, 2, INK);
     R(x, wy - 27, 1, 24, INK);
     for (let i = 0; i < 22; i++) { const w = Math.round(1 + i * 0.5); R(x + (dir > 0 ? 2 : -1 - w), wy - 26 + i, w, 1, vela); }       // vela grande
-    for (let i = 0; i < 16; i++) { const w = Math.round(1 + i * 0.45); R(x + (dir > 0 ? -1 - w : 2), wy - 21 + i, w, 1, tom(vela, '#000000', 0.12)); }   // estai
+    for (let i = 0; i < 16; i++) { const w = Math.round(1 + i * 0.45); R(x + (dir > 0 ? -1 - w : 2), wy - 21 + i, w, 1, mix(vela, '#000000', 0.12)); }   // estai
     R(x - 12, wy + 1, 25, 1, '#ffffff');
   }
 

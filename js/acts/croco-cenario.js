@@ -1,24 +1,19 @@
 // Cenários do nível «O Crôcô»: a esplanada do café na Avenida Infante Santo, desenhada pelas
 // fotografias (o prédio, a caixa do toldo com o néon, a montra, as cadeiras de alumínio, o cartaz
 // dos caracóis e o logótipo dos hambúrgueres), e a malta sentada às mesas. Usado pelos três atos.
-import { INK, PAPER, GOLD, hash, lerp, sky, disc, text, textW, person } from '../draw.js';
+import { INK, PAPER, GOLD, hash, lerp, mix, sky, disc, text, textW, person } from '../draw.js';
 import { getCharacter, makeSprite } from '../sprites.js';
 
 // Os amigos da esplanada, pela ordem em que se sentam.
-export const MALTA = [['ana', 'Ana'], ['mi', 'Mi'], ['soft', 'Soft'], ['pipoca', 'Pipoca'], ['ines', 'Inês'], ['pi', 'Pi'], ['leal', 'Leal'], ['isabel', 'Isabel'], ['maisa', 'Maísa'], ['maria', 'Maria'], ['tete', 'Tété']];
+const MALTA = [['ana', 'Ana'], ['mi', 'Mi'], ['soft', 'Soft'], ['pipoca', 'Pipoca'], ['ines', 'Inês'], ['pi', 'Pi'], ['leal', 'Leal'], ['isabel', 'Isabel'], ['maisa', 'Maísa'], ['maria', 'Maria'], ['tete', 'Tété']];
 export const malta = () => MALTA.map(([who, name]) => ({ who, name, frames: getCharacter(who, 'casual') }));
 
-function rgb(c) { const n = parseInt(c.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
-function mixHex(a, b, t) {
-  const A = rgb(a), B = rgb(b);
-  return '#' + [0, 1, 2].map((i) => Math.round(lerp(A[i], B[i], t)).toString(16).padStart(2, '0')).join('');
-}
 const DIA = ['#6ab4ec', '#9fd0f4', '#cfe8f7', '#eef5e0'], TARDE = ['#3d2f78', '#c8527a', '#f8a05a', '#ffd68a'];
 
 // ----- o néon «Crôcô» -----
 // A letra do néon, traçada com curvas e passada a píxeis uma só vez: um C grande, «rôcô» em letra
 // corrida e o arco que sai do C e passa por cima da palavra, como no letreiro verdadeiro.
-export const NEON_W = 46, NEON_H = 16;
+const NEON_W = 46, NEON_H = 16;
 const NEON = (() => {
   const pts = new Map();
   const put = (x, y) => { const X = Math.round(x), Y = Math.round(y); pts.set(X + ',' + Y, [X, Y]); };
@@ -74,7 +69,7 @@ export function logo(ctx, R, x, y, grande) {
 // O cartaz da primavera: «Há caracóis à "Crôcô"», com o caracol preto e verde de casca clara.
 // (cx, y) = meio do topo; w x h = tamanho da folha.
 export function cartaz(ctx, R, cx, y, w, h) {
-  const x = Math.round(cx - w / 2), AZ = '#1d2233', sc = w >= 94 ? 2 : 1;
+  const x = Math.round(cx - w / 2), AZ = '#1d2233', sc = w >= 90 ? 2 : 1;
   R(x + 2, y + 2, w, h, 'rgba(40,30,50,0.35)'); R(x - 1, y - 1, w + 2, h + 2, INK); R(x, y, w, h, '#f7f5ee');
   R(x + 3, y - 2, 7, 4, '#e8dca0'); R(x + w - 10, y - 2, 7, 4, '#e8dca0');     // fita-cola
   let ty = y + 4 + 2 * sc;
@@ -98,7 +93,7 @@ export function cartaz(ctx, R, cx, y, w, h) {
 function arvore(ctx, R, x, gy, big, dusk) {
   const th = big ? 112 : 94, r = big ? 22 : 16;      // copa alta, por cima do toldo
   R(x - 2, gy - th, 4, th, '#6b4a30'); R(x - 1, gy - th, 1, th, '#8a6442');
-  const a = mixHex('#4f9f52', '#3a6a52', dusk), b = mixHex('#6fbf62', '#4a8a5a', dusk);
+  const a = mix('#4f9f52', '#3a6a52', dusk), b = mix('#6fbf62', '#4a8a5a', dusk);
   disc(ctx, x, gy - th - r + 8, r, a); disc(ctx, x - r + 4, gy - th + 4, r - 6, a); disc(ctx, x + r - 4, gy - th + 2, r - 7, b);
   disc(ctx, x - 4, gy - th - r + 2, r - 9, b);
   for (let i = 0; i < 6; i++) R(x - r + 6 + i * (r / 3.2), gy - th - r + 10 + (i % 3) * 7, 2, 2, '#fffbe8');   // flores da primavera
@@ -142,10 +137,10 @@ export function esplanada(ctx, v, R, o) {
   const { gy, top, cx } = o, dusk = o.dusk || 0, big = v.portrait, t = o.t || 0;
   const fy = gy - (o.rows === 2 ? 40 : 0);                       // onde o prédio assenta
   const noite = dusk > 0.45, aceso = noite && (dusk > 0.6 || Math.floor(t * 14) % 4 !== 0);   // o néon pisca ao acender
-  sky(ctx, v.w, v.h, fy, DIA.map((c, i) => mixHex(c, TARDE[i], dusk)));
+  sky(ctx, v.w, v.h, fy, DIA.map((c, i) => mix(c, TARDE[i], dusk)));
   disc(ctx, Math.round(cx + (o.half || 100) * 0.9), Math.round(lerp(top + 16, fy - 34, dusk)), big ? 14 : 11, dusk > 0.5 ? '#ffe2a0' : '#fff6c8');
   const bw = Math.min(200, (o.half || 100) * 2 - 8), wt = Math.max(top + 4, fy - (big ? 150 : 122)), x0 = Math.round(cx - bw / 2);
-  const WALL = mixHex('#b9b6a2', '#c9a78c', dusk), FRISO = mixHex('#d6d3c4', '#e0c2a6', dusk);
+  const WALL = mix('#b9b6a2', '#c9a78c', dusk), FRISO = mix('#d6d3c4', '#e0c2a6', dusk);
 
   // ----- o prédio -----
   R(x0 - 1, wt - 1, bw + 2, fy - wt + 1, INK); R(x0, wt, bw, fy - wt, WALL);
@@ -171,7 +166,7 @@ export function esplanada(ctx, v, R, o) {
   }
   if (sh > 6) {
     const vidro = noite ? '#ffd98a' : '#3f4c5e';
-    R(bx0, sy, aw, sh, mixHex('#c3c8d0', '#c9b6a8', dusk)); R(bx0, sy, aw, 3, '#8f96a3');
+    R(bx0, sy, aw, sh, mix('#c3c8d0', '#c9b6a8', dusk)); R(bx0, sy, aw, 3, '#8f96a3');
     for (let x = bx0 + 18; x < bx1 - 18; x += 23) R(x, sy + 3, 1, sh - 3, '#a9afba');                       // juntas das chapas de aço
     // a montra, com as prateleiras de garrafas
     const mx = bx0 + 19, mw = Math.round(aw * 0.36), mh = Math.max(6, sh - 12);
@@ -198,9 +193,9 @@ export function esplanada(ctx, v, R, o) {
   }
 
   // ----- a caixa do toldo -----
-  const BR = mixHex('#f6f6f2', '#f2dcc4', dusk), AZUL = '#2b3f9e', CAST = '#7a6468', mid = Math.round((bx0 + bx1) / 2);
+  const BR = mix('#f6f6f2', '#f2dcc4', dusk), AZUL = '#2b3f9e', CAST = '#7a6468', mid = Math.round((bx0 + bx1) / 2);
   R(bx0 - 3, ay - 1, aw + 6, bh + vh + 3, INK);
-  R(bx0 - 2, ay, aw + 4, bh, BR); R(bx0 - 2, ay + bh, aw + 4, vh, mixHex('#ecebe4', '#e6ceb4', dusk)); R(bx0 - 2, ay + bh, aw + 4, 1, '#c9c8c0');
+  R(bx0 - 2, ay, aw + 4, bh, BR); R(bx0 - 2, ay + bh, aw + 4, vh, mix('#ecebe4', '#e6ceb4', dusk)); R(bx0 - 2, ay + bh, aw + 4, 1, '#c9c8c0');
   R(bx0 - 2, ay + bh + vh, aw + 4, 1, '#bdbbb0');
   // em cima: RESTAURANTE, o néon e CAFETARIA (e as chávenas dos cafés nos cantos, se couberem)
   const nx = mid - NEON_W / 2, ny = ay + 2;
@@ -220,7 +215,7 @@ export function esplanada(ctx, v, R, o) {
 
   // ----- a rua: candeeiro, árvore e calçada portuguesa -----
   candeeiro(ctx, R, x0 - 9, fy, big, noite); arvore(ctx, R, cx + bw / 2 + 9, fy, big, dusk);
-  R(0, fy, v.w, v.h - fy, mixHex('#dedbd0', '#c8a890', dusk)); R(0, fy, v.w, 1, '#b9b4a4');
+  R(0, fy, v.w, v.h - fy, mix('#dedbd0', '#c8a890', dusk)); R(0, fy, v.w, 1, '#b9b4a4');
   for (let i = 0; i < 140; i++) R(Math.floor(hash(i) * v.w), fy + 3 + Math.floor(hash(i * 2.3) * (v.h - fy - 4)), 2, 1, hash(i * 5) > 0.45 ? '#c6c1b2' : '#5a5566');
   // mesas vazias à frente, quando sobra chão (ecrã ao alto)
   if (o.fore && v.h - gy > 70) {
@@ -233,7 +228,7 @@ export function esplanada(ctx, v, R, o) {
 }
 
 // Uma imperial pequenina (em cima da mesa).
-export function copinho(R, x, y) {
+function copinho(R, x, y) {
   R(x - 1, y - 9, 6, 9, INK); R(x, y - 6, 4, 5, '#f2b632'); R(x, y - 8, 4, 2, '#ffffff');
 }
 

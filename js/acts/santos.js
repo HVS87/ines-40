@@ -6,7 +6,7 @@
 //                 banda, o toldo verde do gato), onde acabava sempre a noite de Santo António.
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
-import { INK, PAPER, GOLD, clamp, hash, stars, disc, text, sign, person, shadow } from '../draw.js';
+import { INK, PAPER, GOLD, clamp, hash, mkR, stars, disc, text, sign, person, shadow } from '../draw.js';
 import { gato } from './xafarix-cenario.js';
 
 const CORES = ['#ff5d8f', '#ffd166', '#7be0b0', '#6fb0f0', '#ff8a4b', '#c79bff'];
@@ -226,13 +226,14 @@ function musicos(ctx, R, cx, sw, sy, t) {
   guit(Math.round(cx + sw * 0.35), '#e8c34a', 4);
 }
 
-export function praceta(ctx, v, R, t, act) {
-  const gy = act.ground(v), top = act.top(v), w = v.w, P = v.portrait, livre = gy - top;
+// Tudo o que não mexe: prédios, chafariz, terraço, palco, barraca, escada e calçada. Devolve o que
+// a parte animada precisa de saber (centro e largura do palco, altura do estrado, topo dos prédios).
+function largo(ctx, R, v, gy, top) {
+  const w = v.w, P = v.portrait, livre = gy - top;
   const cx = Math.round(w * (P ? 0.44 : 0.47)), ww = Math.round(Math.min(w * 0.33, 132));    // o muro do terraço: cx ± ww
   const mh = Math.min(P ? 78 : 64, Math.round(livre * 0.56)), my = gy - mh;                   // altura do muro
   const ch = Math.max(26, Math.min(P ? 84 : 54, my - top - 6));                               // o chafariz, por cima do muro
   R(0, 0, w, gy, '#12143a');
-  stars(ctx, w, top + 20, t, 5, 20);
 
   // ----- os prédios do largo: o vermelho de cantarias brancas e o cor-de-rosa -----
   const by = Math.max(top - 8, gy - (P ? 236 : 176)), div = Math.round(cx + ww * 0.62);
@@ -300,7 +301,6 @@ export function praceta(ctx, v, R, t, act) {
   R(cx - sw / 2 - 1, sy - 2, sw + 2, sh + 2, INK); R(cx - sw / 2, sy, sw, sh, '#17151e'); R(cx - sw / 2, sy - 1, sw, 2, '#4a4458');
   for (let x = cx - sw / 2 + 6; x < cx + sw / 2 - 4; x += 12) R(x, sy + 3, 1, sh - 3, '#221f2c');
   for (const d of [-1, 1]) { const bx = Math.round(cx + d * (sw / 2 - 8)) - 6; R(bx - 1, sy - 21, 14, 20, INK); R(bx, sy - 20, 12, 18, '#2a2436'); disc(ctx, bx + 6, sy - 14, 3, '#0d0820'); disc(ctx, bx + 6, sy - 6, 4, '#0d0820'); }
-  musicos(ctx, R, cx, sw - 34, sy - 1, t);
 
   // ----- à esquerda: a barraca de toldo às riscas -----
   const tx = Math.round((cx - ww) / 2) - 2, tw = Math.max(40, Math.min(58, cx - ww - 2));
@@ -326,13 +326,34 @@ export function praceta(ctx, v, R, t, act) {
   }
   manjerico(ctx, R, Math.round(cx + ww - 10), gy);
 
+  // ----- a calçada -----
+  R(0, gy, w, v.h - gy, '#8a8794'); R(0, gy, w, 2, '#a8a4b0');
+  for (let y = gy + 4, j = 0; y < v.h; y += 7, j++) for (let x = (j % 2) * 6; x < w; x += 12) R(x, y, 5, 1, j % 3 ? '#7a7684' : '#c8c4d0');
+  return { cx, sw, sy, by };
+}
+
+// ... e desenha-se uma só vez por tamanho de ecrã (é o cenário mais pesado do jogo); em cada
+// fotograma só se desenha o que mexe: as estrelas, a banda, os festões, os balões e o público.
+let fundo = null;
+export function praceta(ctx, v, R, t, act) {
+  const gy = act.ground(v), top = act.top(v), w = v.w, P = v.portrait, chave = `${w}x${v.h}:${gy}:${top}`;
+  if (!fundo || fundo.chave !== chave) {
+    const c = document.createElement('canvas');
+    c.width = w; c.height = v.h;
+    const g = c.getContext('2d');
+    fundo = { chave, c, ...largo(g, mkR(g), v, gy, top) };
+  }
+  const { cx, sw, sy, by } = fundo;
+  ctx.drawImage(fundo.c, 0, 0);
+  if (by > top + 22) {            // (com o ecrã deitado, os prédios tapam o céu todo)
+    ctx.save(); ctx.beginPath(); ctx.rect(50, 0, w - 50, top + 20); ctx.clip();      // fora da copa da árvore
+    stars(ctx, w, top + 20, t, 5, 20);
+    ctx.restore();
+  }
+  musicos(ctx, R, cx, sw - 34, sy - 1, t);
   // festões e balões de papel, por cima de tudo
   festoes(R, w, top + 1, t, P ? 3 : 1);
   for (let i = 0; i < Math.ceil(w / 80); i++) balao(ctx, R, 24 + i * 80, top + (P ? 30 : 12) + (i % 2) * 6, CORES[(i * 2) % CORES.length], t);
-
-  // ----- a calçada e a gente do arraial -----
-  R(0, gy, w, v.h - gy, '#8a8794'); R(0, gy, w, 2, '#a8a4b0');
-  for (let y = gy + 4, j = 0; y < v.h; y += 7, j++) for (let x = (j % 2) * 6; x < w; x += 12) R(x, y, 5, 1, j % 3 ? '#7a7684' : '#c8c4d0');
   // quem está a ver o concerto, de costas, entre o palco e nós
   for (let x = cx - sw / 2 - 12, i = 0; x < cx + sw / 2 + 14; x += 11, i++) {
     const hgt = 17 + Math.round(hash(i * 3.3) * 6), hop = Math.round(Math.abs(Math.sin(t * 5 + i * 1.7)) * 2), yb = gy + 1 - hop;

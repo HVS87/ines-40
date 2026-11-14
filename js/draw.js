@@ -1,6 +1,6 @@
 // Ferramentas de desenho comuns a todos os níveis: cores, retângulos, céus em faixas, discos,
 // montes, letras em píxeis (para tabuletas e letreiros) e bonecos.
-import { charFrame } from './sprites.js';
+import { charFrame, flip } from './sprites.js';
 
 export const INK = '#2b1d2e', PAPER = '#fff6e6', PINK = '#ff5d8f', GOLD = '#ffd166', MINT = '#7be0b0';
 export const SKIN = '#f6c9a0';
@@ -19,14 +19,37 @@ export function mkR(ctx) {
   return (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
 }
 
-function rgb(hex) {
+// Componentes [r, g, b] de uma cor '#rrggbb'.
+export function rgb(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [n >> 16, (n >> 8) & 255, n & 255];
 }
+// Mistura duas cores '#rrggbb' (t = 0 dá a primeira, t = 1 a segunda); devolve outra '#rrggbb',
+// que pode voltar a ser misturada.
 export function mix(a, b, t) {
-  const A = rgb(a), B = rgb(b);
-  const c = (i) => Math.round(A[i] + (B[i] - A[i]) * t);
-  return `rgb(${c(0)},${c(1)},${c(2)})`;
+  const A = rgb(a), B = rgb(b), k = Math.max(0, Math.min(1, t));
+  return '#' + [0, 1, 2].map((i) => Math.round(A[i] + (B[i] - A[i]) * k).toString(16).padStart(2, '0')).join('');
+}
+
+// Copia os fotogramas de um boneco trocando cores (mapa { '#de': '#para' }), só nas linhas acima
+// de `rows` (por omissão, todas): serve para criar figurantes sem mexer no elenco.
+export function recolor(frames, map, rows = 99) {
+  const pairs = Object.entries(map).map(([a, b]) => [rgb(a), rgb(b)]);
+  const out = {};
+  for (const k of Object.keys(frames)) {
+    const src = frames[k].r, c = document.createElement('canvas');
+    c.width = src.width; c.height = src.height;
+    const g = c.getContext('2d');
+    g.drawImage(src, 0, 0);
+    const im = g.getImageData(0, 0, c.width, Math.min(rows, c.height)), d = im.data;
+    for (let i = 0; i < d.length; i += 4) {
+      if (!d[i + 3]) continue;
+      for (const [a, b] of pairs) if (d[i] === a[0] && d[i + 1] === a[1] && d[i + 2] === a[2]) { d[i] = b[0]; d[i + 1] = b[1]; d[i + 2] = b[2]; break; }
+    }
+    g.putImageData(im, 0, 0);
+    out[k] = { r: c, l: flip(c) };
+  }
+  return out;
 }
 
 // Céu em faixas (estilo pixel art), de cima (stops[0]) até à linha y = gy; daí para baixo fica a última cor.

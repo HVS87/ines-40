@@ -14,7 +14,7 @@ const SAID = [
 ];
 
 // Chão da rua (o mesmo no ato e nas falas antes dele).
-export const portaChao = (v) => Math.round(v.h * (v.portrait ? 0.74 : 0.86));
+const portaChao = (v) => Math.round(v.h * (v.portrait ? 0.74 : 0.86));
 
 // Fundo para um Talk à porta: a rua, a fila e o porteiro.
 export function portaFundo(ctx, v, R, t, act) {

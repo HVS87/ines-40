@@ -19,18 +19,11 @@
 //     fish: [{ who: 'ines', fish: 'dourado', turn: 'É a vez da Inês.', cheer: 'Inês: «...»', alt: 'LETREIRO' }] }
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
-import { INK, PAPER, GOLD, MINT, clamp, lerp, hash, person, sign, mark, sky } from '../draw.js';
+import { INK, PAPER, GOLD, MINT, clamp, lerp, mix, hash, person, sign, mark, sky } from '../draw.js';
 
 const SOBE = 0.62, DESCE = 0.52;   // velocidade da tensão (por segundo) a puxar e a largar
 const ZONA = 0.17;                 // metade da altura da zona verde
 const LIMITE = 14;                 // segundos a puxar até os amigos ajudarem
-
-// Mistura duas cores '#rrggbb' (devolve também '#rrggbb', para poder voltar a ser misturada).
-export function tom(a, b, t) {
-  const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16);
-  const c = (s) => Math.round(((A >> s) & 255) + (((B >> s) & 255) - ((A >> s) & 255)) * clamp(t, 0, 1));
-  return '#' + ((1 << 24) | (c(16) << 16) | (c(8) << 8) | c(0)).toString(16).slice(1);
-}
 
 // Segmento de reta, píxel a píxel.
 export function seg(R, x0, y0, x1, y1, c, th = 1) {
@@ -247,7 +240,7 @@ export class Pesca extends Act {
     const dobra = ph === 'puxar' ? Math.round(2 + this.tens * 10) : ph === 'picada' ? 4 : 0;
     const hx = g.px + 8, hy = g.fy + bob - 22, tx = g.tipX - Math.round(dobra * 0.4), ty = g.tipY + bob + dobra + sh;
     seg(R, hx, hy, tx, ty, INK, 2); seg(R, hx, hy, tx - 6, ty + 5, '#b8793a', 1);
-    const dark = tom(sea[1], '#000000', 0.25);
+    const dark = mix(sea[1], '#000000', 0.25);
 
     if (ph === 'pronto') { this.fio(R, tx, ty, tx, ty + 12, wl, 0); this.boia(R, tx, ty + 15); }
     else if (ph === 'lancar') {
@@ -298,20 +291,20 @@ export class Pesca extends Act {
   // O mar por baixo da linha de água.
   mar(ctx, v, R, g, t, sea) {
     const n = 8, H = v.h - g.wl;
-    for (let i = 0; i < n; i++) R(0, g.wl + Math.floor((i * H) / n), v.w, Math.ceil(H / n) + 1, tom(sea[0], sea[1], i / (n - 1)));
+    for (let i = 0; i < n; i++) R(0, g.wl + Math.floor((i * H) / n), v.w, Math.ceil(H / n) + 1, mix(sea[0], sea[1], i / (n - 1)));
     R(0, g.wl, v.w, 1, sea[2] || '#cfefff');
     for (let i = 0; i < 12; i++) {
       const W = v.w + 30, x = (((hash(i + 3) * W + t * 7 * (i % 2 ? 1 : -1)) % W) + W) % W - 15;
-      R(x, g.wl + 2 + (i % 3) * 2, 5 + (i % 3) * 4, 1, tom(sea[0], sea[2] || '#cfefff', 0.6));
+      R(x, g.wl + 2 + (i % 3) * 2, 5 + (i % 3) * 4, 1, mix(sea[0], sea[2] || '#cfefff', 0.6));
     }
     // areia e pedras no fundo
     const bed = this.sk.bed || '#c9b57a';
-    R(0, v.h - 6, v.w, 6, tom(bed, sea[1], 0.35));
-    for (let i = 0; i < v.w / 14; i++) { const x = i * 14 + hash(i + 9) * 8, hh = 1 + Math.floor(hash(i * 3) * 3); R(x, v.h - 6 - hh, 5 + hash(i) * 6, hh, tom(bed, sea[1], 0.5)); }
+    R(0, v.h - 6, v.w, 6, mix(bed, sea[1], 0.35));
+    for (let i = 0; i < v.w / 14; i++) { const x = i * 14 + hash(i + 9) * 8, hh = 1 + Math.floor(hash(i * 3) * 3); R(x, v.h - 6 - hh, 5 + hash(i) * 6, hh, mix(bed, sea[1], 0.5)); }
     // peixinhos ao longe
     for (let i = 0; i < 4; i++) {
       const W = v.w + 40, dir = i % 2 ? 1 : -1, x = (((hash(i * 7 + 1) * W + t * (8 + i * 3) * dir) % W) + W) % W - 20;
-      const y = g.wl + 14 + hash(i * 5 + 2) * Math.max(10, H - 34), c = tom(sea[1], sea[0], 0.25);
+      const y = g.wl + 14 + hash(i * 5 + 2) * Math.max(10, H - 34), c = mix(sea[1], sea[0], 0.25);
       R(x, y, 4, 2, c); R(x - 2 * dir, y - 1, 1, 4, c);
     }
     if (this.sk.under) this.sk.under(ctx, v, R, t, g.wl);

@@ -5,8 +5,7 @@
 //   { act: Mergulhos, hearts: 4, divers: ['ines', 'mi', ...], lines: ['Pi: «...»', ...] }
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
-import { INK, GOLD, clamp, lerp, person, text } from '../draw.js';
-import { tom } from './pesca.js';
+import { INK, GOLD, clamp, lerp, mix, person, text } from '../draw.js';
 import { enseada, lancha } from './barco-cenario.js';
 
 const VOO = 0.55, RAIO = 34, CERTO = 14;
@@ -73,7 +72,7 @@ export class Mergulhos extends Act {
     const g = this.geo(v), t = this.t, wl = g.wl, quem = this.fila[Math.min(this.n, this.fila.length - 1)];
     enseada(ctx, v, R, t, wl);
     const n = 8, H = v.h - wl;
-    for (let i = 0; i < n; i++) R(0, wl + Math.floor((i * H) / n), v.w, Math.ceil(H / n) + 1, tom('#5fd8d0', '#1f7a9a', i / (n - 1)));
+    for (let i = 0; i < n; i++) R(0, wl + Math.floor((i * H) / n), v.w, Math.ceil(H / n) + 1, mix('#5fd8d0', '#1f7a9a', i / (n - 1)));
     for (let i = 0; i < 14; i++) R((i * 53 + Math.sin(t + i) * 6 + 400) % (v.w + 20) - 10, wl + 3 + ((i * 17) % Math.max(8, H - 8)), 8, 1, '#bff4ee');
     // o barco (espelhado: a proa para a esquerda) e quem fica a bordo
     const bob = Math.round(Math.sin(t * 1.5) * 1), fy = wl - 6 + bob, len = 150;

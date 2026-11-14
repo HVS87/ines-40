@@ -2,8 +2,8 @@
 // http://localhost:8090/?qa) e os testes correm sozinhos, com o resultado num painel e em
 // window.__qa ({ results, bad, errors, done }).
 //
-//   ?qa&only=<nome>   corre só um grupo (dados, jogo, textos, ausente, fluxo, toque, teclado, app,
-//                     fontes, musica, monkey)
+//   ?qa&only=<nome>   corre só um grupo (dados, jogo, textos, ausente, parado, momentos, fluxo, toque,
+//                     teclado, app, fontes, musica, monkey)
 //   ?qa&report=http://localhost:8092/&tag=nome   no fim, envia o resultado para esse endereço
 //                     (só para este computador; é o que usa o tests/matrix.mjs)
 //   ?qa&seed=7        semente do teste de toques ao acaso (monkey)
@@ -18,10 +18,15 @@
 //   4. Menus, gravação do progresso, ficheiros para jogar sem rede e toques ao acaso.
 //   5. Ecrã tátil (toques, dois dedos, arrastar, gestos do sistema, tamanho dos botões), teclado,
 //      instalação como app (Android e iPhone) e dados cruzados (personagens, roupas e sons pedidos).
+//   6. Sem tocar em nada: todos os níveis chegam ao fim sozinhos (é aqui que se veem os caminhos
+//      de quem falha tudo), a desenhar muito mais fotogramas, e mede-se o custo de cada desenho.
+//   7. Momentos: os cartões do Crôcô, a receita do Long Island, os telefonemas (ganhar e perder com
+//      cada intruso) e quem aparece na festa e no ecrã final.
 // Atenção: os testes apagam o progresso guardado neste browser.
 import { LEVELS, levelLabel } from '../js/levels/index.js';
 import { SAVE_KEY } from '../js/config.js';
 import { seen, missing } from '../js/sprites.js';
+import { CONVIDADOS, TODOS, FAMILIA } from '../js/convidados.js';
 
 const STEP = 1 / 60;
 const results = [];
@@ -201,6 +206,130 @@ async function testAway() {
   }
   check('níveis 8 a 14: o Lourenço só aparece ao telefone', !bad.length, bad.join(', '));
   check('níveis 10 a 14 acabam com um telefonema da Austrália', ['bimby', 'pedras', 'xafarix', 'jantares', 'santos'].every((id) => ((LEVELS.find((L) => L.id === id) || {}).acts || []).some((a) => a.act.name === 'Call')));
+}
+
+// ---------- Sem tocar em nada ----------
+// Cada nível jogado sem carregar em nada (nem o robô): todos os atos têm de acabar sozinhos, sem
+// erros. Como aqui se falha tudo, é o teste dos caminhos de derrota (o telefonema que cai, a
+// bebida que o barman acaba...). Desenha-se um fotograma em cada seis — vinte vezes mais do que
+// nos outros testes —, para apanhar erros de desenho nos momentos de passagem, e mede-se o tempo
+// que cada desenho leva (o ato mais pesado fica registado).
+async function testIdle() {
+  const presos = [], erros = [], lentos = [], custos = [];
+  let pior = 0, piorNome = '', soma = 0, conta = 0;
+  for (let i = 0; i < LEVELS.length; i++) {
+    const L = LEVELS[i];
+    if (L.broken) continue;
+    window.__errors = [];
+    game.startLevel(i);
+    game.ui.act('start');
+    const s = game.scene, max = Math.round(1500 / STEP);
+    let n = 0, ato = -1, t0 = 0, td = 0, nd = 0;
+    const fecha = () => {
+      if (ato < 0) return;
+      const nome = `${L.id} ato ${ato} (${L.acts[ato] ? L.acts[ato].act.name : '?'})`;
+      if ((n - t0) * STEP > 240) lentos.push(`${nome}: ${Math.round((n - t0) * STEP)} s`);
+      if (nd > 20) { const m = td / nd; soma += td; conta += nd; custos.push([m, nome]); if (m > pior) { pior = m; piorNome = nome; } }
+    };
+    while (s.state !== 'done' && n < max) {
+      if (s.i !== ato) { fecha(); ato = s.i; t0 = n; td = 0; nd = 0; }
+      clearInput();
+      s.update(STEP);
+      if (n % 6 === 0) { const a = performance.now(); s.draw(ctx2d(), game.view); if (s.state === 'play') { td += performance.now() - a; nd++; } }
+      n++;
+      if (n % 3600 === 0) await tick();
+    }
+    fecha();
+    if (s.state !== 'done') presos.push(`${L.id}: preso no ato ${s.i} (${s.act && s.act.constructor.name})`);
+    if ((window.__errors || []).length) erros.push(`${L.id}: ${window.__errors[0]}`);
+    await tick();
+  }
+  check('sem tocar em nada: todos os níveis chegam ao fim sozinhos', !presos.length, presos.join(' | '));
+  check('sem tocar em nada: sem erros (caminhos de quem falha tudo)', !erros.length, erros.slice(0, 6).join(' | '));
+  check('sem tocar em nada: nenhum ato demora mais de 4 minutos', !lentos.length, lentos.join(' | '));
+  const media = conta ? soma / conta : 0;
+  window.__qa.pesados = custos.sort((a, b) => b[0] - a[0]).slice(0, 10).map(([m, nome]) => `${m.toFixed(2)} ms ${nome}`);      // os dez atos mais pesados
+  check(`desenho: ${media.toFixed(2)} ms por fotograma em média; o ato mais pesado (${piorNome}) leva ${pior.toFixed(2)} ms`, pior < 12, piorNome);
+  game.goMenu();
+}
+
+// ---------- Momentos que os robôs não mostram ----------
+// Coisas que dependem do que o jogador faz (ou não faz) e que jogar o nível de fio a pavio não prova.
+async function testMoments() {
+  const abre = (id, a) => {
+    game.startLevel(LEVELS.findIndex((L) => L.id === id));
+    game.ui.act('start');
+    const s = game.scene;
+    while (s.i < a && s.state !== 'end') s.nextAct();
+    if (s.state === 'fade') s.startAct();
+    return s.act;
+  };
+  const toque = (s, k) => { if (k === 0) { I.actionPressed = true; I.action = true; } };
+  const ate = (act, fim, bot, max = 60) => { for (let n = 0; n < max * 60 && !fim(act); n += 5) frames(5, bot); return fim(act); };
+  window.__errors = [];
+
+  // Crôcô: o logótipo (imperiais) e o cartaz (caracóis) aparecem primeiro; um toque salta-os e,
+  // sem tocar, saem sozinhos
+  let act = abre('croco', 0);
+  frames(60, false);
+  const logo = act.state === 'logo';
+  frames(1, toque); frames(2, false);
+  const saltaLogo = act.state === 'fill';
+  act = abre('croco', 0);
+  const saiLogo = ate(act, (a) => a.state === 'fill', false, 6);
+  act = abre('croco', 1);
+  frames(60, false);
+  const cartaz = act.state === 'cartaz';
+  frames(1, toque); frames(2, false);
+  const saltaCartaz = act.state === 'aim';
+  act = abre('croco', 1);
+  const saiCartaz = ate(act, (a) => a.state === 'aim', false, 6);
+  check('Crôcô: o logótipo e o cartaz dos caracóis aparecem primeiro, saltam-se com um toque e saem sozinhos', logo && saltaLogo && saiLogo && cartaz && saltaCartaz && saiCartaz, JSON.stringify({ logo, saltaLogo, saiLogo, cartaz, saltaCartaz, saiCartaz }));
+
+  // Long Island: as medidas nas instruções; no fim, o cartão da receita fica até se tocar
+  act = abre('xafarix', 2);
+  const medida = /15 ml de vodka/.test($('#hint').textContent);
+  const nota = ate(act, (a) => a.state === 'nota', true, 150);
+  frames(6 * 60, false);
+  const fica = act.state === 'nota' && game.scene.act === act;
+  frames(1, toque); frames(3, false);
+  const segue = game.scene.act !== act;
+  act = abre('xafarix', 2);
+  const sozinho = ate(act, (a) => a.state === 'nota', false, 150) && act.good === 0;     // sem tocar, o barman faz tudo
+  check('Long Island: medidas nas instruções, e a receita fica no ecrã até se tocar', medida && nota && fica && segue && sozinho, JSON.stringify({ medida, nota, fica, segue, sozinho }));
+
+  // telefonemas: a enxotar, o Lourenço ganha; sem tocar, a chamada cai (com os cinco intrusos)
+  const tel = [];
+  for (const L of LEVELS) {
+    const a = (L.acts || []).findIndex((x) => x.act.name === 'Call');
+    if (a < 0) continue;
+    const cfg = L.acts[a];
+    let c = abre(L.id, a);
+    const ganha = ate(c, (x) => x.state === 'end', true, 60) && c.won && $('#hint').textContent === cfg.win;
+    frames(5 * 60, true);
+    const acaba = game.scene.act !== c || game.scene.state !== 'play';      // (é o último ato: o nível acaba)
+    c = abre(L.id, a);
+    const perde = ate(c, (x) => x.state === 'end', false, 60) && !c.won && $('#hint').textContent === cfg.lose;
+    for (let k = 0; k < 90; k++) { frames(1, false); game.scene.draw(ctx2d(), game.view); }      // o fim de quem perde, fotograma a fotograma
+    if (!(ganha && acaba && perde)) tel.push(`${L.id} (${cfg.animal}): ${JSON.stringify({ ganha, acaba, perde })}`);
+  }
+  check('telefonemas: a enxotar, o Lourenço ganha; sem tocar, a chamada cai (cinco intrusos)', !tel.length, tel.join(' | '));
+
+  // a festa e o ecrã final: quem está nos abraços está à volta do bolo; no fim estão a família e os amigos
+  const nomes = (l) => l.map(([w]) => w), festa = LEVELS.find((L) => L.id === 'festa') || { acts: [] };
+  const abracos = (festa.acts.find((a) => a.act.name === 'Abracos') || {}).groups || [], bolo = festa.acts.find((a) => a.act.name === 'Bolo') || {};
+  const nosAbracos = abracos.flatMap((g) => nomes(g.people)).sort().join(' '), convidados = nomes(CONVIDADOS).sort().join(' ');
+  check('dados cruzados: os convidados dos abraços são os mesmos da roda do bolo', nosAbracos === convidados && bolo.crowd === CONVIDADOS && CONVIDADOS.length >= 20, `${nosAbracos} / ${convidados}`);
+  const todos = nomes(TODOS), emCasa = ['ines', 'lourenco', 'tomas'];
+  const faltam = [...nomes(FAMILIA), ...nomes(CONVIDADOS)].filter((w) => !emCasa.includes(w) && !todos.includes(w));
+  const semFamilia = nomes(FAMILIA).filter((w) => convidados.split(' ').includes(w));
+  check('dados cruzados: o ecrã final junta a família e os amigos, sem repetir ninguém (a família não vai à festa)', new Set(todos).size === todos.length && !faltam.length && !emCasa.some((w) => todos.includes(w)) && !semFamilia.length, `faltam: ${faltam.join(', ')}; na festa: ${semFamilia.join(', ')}`);
+  game.showVictory();
+  const fim = game.scene;
+  for (let k = 0; k < 240; k++) { if (k % 40 === 0) fim.onTap({ type: 'pointerdown' }); fim.update(STEP); fim.draw(ctx2d(), game.view); }
+  check('ecrã final: toda a gente a festejar, com foguetes a cada toque', fim.crowd.length === TODOS.length && fim.lourenco && fim.tomas && game.ui.current === 'victory');
+  check('momentos: sem erros', !(window.__errors || []).length, (window.__errors || []).slice(0, 4).join(' | '));
+  game.goMenu();
 }
 
 // Toca cada faixa «em seco» e mede-a: nenhuma pode ficar muda nem distorcer (pico acima de 1).
@@ -557,6 +686,8 @@ export async function run(g) {
     if (!only || only === 'jogo') await testGame();
     if (!only || only === 'jogo' || only === 'textos') testShown();
     if (!only || only === 'ausente') await testAway();
+    if (!only || only === 'parado') await testIdle();
+    if (!only || only === 'momentos') await testMoments();
     if (!only || only === 'jogo') testCross();
     if (!only || only === 'fluxo') testFlow();
     if (!only || only === 'toque') await testTouch(q.has('touch'));
@@ -579,7 +710,7 @@ export async function run(g) {
   // relatório para o tests/matrix.mjs (só para este computador)
   const rep = q.get('report');
   if (rep && /^http:\/\/(localhost|127\.0\.0\.1):\d+\//.test(rep)) {
-    fetch(rep, { method: 'POST', body: JSON.stringify({ tag: q.get('tag') || '', ua: navigator.userAgent, size: `${innerWidth}x${innerHeight}`, dpr: devicePixelRatio, view: `${game.view.w}x${game.view.h}`, touch: q.has('touch'), total: results.length, bad: window.__qa.bad, errors }) }).catch(() => {});
+    fetch(rep, { method: 'POST', body: JSON.stringify({ tag: q.get('tag') || '', ua: navigator.userAgent, size: `${innerWidth}x${innerHeight}`, dpr: devicePixelRatio, view: `${game.view.w}x${game.view.h}`, touch: q.has('touch'), total: results.length, bad: window.__qa.bad, errors, medidas: results.filter((r) => /^desenho:/.test(r.name)).map((r) => r.name) }) }).catch(() => {});
   }
   log(`\n${results.length - bad.length}/${results.length} verificações passaram.` + (bad.length ? '\nFALHAS:\n' + window.__qa.bad.join('\n') : ''));
 }

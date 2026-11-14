@@ -1,7 +1,7 @@
 // Cenários de Moçambique (nível 20): a praia de areia branca com palmeiras e um dhow, o mar
 // visto do barco e a «pele» da pesca (barco, tripulação e cores do Índico).
-import { INK, disc, hash, lerp, sky } from '../draw.js';
-import { tom, casco } from './pesca.js';
+import { INK, disc, hash, lerp, mix, sky } from '../draw.js';
+import { casco } from './pesca.js';
 
 const CEU_DIA = ['#2f8fe0', '#7cc8f5', '#d8f4fb'], CEU_TARDE = ['#3a2a6a', '#e0527a', '#ffb35a'];
 
@@ -11,11 +11,11 @@ function nuvem(R, x, y, w, c) {
 
 // Céu com sol e nuvens até ao horizonte (hy). dusk: 0 = dia, 1 = pôr do sol.
 function ceu(ctx, v, R, t, hy, dusk) {
-  sky(ctx, v.w, v.h, hy, CEU_DIA.map((c, i) => tom(c, CEU_TARDE[i], dusk)));
+  sky(ctx, v.w, v.h, hy, CEU_DIA.map((c, i) => mix(c, CEU_TARDE[i], dusk)));
   const sx = Math.round(v.w * 0.7), sy = Math.round(lerp(hy - Math.min(58, hy * 0.42), hy - 3, dusk));
-  disc(ctx, sx, sy, 13, tom('#bfe6fb', '#ff9a5a', Math.min(1, dusk + 0.25)));
-  disc(ctx, sx, sy, 10, tom('#fffbe0', '#ffe08a', dusk));
-  const cn = tom('#ffffff', '#ffb0a0', dusk);
+  disc(ctx, sx, sy, 13, mix('#bfe6fb', '#ff9a5a', Math.min(1, dusk + 0.25)));
+  disc(ctx, sx, sy, 10, mix('#fffbe0', '#ffe08a', dusk));
+  const cn = mix('#ffffff', '#ffb0a0', dusk);
   for (let i = 0; i < 4; i++) {
     const W = v.w + 80, x = (((hash(i + 2) * W + t * (2 + i)) % W) + W) % W - 40;
     nuvem(R, x, hy - 22 - hash(i * 3 + 1) * Math.min(70, hy * 0.35), 26 + i * 6, cn);
@@ -25,8 +25,8 @@ function ceu(ctx, v, R, t, hy, dusk) {
 
 // Palmeira com o pé em (x, gy): tronco curvo (lean = para que lado se inclina) e copa de folhas caídas.
 export function palmeira(R, x, gy, alt, lean = 1, shade = 0) {
-  const tr = tom('#9a7a52', '#3a2038', shade), tr2 = tom('#6b5236', '#2a1830', shade);
-  const f1 = tom('#3fae5a', '#2a2040', shade), f2 = tom('#1f7a3a', '#1c1430', shade);
+  const tr = mix('#9a7a52', '#3a2038', shade), tr2 = mix('#6b5236', '#2a1830', shade);
+  const f1 = mix('#3fae5a', '#2a2040', shade), f2 = mix('#1f7a3a', '#1c1430', shade);
   for (let i = 0; i < alt; i++) {
     const k = i / alt, ox = Math.round(lean * k * k * alt * 0.3);
     R(x + ox - 1, gy - i - 1, k > 0.5 ? 3 : 4, 1, i % 4 === 0 ? tr2 : tr);
@@ -38,14 +38,14 @@ export function palmeira(R, x, gy, alt, lean = 1, shade = 0) {
       R(px, py, 2, 2, f1); R(px, py + 2, 1, 2 + (j % 2), f2);
     }
   }
-  const coco = tom('#5a3a22', '#1c1430', shade);
+  const coco = mix('#5a3a22', '#1c1430', shade);
   R(tx - 2, ty + 1, 3, 3, coco); R(tx + 1, ty + 2, 3, 3, coco);
 }
 
 // Dhow: barco de madeira com vela latina branca. (x, wy) = meio do casco, na linha de água.
 export function dhow(R, x, wy, s = 1, dir = 1, shade = 0) {
-  const W = tom('#8a5a34', '#2a1830', shade), Wd = tom('#5a3420', '#1c1430', shade);
-  const vela = tom('#ffffff', '#ffc890', shade), vela2 = tom('#d8e2ee', '#e09a6a', shade);
+  const W = mix('#8a5a34', '#2a1830', shade), Wd = mix('#5a3420', '#1c1430', shade);
+  const vela = mix('#ffffff', '#ffc890', shade), vela2 = mix('#d8e2ee', '#e09a6a', shade);
   const X = (dx) => x + dir * dx * s;
   // casco, com a proa levantada
   R(Math.min(X(-12), X(12)), wy - 3 * s, 24 * s, 3 * s, W); R(Math.min(X(-10), X(10)), wy, 20 * s, s, Wd);
@@ -65,18 +65,18 @@ export function praiaMoz(ctx, v, R, t, o = {}) {
   const gy = o.gy || Math.round(v.h * 0.8), dusk = o.dusk || 0;
   const sy = gy - 12, hy = sy - (v.portrait ? 64 : 30);
   const [sx] = ceu(ctx, v, R, t, hy, dusk);
-  const mar = ['#1f8fc0', '#2fc0c8', '#8fe8dc'].map((c, i) => tom(c, ['#5a3a7a', '#c0607a', '#ffb07a'][i], dusk * 0.7));
+  const mar = ['#1f8fc0', '#2fc0c8', '#8fe8dc'].map((c, i) => mix(c, ['#5a3a7a', '#c0607a', '#ffb07a'][i], dusk * 0.7));
   const n = 6, H = sy - hy;
-  for (let i = 0; i < n; i++) R(0, hy + Math.floor((i * H) / n), v.w, Math.ceil(H / n) + 1, tom(mar[0], mar[2], i / (n - 1)));
-  R(0, hy, v.w, 1, tom(mar[0], '#ffffff', 0.35));
+  for (let i = 0; i < n; i++) R(0, hy + Math.floor((i * H) / n), v.w, Math.ceil(H / n) + 1, mix(mar[0], mar[2], i / (n - 1)));
+  R(0, hy, v.w, 1, mix(mar[0], '#ffffff', 0.35));
   // o sol a brilhar na água
-  for (let i = 0; i < H; i += 2) { const w = 3 + Math.round(Math.abs(Math.sin(t * 2 + i)) * (5 + i * 0.4)); R(sx - w / 2, hy + 1 + i, w, 1, tom('#ffffff', '#ffe08a', dusk)); }
+  for (let i = 0; i < H; i += 2) { const w = 3 + Math.round(Math.abs(Math.sin(t * 2 + i)) * (5 + i * 0.4)); R(sx - w / 2, hy + 1 + i, w, 1, mix('#ffffff', '#ffe08a', dusk)); }
   dhow(R, Math.round(v.w * 0.3 + Math.sin(t * 0.15) * 8), hy + Math.round(H * 0.3), 1, 1, dusk * 0.6);
   // areia e rebentação
-  const areia = tom('#fff6dc', '#e8a878', dusk * 0.6);
+  const areia = mix('#fff6dc', '#e8a878', dusk * 0.6);
   R(0, sy, v.w, v.h - sy, areia);
   for (let x = 0; x < v.w; x += 6) R(x, sy - 1 + Math.round(Math.sin(t * 1.4 + x * 0.09) * 1.5), 6, 2, '#ffffff');
-  for (let i = 0; i < 46; i++) R(hash(i + 5) * v.w, sy + 5 + hash(i * 2 + 1) * (v.h - sy - 6), 2, 1, tom(areia, '#b88a5a', 0.35));
+  for (let i = 0; i < 46; i++) R(hash(i + 5) * v.w, sy + 5 + hash(i * 2 + 1) * (v.h - sy - 6), 2, 1, mix(areia, '#b88a5a', 0.35));
   // conchas e uma estrela-do-mar
   for (let i = 0; i < 4; i++) R(hash(i + 40) * v.w, gy + 5 + hash(i + 50) * Math.max(4, v.h - gy - 10), 2, 2, i % 2 ? '#ff9ab0' : '#ffffff');
   const alt = Math.round(Math.min(132, gy * 0.56));
@@ -86,7 +86,7 @@ export function praiaMoz(ctx, v, R, t, o = {}) {
 }
 
 // O mar visto do barco de pesca: céu, costa de areia branca com palmeiras ao longe e um dhow.
-export function marMoz(ctx, v, R, t, wl) {
+function marMoz(ctx, v, R, t, wl) {
   ceu(ctx, v, R, t, wl, 0);
   const cw = Math.round(v.w * 0.5);
   for (let x = 0; x < cw; x += 2) {

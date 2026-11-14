@@ -226,7 +226,7 @@ async function chromium(run, dir) {
     let report = null;
     for (const t0 = Date.now(); Date.now() - t0 < TIMEOUT && !report;) {
       await sleep(1000);
-      report = await cdp.eval(`(() => { const q = window.__qa; if (!q || !q.done) return null; const g = window.__game; return { ua: navigator.userAgent, size: innerWidth + 'x' + innerHeight, dpr: devicePixelRatio, view: g.view.w + 'x' + g.view.h, coarse: matchMedia('(pointer: coarse)').matches, total: q.results.length, bad: q.bad, errors: q.errors }; })()`).catch(() => null);
+      report = await cdp.eval(`(() => { const q = window.__qa; if (!q || !q.done) return null; const g = window.__game; return { ua: navigator.userAgent, size: innerWidth + 'x' + innerHeight, dpr: devicePixelRatio, view: g.view.w + 'x' + g.view.h, coarse: matchMedia('(pointer: coarse)').matches, total: q.results.length, bad: q.bad, errors: q.errors, medidas: q.results.filter((r) => /^desenho:/.test(r.name)).map((r) => r.name), pesados: q.pesados }; })()`).catch(() => null);
     }
     if (report && run.touch) {
       const extra = await dedos(cdp, run).catch((err) => ['dedo real: o teste não chegou ao fim — ' + err.message]);
@@ -307,7 +307,7 @@ await Promise.all(Array.from({ length: PARALLEL }, async () => {
     const r = await one(queue.shift());
     out.push(r);
     const rep = r.report;
-    console.log(`${(rep && !rep.bad.length ? 'OK   ' : r.skipped ? 'SALTO' : 'FALHA')} ${r.tag.padEnd(26)} ${rep ? `${rep.size.padEnd(9)} dpr ${String(rep.dpr).padEnd(6)} jogo ${rep.view.padEnd(8)} ${rep.total - rep.bad.length}/${rep.total}${rep.dedos ? ' dedos ' + rep.dedos : ''}  ${r.secs} s` : r.skipped || 'sem resposta: ' + (r.erro || 'tempo esgotado')}`);
+    console.log(`${(rep && !rep.bad.length ? 'OK   ' : r.skipped ? 'SALTO' : 'FALHA')} ${r.tag.padEnd(26)} ${rep ? `${rep.size.padEnd(9)} dpr ${String(rep.dpr).padEnd(6)} jogo ${rep.view.padEnd(8)} ${rep.total - rep.bad.length}/${rep.total}${rep.dedos ? ' dedos ' + rep.dedos : ''}  ${r.secs} s${rep.medidas && rep.medidas[0] ? '  ' + rep.medidas[0].replace(/^desenho: /, '').replace(' por fotograma em média; o ato mais pesado', ', pior') : ''}` : r.skipped || 'sem resposta: ' + (r.erro || 'tempo esgotado')}`);
   }
 }));
 server.close();

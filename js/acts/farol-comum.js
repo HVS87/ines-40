@@ -1,36 +1,12 @@
 // Peças de desenho comuns aos níveis de praia (Ilha do Farol e Pedras d'El Rei): a praia vista
 // de lado, o farol, o trolley da Isabel, a tenda, a fogueira, os barcos e as nove raparigas.
 import { getCharacter } from '../sprites.js';
-import { INK, SKIN, hash, sky, text } from '../draw.js';
+import { INK, SKIN, hash, sky, text, recolor } from '../draw.js';
 
 // Linha do chão (os pés dos bonecos) por omissão.
 export const chao = (v) => Math.round(v.h * (v.portrait ? 0.72 : 0.84));
 
 // ---------- As nove raparigas ----------
-// Troca cores num conjunto de fotogramas (para criar uma figurante sem mexer no elenco).
-const rgb = (h) => { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
-export function recolor(frames, map) {
-  const pairs = Object.entries(map).map(([a, b]) => [rgb(a), rgb(b)]);
-  const out = {};
-  for (const k of Object.keys(frames)) {
-    out[k] = {};
-    for (const side of ['r', 'l']) {
-      const src = frames[k][side], c = document.createElement('canvas');
-      c.width = src.width; c.height = src.height;
-      const g = c.getContext('2d');
-      g.drawImage(src, 0, 0);
-      const im = g.getImageData(0, 0, c.width, c.height), d = im.data;
-      for (let i = 0; i < d.length; i += 4) {
-        if (!d[i + 3]) continue;
-        for (const [a, b] of pairs) if (d[i] === a[0] && d[i + 1] === a[1] && d[i + 2] === a[2]) { d[i] = b[0]; d[i + 1] = b[1]; d[i + 2] = b[2]; break; }
-      }
-      g.putImageData(im, 0, 0);
-      out[k][side] = c;
-    }
-  }
-  return out;
-}
-
 // Pela ordem: Inês, Isabel, e as outras sete (a nona é uma amiga sem nome, feita aqui).
 let grupo = null;
 export const CORES = ['#ff8a4b', '#c79bff', '#3fa6a0', '#ffd166', '#ff5d8f', '#5a8fd0', '#ff8a4b', '#7be0b0', '#f2f2f7'];

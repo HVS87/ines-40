@@ -11,7 +11,7 @@ export const CORES = [
   { nome: 'ROSA-VELHO', fala: 'Rosa-velho', c: '#efc2c4' },
   { nome: 'TERRACOTA', fala: 'Terracota', c: '#e6a882' },
 ];
-export const REBOCO = '#d9d3c7';
+const REBOCO = '#d9d3c7';
 const MADEIRA = '#e3c48a', MADEIRA_D = '#b8935a';
 
 // Estado da casa (um por cena). `quadros`: inclinação com que cada um ficou (null = por pendurar).

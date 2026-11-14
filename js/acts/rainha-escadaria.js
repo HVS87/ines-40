@@ -3,8 +3,8 @@
 // escadas sem encontrões dá um coração. Lá em cima, um rapaz novo segura a porta da sala...
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
-import { INK, GOLD, clamp, hash, lerp, person, shadow, mark, text, sign } from '../draw.js';
-import { recolor, costas } from './rainha-cenario.js';
+import { INK, GOLD, clamp, hash, lerp, person, shadow, mark, text, sign, recolor } from '../draw.js';
+import { costas } from './rainha-cenario.js';
 
 const POR_LANCE = 4;
 const DESCULPAS = ['Inês: «Ups! Desculpa!»', 'Inês: «Com licença, com licença!»', 'Inês: «Perdão! Estou atrasada!»'];
