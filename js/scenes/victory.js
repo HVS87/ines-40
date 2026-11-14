@@ -1,6 +1,6 @@
-// O final do jogo: fogo de artifício e toda a gente da história a festejar os 40 anos da Inês — a
-// família, os amigos e quem foi aparecendo pelo caminho; ao lado dela, o Lourenço, o Tomás, a Jeanne
-// no carrinho e o Ginja. Cada toque no ecrã lança mais foguetes.
+// O final do jogo: fogo de artifício e a família e os amigos todos a festejar os 40 anos da Inês;
+// ao lado dela, o Lourenço, o Tomás, a Jeanne no carrinho e o Ginja. Cada toque no ecrã lança mais
+// foguetes.
 import { getCharacter } from '../sprites.js';
 import { Fireworks, Particles } from '../fx.js';
 import { mkR, sky, stars, person, text, PINK, GOLD } from '../draw.js';

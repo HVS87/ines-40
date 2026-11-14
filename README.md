@@ -33,7 +33,7 @@ js/levels/            um ficheiro por nível: textos e a lista de atos com a sua
 js/sprites.js         bonecos em pixel art e o ELENCO (cores de cabelo, olhos e roupa de cada pessoa)
 js/draw.js            ferramentas de desenho (retângulos, céus, letras de píxeis, bonecos)
 js/nomes.js           nomes usados em vários níveis (o do pai da Inês)
-js/convidados.js      quem vai à festa dos 40 anos (abraços e bolo) e toda a gente do ecrã final
+js/convidados.js      quem vai à festa dos 40 anos (abraços e bolo) e a família e os amigos do ecrã final
 js/audio.js           efeitos sonoros e motor da música · js/musicas.js: as músicas, nota a nota
 js/input.js           teclado e toque · js/save.js: progresso
 tools/                servidor local, página do logótipo e lista de ficheiros do sw.js
@@ -88,7 +88,7 @@ partilhadas por vários níveis, cada um com a sua «pele».
   colégio é a constante `FARDA`, no mesmo ficheiro.
 - **Nome do pai da Inês**: `TIO` em `js/nomes.js`.
 - **Convidados da festa**: `js/convidados.js` (`CONVIDADOS`: abraços e roda do bolo; `TODOS`: o
-  ecrã final dos parabéns, que junta a família e quem aparece ao longo da história).
+  ecrã final dos parabéns, que junta a família aos amigos).
 - **Textos e falas de um nível**: no ficheiro do nível (`js/levels/`) ou nos atos desse nível
   (`js/acts/<nível>-*.js`).
 - **Música**: as faixas estão em `js/musicas.js` (melodia, acordes, baixo e percussão; o formato
