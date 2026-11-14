@@ -30,6 +30,6 @@ export default {
     },
     { act: GaragePorta, hearts: 3, muffled: true },      // cá fora, a música ouve-se abafada
     { act: Ritmo, hearts: 4, when: 'Lá dentro, a pista já está a ferver...', ...PISTA },
-    { act: GarageAmigos, hearts: 5, music: 'noite', when: 'A pista encheu e as luzes baixaram. Onde está toda a gente?' },
+    { act: GarageAmigos, hearts: 5, music: 'noite', when: 'A pista encheu e as luzes baixaram. Onde está toda a gente? (Atrás das cortinas não vale procurar!)' },
   ],
 };

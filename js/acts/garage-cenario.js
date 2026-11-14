@@ -1,5 +1,5 @@
 // Cenários do Paradise Garage (nível 5): a porta, na rua, com o néon e a fila; e a pista, com a
-// bola de espelhos, as luzes, o bar (Metz, Smirnoff Ice, shots) e a cabine do DJ.
+// bola de espelhos, as luzes, o bar (Metz, Smirnoff Ice, shots), as cortinas e a cabine do DJ.
 import { getCharacter, makeSprite, flip, LOOKS } from '../sprites.js';
 import { INK, PAPER, PINK, GOLD, hash, disc, text, textW, stars } from '../draw.js';
 
@@ -160,6 +160,20 @@ export function pistaBg(ctx, v, R, t, o) {
   R(0, cy, barW, gy - cy, '#3a2456'); R(0, cy, barW, 3, '#7a4fb0'); R(0, cy + 3, barW, 1, INK);
   for (let x = 6; x < barW - 4; x += 16) R(x, cy + 8, 2, gy - cy - 8, '#2e1c46');
   R(barW, cy, 2, gy - cy, INK);
+  // ----- as cortinas de veludo, ao fundo, entre o bar e a cabine (de vez em quando, mexem-se) -----
+  const c0 = barW + 6, c1 = w - Math.round(P ? w * 0.36 : Math.min(104, w * 0.27)) - 6, cw = Math.min(46, c1 - c0);
+  if (cw >= 24) {
+    const ch = Math.min(P ? 92 : 62, gy - top - 26), vy = gy - ch, vx = Math.round((c0 + c1 - cw) / 2);
+    const mexe = t % 9 < 0.7 ? Math.round(Math.sin(t * 22)) : 0;
+    R(vx - 4, vy - 4, cw + 8, 3, INK); R(vx - 3, vy - 3, cw + 6, 1, GOLD);            // o varão
+    R(vx - 1, vy - 1, cw + 2, ch + 1, INK);
+    for (let i = 0; i < cw; i++) {
+      const dobra = (i + (i >= cw / 2 ? mexe + 6 : 0)) % 6;
+      R(vx + i, vy, 1, ch, dobra < 1 ? '#3f0c1e' : dobra < 4 ? '#6a1830' : '#8a2440');
+    }
+    R(vx + Math.round(cw / 2) + mexe, vy, 1, ch, '#1a0612');                           // onde os dois panos se encontram
+    R(vx, vy, cw, 3, '#4f1024');
+  }
   // ----- a cabine do DJ, à direita -----
   if (!o.noBooth) {
     const bw = Math.round(P ? w * 0.36 : Math.min(104, w * 0.27)), bx = w - bw, by = gy - (P ? 72 : 62);
