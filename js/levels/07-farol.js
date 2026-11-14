@@ -36,7 +36,7 @@ export default {
   id: 'farol',
   title: 'Acampar na Ilha do Farol',
   music: 'acampar',
-  story: 'A Inês foi acampar com as amigas para a Ilha do Farol, ao largo de Olhão: nove raparigas, sol, praia e uma noite debaixo das estrelas. O que é que podia correr mal?',
+  story: 'A Inês foi acampar com a Ana, a Isabel e as outras amigas para a Ilha do Farol, ao largo de Olhão: nove raparigas, sol, praia e uma noite debaixo das estrelas. O que é que podia correr mal?',
   help: 'Toca no ecrã (ou Espaço) para saltar, dar uma ajuda às amigas e pregar as estacas; mantém premido para soprar a fogueira. De manhã, toca em cada coisa (ou setas e Espaço) para a arrumar.',
   outro: 'Acampamento levantado! E o trolley da Isabel ficou para a história.',
   acts: [
@@ -44,14 +44,16 @@ export default {
       act: Talk, when: 'Férias de verão: de Olhão, de barco, para a Ilha do Farol...', bg: cais,
       fg: (ctx, v, R, t, act) => trolley(R, Math.round(0.62 * v.w) + 30, act.ground(v), 2, -1),
       cast: [
-        { who: 'ana', outfit: 'praia', x: 0.12 }, { who: 'ines', outfit: 'praia', x: 0.36, name: 'Inês' },
+        { who: 'ana', outfit: 'praia', x: 0.12, name: 'Ana' }, { who: 'ines', outfit: 'praia', x: 0.36, name: 'Inês' },
         { who: 'isabel', outfit: 'praia', x: 0.62, face: -1, name: 'Isabel' }, { who: 'mi', outfit: 'praia', x: 0.9, face: -1 },
       ],
       lines: [
         'Inês: «Ilha do Farol! Nove amigas e uma ilha inteira só para nós.»',
+        'Ana: «Sol, praia e uma noite debaixo das estrelas. Vai ser de sonho!»',
         'Isabel: «Alguém me ajuda? O meu trolley prende-se nas tábuas...»',
         'Inês: «Isabel... trouxeste um TROLLEY para acampar?!»',
         'Isabel: «Então? Tem rodinhas. É muito mais prático do que uma mochila!»',
+        'Ana: «Na areia é que vai ser bonito... Anda, Isabel, eu vou atrás de ti e dou-te uma ajuda.»',
       ],
     },
     { act: FarolChegada, hearts: 4 },

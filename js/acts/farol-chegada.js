@@ -25,7 +25,8 @@ export class FarolChegada extends Act {
     this.hint(DICA);
   }
 
-  // posições no ecrã: a Inês à frente, a Isabel logo atrás (com o trolley), e as outras em fila
+  // posições no ecrã: a Inês à frente, a Isabel logo atrás (com o trolley), a Ana a seguir (é
+  // ela que ajuda quando o trolley encalha) e as outras em fila
   lay(v) {
     const P = v.portrait, gy = chao(v), ix = Math.round(v.w * (P ? 0.68 : 0.72)), sp = P ? 27 : 30;
     const gx = (k) => ix - (k === 0 ? 0 : k === 1 ? sp : k * sp + 24);
@@ -53,7 +54,7 @@ export class FarolChegada extends Act {
         if (s.n >= PUXOES) {
           this.heart(1, L.tx, L.gy - 30);
           this.hint(this.nStuck ? 'Isabel: «Outra vez?! Para a próxima... trago rodas maiores.»' : 'Isabel: «Obrigada! Eu disse que as rodinhas davam jeito... no alcatrão.»');
-        } else this.hint('As amigas dão uma ajuda e o trolley lá sai da areia!');
+        } else this.hint('A Ana dá uma ajuda e o trolley lá sai da areia!');
         this.stuck = null; this.nStuck++; this.msg = 3.2;
       }
       return;
