@@ -28,7 +28,7 @@
 import { LEVELS, levelLabel } from '../js/levels/index.js';
 import { SAVE_KEY } from '../js/config.js';
 import { seen, missing } from '../js/sprites.js';
-import { CONVIDADOS, TODOS, FAMILIA } from '../js/convidados.js';
+import { CONVIDADOS, TODOS, PAIS, IRMAOS } from '../js/convidados.js';
 
 const STEP = 1 / 60;
 const results = [];
@@ -385,9 +385,9 @@ async function testMoments() {
   const nosAbracos = abracos.flatMap((g) => nomes(g.people)).sort().join(' '), convidados = nomes(CONVIDADOS).sort().join(' ');
   check('dados cruzados: os convidados dos abraços são os mesmos da roda do bolo', nosAbracos === convidados && bolo.crowd === CONVIDADOS && CONVIDADOS.length >= 20, `${nosAbracos} / ${convidados}`);
   const todos = nomes(TODOS), emCasa = ['ines', 'lourenco', 'tomas'];
-  const faltam = [...nomes(FAMILIA), ...nomes(CONVIDADOS)].filter((w) => !emCasa.includes(w) && !todos.includes(w));
-  const semFamilia = nomes(FAMILIA).filter((w) => convidados.split(' ').includes(w));
-  check('dados cruzados: o ecrã final junta a família e os amigos, sem repetir ninguém (a família não vai à festa)', new Set(todos).size === todos.length && !faltam.length && !emCasa.some((w) => todos.includes(w)) && !semFamilia.length, `faltam: ${faltam.join(', ')}; na festa: ${semFamilia.join(', ')}`);
+  const faltam = [...nomes(PAIS), ...nomes(CONVIDADOS)].filter((w) => !emCasa.includes(w) && !todos.includes(w));
+  const naFesta = convidados.split(' '), paisNaFesta = nomes(PAIS).filter((w) => naFesta.includes(w)), irmaosFora = nomes(IRMAOS).filter((w) => !naFesta.includes(w));
+  check('dados cruzados: o ecrã final junta a família e os amigos, sem repetir ninguém (os irmãos vão à festa; os pais, não)', new Set(todos).size === todos.length && !faltam.length && !emCasa.some((w) => todos.includes(w)) && !paisNaFesta.length && !irmaosFora.length && IRMAOS.length === 4, `faltam: ${faltam.join(', ')}; pais na festa: ${paisNaFesta.join(', ')}; irmãos de fora: ${irmaosFora.join(', ')}`);
   game.showVictory();
   const fim = game.scene;
   for (let k = 0; k < 240; k++) { if (k % 40 === 0) fim.onTap({ type: 'pointerdown' }); fim.update(STEP); fim.draw(ctx2d(), game.view); }

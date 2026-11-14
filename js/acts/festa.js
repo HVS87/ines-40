@@ -1,6 +1,6 @@
 // Atos do último nível, a festa dos 40 anos no Recreio de Miraflores (o cenário está em
 // recreio-cenario.js):
-//   Abracos  — a Inês atravessa a festa e vai sendo recebida por cada grupo de amigos;
+//   Abracos  — a Inês atravessa a festa e vai sendo recebida pelos irmãos e por cada grupo de amigos;
 //   PISTA — «pele» do jogo de ritmo: o DJ põe música e toda a gente dança;
 //   Bolo     — o bolo com 40 velas: tocar muitas vezes para ajudar a soprá-las todas.
 import { Act } from './base.js';
@@ -10,7 +10,7 @@ import { interior, mesa, matraquilhos, escorrega, ROSA } from './recreio-cenario
 
 const GAP = 190;                 // distância entre grupos
 const INICIO = 215;              // onde está o primeiro grupo (antes fica a entrada, com os cartazes)
-const DJ = INICIO + 6 * GAP + 150;      // onde fica o canto do DJ (em coordenadas do mundo), ao fundo da sala
+const DJ = INICIO + 7 * GAP + 150;      // onde fica o canto do DJ (em coordenadas do mundo), ao fundo da sala
 const BALLOONS = ['#ff5d8f', '#ffd166', '#6fb0f0', '#c79bff', '#ff8a4b'];
 
 // O carrinho da bebé Jeanne.

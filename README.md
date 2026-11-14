@@ -88,8 +88,8 @@ partilhadas por vários níveis, cada um com a sua «pele».
 - **Aspeto de uma pessoa** (cabelo, olhos, roupa): `LOOKS` em `js/sprites.js`. A farda do
   colégio é a constante `FARDA`, no mesmo ficheiro.
 - **Nome do pai da Inês**: `TIO` em `js/nomes.js`.
-- **Convidados da festa**: `js/convidados.js` (`CONVIDADOS`: abraços e roda do bolo; `TODOS`: o
-  ecrã final dos parabéns, que junta a família aos amigos).
+- **Convidados da festa**: `js/convidados.js` (`CONVIDADOS`: abraços e roda do bolo, com os irmãos da
+  Inês e os amigos; `TODOS`: o ecrã final dos parabéns, que junta também os pais).
 - **Textos e falas de um nível**: no ficheiro do nível (`js/levels/`) ou nos atos desse nível
   (`js/acts/<nível>-*.js`).
 - **Música**: as faixas estão em `js/musicas.js` (melodia, acordes, baixo e percussão; o formato
