@@ -2,8 +2,8 @@
 //   arraial()   — a rua enfeitada: casas, festões, balões de papel, manjericos;
 //   Sardinhas   — na banca: tirar cada sardinha (ou bifana) da grelha no ponto certo;
 //   PIMBA       — a «pele» do jogo de ritmo (js/acts/ritmo.js) para dançar música pimba no arraial;
-//   praceta()   — a praceta em frente ao Xafarix (toldo verde com o gato, o chafariz, o palco
-//                 com música ao vivo), onde acabava sempre a noite de Santo António.
+//   praceta()   — o largo em frente ao Xafarix (o chafariz iluminado, o terraço, o palco com a
+//                 banda, o toldo verde do gato), onde acabava sempre a noite de Santo António.
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
 import { INK, PAPER, GOLD, clamp, hash, stars, disc, text, sign, person, shadow } from '../draw.js';
@@ -200,49 +200,146 @@ export const PIMBA = {
   end: 'Pipoca: «E agora, todos para a praceta do Xafarix!»',
 };
 
-// A praceta em frente ao Xafarix, na noite de Santo António: a parede de pedra com o toldo
-// verde do gato e a porta de luz roxa, a urna de pedra do chafariz, e o palco da música ao vivo.
+// O largo em frente ao Xafarix na noite de Santo António, desenhado pelas fotografias das festas
+// do bar: ao fundo o prédio vermelho de cantarias brancas e o cor-de-rosa; ao meio o chafariz
+// barroco, iluminado a roxo, por cima do terraço de pedra de onde há gente a ver; encostado ao
+// muro, o palco com a banda e os projetores vermelhos; à esquerda a barraca de toldo às riscas e,
+// à direita, a escada de pedra para a porta do Xafarix, com o toldo verde do gato e os vasos.
+function musicos(ctx, R, cx, sw, sy, t) {
+  const A = getCharacter('musico', 'casual'), B = getCharacter('musico', 'b');
+  const bob = (i) => Math.round(Math.abs(Math.sin(t * 6 + i * 1.5)) * 1);
+  // o baterista, atrás da bateria
+  const dx = Math.round(cx - sw * 0.3);
+  person(ctx, B, dx, sy - 5, { scale: 1, face: 1, hop: bob(0) });
+  disc(ctx, dx, sy - 7, 6, INK); disc(ctx, dx, sy - 7, 5, '#e8e2d6'); disc(ctx, dx, sy - 7, 2, '#c0392b');
+  R(dx - 11, sy - 14, 6, 4, INK); R(dx - 10, sy - 13, 4, 2, '#d8d2c6'); R(dx + 6, sy - 13, 5, 4, INK); R(dx + 7, sy - 12, 3, 2, '#d8d2c6');
+  R(dx - 13, sy - 21 + (Math.floor(t * 8) % 2), 8, 1, '#ffd166'); R(dx - 10, sy - 20, 1, 20, '#8a8794'); R(dx + 7, sy - 23, 8, 1, '#ffd166'); R(dx + 11, sy - 22, 1, 22, '#8a8794');
+  // guitarras, voz e teclas
+  const guit = (x, c, i) => { person(ctx, i % 2 ? A : B, x, sy, { scale: 1, face: i % 2 ? -1 : 1, hop: bob(i) }); R(x - 5, sy - 12 - bob(i), 8, 5, INK); R(x - 4, sy - 11 - bob(i), 6, 3, c); R(x + 3, sy - 13 - bob(i), 8, 1, INK); };
+  guit(Math.round(cx - sw * 0.13), '#c0392b', 1);
+  const vx = Math.round(cx + sw * 0.03);
+  person(ctx, A, vx, sy, { scale: 1, face: 1, hop: bob(2) });
+  R(vx + 7, sy - 19, 1, 19, '#8a8794'); R(vx + 5, sy - 21, 4, 3, INK); R(vx - 6, sy - 24 - bob(2), 2, 7, '#f6c9a0');       // o microfone e o braço no ar
+  const kx = Math.round(cx + sw * 0.19);
+  person(ctx, B, kx, sy, { scale: 1, face: -1, hop: bob(3) });
+  R(kx - 9, sy - 12, 18, 4, INK); R(kx - 8, sy - 11, 16, 2, '#b79cf0'); for (let k = 0; k < 8; k += 2) R(kx - 8 + k * 2, sy - 11, 1, 2, '#f2f2f7'); R(kx - 6, sy - 8, 1, 8, '#8a8794'); R(kx + 5, sy - 8, 1, 8, '#8a8794');
+  guit(Math.round(cx + sw * 0.35), '#e8c34a', 4);
+}
+
 export function praceta(ctx, v, R, t, act) {
-  const gy = act.ground(v), top = act.top(v), w = v.w, P = v.portrait;
-  R(0, 0, w, gy, '#161a40');
+  const gy = act.ground(v), top = act.top(v), w = v.w, P = v.portrait, livre = gy - top;
+  const cx = Math.round(w * (P ? 0.44 : 0.47)), ww = Math.round(Math.min(w * 0.33, 132));    // o muro do terraço: cx ± ww
+  const mh = Math.min(P ? 78 : 64, Math.round(livre * 0.56)), my = gy - mh;                   // altura do muro
+  const ch = Math.max(26, Math.min(P ? 84 : 54, my - top - 6));                               // o chafariz, por cima do muro
+  R(0, 0, w, gy, '#12143a');
   stars(ctx, w, top + 20, t, 5, 20);
-  // a parede de cantaria
-  const wy = Math.max(top - 6, gy - (P ? 150 : 100));
-  R(0, wy, w, gy - wy, '#c8b890');
-  for (let y = wy, j = 0; y < gy; y += 13, j++) { R(0, y, w, 1, '#a89870'); for (let x = (j % 2) * 16; x < w; x += 32) R(x, y, 1, 13, '#a89870'); }
-  R(0, wy, w, gy - wy, 'rgba(255,170,60,0.12)');
-  // a porta, com a luz roxa lá dentro, e o toldo verde com o gato e o nome
-  const dx = Math.round(w * (P ? 0.5 : 0.4));
-  R(dx - 13, gy - 44, 26, 44, INK); R(dx - 12, gy - 43, 24, 43, '#7a3fc0'); R(dx - 8, gy - 43, 16, 43, '#c85aff'); R(dx - 3, gy - 30, 6, 30, '#ff9ad8');
-  const aw = 92, ay = gy - 76;
-  R(dx - aw / 2 - 1, ay - 1, aw + 2, 28, INK); R(dx - aw / 2, ay, aw, 26, '#1f5a44'); R(dx - aw / 2, ay, aw, 3, '#2f7a5c');
-  for (let x = dx - aw / 2; x < dx + aw / 2; x += 8) { R(x, ay + 26, 8, 3, INK); R(x + 1, ay + 26, 6, 2, '#1f5a44'); }
-  gato(ctx, dx - 40, ay + 6, '#ffffff', '#1f5a44');
-  text(ctx, 'XAFARIX', dx - 16, ay + 9, '#ffffff', { scale: 2 });
-  // a urna de pedra do chafariz
-  const ux = Math.round(w * (P ? 0.12 : 0.1));
-  R(ux - 11, gy - 30, 22, 30, INK); R(ux - 10, gy - 29, 20, 29, '#d8c8a0'); R(ux - 13, gy - 34, 26, 5, INK); R(ux - 12, gy - 33, 24, 3, '#e8d8b0');
-  disc(ctx, ux, gy - 46, 11, INK); disc(ctx, ux, gy - 46, 10, '#d8c8a0'); R(ux - 5, gy - 60, 10, 6, INK); R(ux - 4, gy - 59, 8, 4, '#e8d8b0');
-  for (let k = -2; k <= 2; k++) R(ux + k * 4, gy - 50, 1, 8, '#b8a880');
-  // o palco: estrado, grade de luzes e a banda
-  const sx = Math.round(w * (P ? 0.82 : 0.8)), sw = P ? 76 : 96;
-  R(sx - sw / 2, gy - 62, 2, 62, INK); R(sx + sw / 2 - 2, gy - 62, 2, 62, INK); R(sx - sw / 2 - 2, gy - 66, sw + 4, 5, INK);
-  ['#ff4f8a', '#ffd166', '#6fb0f0'].forEach((c, i) => { const lx = sx - sw / 3 + (i * sw) / 3; R(lx - 3, gy - 61, 7, 5, INK); R(lx - 2, gy - 57, 5, 2, c); for (let k = 0; k < 12; k++) R(lx - 2 - k, gy - 55 + k * 3, 5 + k * 2, 3, c === '#ffd166' ? 'rgba(255,220,150,0.1)' : c === '#ff4f8a' ? 'rgba(255,80,150,0.1)' : 'rgba(110,170,240,0.1)'); });
-  R(sx - sw / 2 - 1, gy - 9, sw + 2, 9, INK); R(sx - sw / 2, gy - 8, sw, 8, '#3a3448'); R(sx - sw / 2, gy - 8, sw, 2, '#5a5468');
-  [['musico', 'casual', -18], ['musico', 'b', 16]].forEach(([who, outfit, dx2], i) => {
-    const bob = Math.round(Math.abs(Math.sin(t * 6 + i * 1.5)) * 2), x = sx + dx2;
-    person(ctx, getCharacter(who, outfit), x, gy - 8, { scale: 2, face: -1, hop: bob });
-    // guitarra / acordeão
-    if (i === 0) { R(x - 12, gy - 30 - bob, 16, 10, INK); R(x - 11, gy - 29 - bob, 14, 8, '#c8843c'); R(x + 3, gy - 30 - bob, 14, 3, INK); R(x - 6, gy - 27 - bob, 3, 3, '#3a2416'); }
-    else { R(x - 12, gy - 32 - bob, 20, 14, INK); R(x - 11, gy - 31 - bob, 6, 12, '#c0392b'); R(x - 5, gy - 31 - bob, 6 + Math.round(Math.sin(t * 6) * 2), 12, PAPER); R(x + 2, gy - 31 - bob, 5, 12, '#c0392b'); }
-  });
-  // festões, balões de papel e manjericos
-  festoes(R, w, Math.max(top + 2, wy - 6), t, 3);
-  for (let i = 0; i < Math.ceil(w / 80); i++) balao(ctx, R, 24 + i * 80, Math.max(top + 16, wy + 6) + (i % 2) * 8, CORES[(i * 2) % CORES.length], t);
-  manjerico(ctx, R, dx + 24, gy);
-  // a calçada e a gente do arraial, em silhueta, ao fundo
+
+  // ----- os prédios do largo: o vermelho de cantarias brancas e o cor-de-rosa -----
+  const by = Math.max(top - 8, gy - (P ? 236 : 176)), div = Math.round(cx + ww * 0.62);
+  R(0, by, div, gy - by, '#6e2833'); R(div, by + 10, w - div, gy - by - 10, '#7c5a7c');
+  R(0, by, div, 3, '#b3aab4'); R(div - 3, by, 3, gy - by, '#b3aab4'); R(div, by + 10, w - div, 2, '#a892a8');
+  for (let yy = by + 12, r = 0; yy < my - ch - 4 || (yy < gy - 30 && r < 6); yy += 36, r++) {
+    for (let x = 10, q = 0; x < w - 8; x += 30, q++) {
+      if (Math.abs(x + 7 - div) < 12) continue;
+      const on = hash(q * 5.1 + r * 3.7) > 0.55;
+      R(x - 2, yy - 2, 18, 24, x < div ? '#b3aab4' : '#a892a8'); R(x, yy, 14, 20, on ? '#ffd98a' : '#1f2340');
+      R(x + 6, yy, 2, 20, x < div ? '#2f4a3c' : '#5a4a5a'); R(x, yy + 7, 14, 1, x < div ? '#2f4a3c' : '#5a4a5a');
+      if (r % 2 === 0 && x < div) for (let k = 0; k < 16; k += 2) R(x - 1 + k, yy + 14, 1, 7, '#22262e');       // varandim de ferro
+    }
+  }
+  R(0, by, w, gy - by, 'rgba(16,14,48,0.3)');
+  // a árvore do largo, com a copa acesa de vermelho pelos projetores
+  if (livre > 96) {
+    R(3, top + 22, 6, gy - top - 22, '#3a2a2e');
+    for (const [dx, dy, r, c] of [[6, 14, 20, '#7a2434'], [26, 8, 15, '#a83238'], [-2, 26, 13, '#5a2030'], [18, 22, 11, '#c8483c'], [36, 18, 9, '#8a2a36']]) disc(ctx, dx, top + dy, r, c);
+    for (let i = 0; i < 18; i++) R(Math.floor(hash(i * 1.7) * 44), top + 2 + Math.floor(hash(i * 4.1) * 30), 2, 1, '#e86a50');
+  }
+
+  // ----- o chafariz, iluminado a roxo -----
+  const L = '#eadfff', M = '#b99ef2', D = '#7f61d2', DD = '#4a3896', fw = Math.round(Math.min(104, ww * 1.25)), h1 = Math.round(ch * 0.46), h2 = Math.round(ch * 0.8);
+  // as alas, com as volutas, e os pináculos
+  R(cx - fw / 2, my - h1, fw, h1, M); R(cx - fw / 2, my - h1, fw, 2, L);
+  for (const d of [-1, 1]) {
+    for (let i = 0; i < 6; i++) R(cx + d * (fw / 2 - 3 - i * 2) - (d > 0 ? 0 : 3), my - h1 - 2 - i * 2, 3, 2, i % 2 ? M : L);
+    for (const k of [0.5, 0.33]) { const px = Math.round(cx + d * fw * k); R(px - 2, my - (k > 0.4 ? h1 : h2) - 4, 5, 4, M); R(px - 1, my - (k > 0.4 ? h1 : h2) - 11, 3, 8, L); disc(ctx, px, my - (k > 0.4 ? h1 : h2) - 12, 2, L); }
+    const lx = Math.round(cx + d * fw * 0.42); disc(ctx, lx, my - h1 - 9, 4, 'rgba(255,200,110,0.3)'); disc(ctx, lx, my - h1 - 9, 2, '#ffe6a8');       // os dois candeeiros
+  }
+  // o corpo central: colunas, nicho e frontão curvo
+  const bw2 = Math.round(fw * 0.62);
+  R(cx - bw2 / 2, my - h2, bw2, h2, M); R(cx - bw2 / 2 - 2, my - h2 - 2, bw2 + 4, 3, L); R(cx - bw2 / 2, my - h2 + 1, bw2, 1, D);
+  for (const k of [-0.43, -0.27, 0.27, 0.43]) { const px = Math.round(cx + bw2 * k); R(px - 2, my - h2 + 2, 4, h2 - 2, L); R(px + 1, my - h2 + 2, 1, h2 - 2, D); R(px - 3, my - 4, 6, 4, L); }
+  const nw = Math.round(bw2 * 0.2), nh = Math.round(h2 * 0.62);
+  R(cx - nw, my - nh, nw * 2, nh, DD); R(cx - nw + 2, my - nh + 2, nw * 2 - 4, nh - 2, D); R(cx - nw + 2, my - nh - 2, nw * 2 - 4, 2, DD); R(cx - 3, my - Math.round(nh * 0.6), 6, Math.round(nh * 0.6), M);
+  const ph = Math.max(5, ch - h2 - 6);
+  for (let i = 0; i < ph; i++) { const half = Math.round((bw2 * 0.34) * Math.sqrt(1 - Math.pow((ph - 1 - i) / ph, 2))); R(cx - half, my - h2 - 2 - ph + i, half * 2, 1, i < 2 ? L : M); }
+  R(cx - 1, my - h2 - ph - 6, 3, 5, L); disc(ctx, cx, my - h2 - ph - 7, 2, L);
+
+  // ----- o terraço: o muro de pedra, as urnas e a gente a ver de cima -----
+  R(cx - ww, my, ww * 2, mh, '#d6cfc6'); R(cx - ww - 2, my - 3, ww * 2 + 4, 4, '#efe9df'); R(cx - ww, my + 1, ww * 2, 1, '#a9a198');
+  for (let yy = my + 12, j = 0; yy < gy; yy += 13, j++) { R(cx - ww, yy, ww * 2, 1, '#bdb5ac'); for (let x = cx - ww + (j % 2) * 14; x < cx + ww; x += 28) R(x, yy, 1, 13, '#bdb5ac'); }
+  disc(ctx, cx, my + 15, 7, '#a9a198'); disc(ctx, cx, my + 15, 5, '#e6dfd4'); disc(ctx, cx, my + 15, 2, '#a9a198');          // o medalhão
+  for (const d of [-1, 1]) { const ux = Math.round(cx + d * ww * 0.7); R(ux - 3, my - 7, 6, 4, '#cfc8be'); disc(ctx, ux, my - 10, 4, '#8fb0f0'); R(ux - 1, my - 15, 2, 2, '#b8d0ff'); }
+  for (let x = cx - ww + 7, i = 0; x < cx + ww - 4; x += 10, i++) {
+    if (Math.abs(Math.abs(x - cx) - ww * 0.7) < 7) continue;
+    const c = ['#2a2540', '#40304a', '#2f3558', '#5a3040', '#3a4a5a'][i % 5], up = Math.round(hash(i * 2.3) * 2);
+    R(x - 3, my - 8 - up, 6, 6, c); disc(ctx, x, my - 11 - up, 2, i % 3 ? '#d8b090' : '#c89a78'); R(x - 2, my - 14 - up, 4, 2, ['#2a1c1a', '#c8a060', '#5a3a2a'][i % 3]);
+  }
+  R(cx - ww, my + Math.round(mh * 0.5), ww * 2, Math.round(mh * 0.5), 'rgba(30,20,60,0.22)');
+
+  // ----- o palco, encostado ao muro: projetores, colunas e a banda -----
+  const sw = Math.min(ww * 2 - 26, 156), sh = Math.min(P ? 38 : 32, mh - 26), sy = gy - sh;
+  for (const d of [-1, 1]) {
+    const px = Math.round(cx + d * (sw / 2 + 9));
+    R(px, my - 16, 2, mh + 16, '#2b2a30'); R(px - 6, my - 17, 14, 2, '#2b2a30');
+    for (const [k, c, g] of [[-5, '#ff5038', 'rgba(255,70,50,0.10)'], [4, '#ff9a3a', 'rgba(255,150,60,0.08)']]) {
+      R(px + k - 2, my - 15, 5, 5, INK); R(px + k - 1, my - 11, 3, 2, c); disc(ctx, px + k, my - 12, 5, g.replace(/0\.\d+\)/, '0.3)'));
+      for (let i = 0; i < 12; i++) R(px + k - d * i * 3 - 3 - i, my - 9 + i * 3, 6 + i * 2, 3, g);
+    }
+  }
+  R(cx - sw / 2, sy - 30, sw, 30, 'rgba(255,60,70,0.07)');
+  R(cx - sw / 2 - 1, sy - 2, sw + 2, sh + 2, INK); R(cx - sw / 2, sy, sw, sh, '#17151e'); R(cx - sw / 2, sy - 1, sw, 2, '#4a4458');
+  for (let x = cx - sw / 2 + 6; x < cx + sw / 2 - 4; x += 12) R(x, sy + 3, 1, sh - 3, '#221f2c');
+  for (const d of [-1, 1]) { const bx = Math.round(cx + d * (sw / 2 - 8)) - 6; R(bx - 1, sy - 21, 14, 20, INK); R(bx, sy - 20, 12, 18, '#2a2436'); disc(ctx, bx + 6, sy - 14, 3, '#0d0820'); disc(ctx, bx + 6, sy - 6, 4, '#0d0820'); }
+  musicos(ctx, R, cx, sw - 34, sy - 1, t);
+
+  // ----- à esquerda: a barraca de toldo às riscas -----
+  const tx = Math.round((cx - ww) / 2) - 2, tw = Math.max(40, Math.min(58, cx - ww - 2));
+  R(tx - tw / 2 + 2, gy - 34, tw - 4, 34, '#2a2032'); R(tx - tw / 2 + 4, gy - 30, tw - 8, 14, '#ffcf80'); R(tx - tw / 2 + 2, gy - 15, tw - 4, 15, '#5a3a2a'); R(tx - tw / 2 + 2, gy - 16, tw - 4, 2, '#8a5a3a');
+  for (let x = 0; x < tw; x += 5) { const c = (x / 5) % 2 ? '#f2f2ea' : '#2f7a5c'; R(tx - tw / 2 + x, gy - 46, 5, 11, c); R(tx - tw / 2 + x + 1, gy - 35, 3, 2, c); }
+  R(tx - tw / 2, gy - 47, tw, 1, INK); R(tx - tw / 2 + 1, gy - 34, 2, 34, '#d8d2c6'); R(tx + tw / 2 - 3, gy - 34, 2, 34, '#d8d2c6');
+
+  // ----- à direita: a escada de pedra, a porta do Xafarix e o toldo verde do gato -----
+  const ex0 = cx + ww + 2, ex = Math.round((ex0 + w) / 2), VERDE = '#1f5a44';
+  R(ex0, gy - 40, w - ex0, 40, '#cfc8be'); R(ex0, gy - 41, w - ex0, 2, '#efe9df'); R(ex0, gy - 40, w - ex0, 40, 'rgba(30,20,60,0.2)');
+  R(ex - 10, gy - 45, 20, 30, INK); R(ex - 9, gy - 44, 18, 29, '#7a3fc0'); R(ex - 6, gy - 44, 12, 29, '#c85aff'); R(ex - 2, gy - 34, 4, 19, '#ff9ad8');     // a porta, com a luz lá dentro
+  for (let k = 0; k < 5; k++) { R(ex - 15 + k, gy - 3 * (k + 1), 30 - k * 2, 3, k % 2 ? '#9d978e' : '#b9b3a8'); R(ex - 15 + k, gy - 3 * (k + 1), 30 - k * 2, 1, '#d6d0c6'); }
+  for (let i = 0; i < 20; i++) { const half = Math.round(23 * Math.sqrt(1 - Math.pow((19 - i) / 20, 2))); R(ex - half, gy - 73 + i, half * 2, 1, i < 3 ? '#2f7a5c' : VERDE); }
+  R(ex - 24, gy - 53, 48, 8, INK); R(ex - 23, gy - 53, 46, 7, VERDE);
+  for (let x = ex - 23; x < ex + 23; x += 6) { R(x, gy - 46, 5, 2, VERDE); R(x + 1, gy - 44, 3, 1, VERDE); }
+  gato(ctx, ex - 8, gy - 69, '#ffffff', VERDE);
+  text(ctx, 'XAFARIX', ex, gy - 52, '#ffffff', { align: 'center' });
+  R(ex + 13, gy - 38, 4, 6, INK); R(ex + 14, gy - 37, 2, 4, '#e0303a');                                             // a lanterna vermelha
+  for (const d of [-1, 1]) {                                                                                       // os vasos de barro com as iúcas
+    const vx = ex + d * 24;
+    R(vx - 5, gy - 12, 10, 12, INK); R(vx - 4, gy - 11, 8, 11, '#c8683e'); R(vx - 5, gy - 13, 10, 2, '#e0855a'); R(vx, gy - 26, 1, 14, '#6a5a3a');
+    for (const [a, b] of [[-7, -30], [-5, -34], [0, -36], [5, -34], [7, -29], [-8, -24], [8, -23]]) for (let i = 0; i <= 6; i++) R(vx + Math.round((a * i) / 6), gy - 22 + Math.round(((b + 22) * i) / 6), 1, 2, i > 3 ? '#6fae5a' : '#3f7a40');
+  }
+  manjerico(ctx, R, Math.round(cx + ww - 10), gy);
+
+  // festões e balões de papel, por cima de tudo
+  festoes(R, w, top + 1, t, P ? 3 : 1);
+  for (let i = 0; i < Math.ceil(w / 80); i++) balao(ctx, R, 24 + i * 80, top + (P ? 30 : 12) + (i % 2) * 6, CORES[(i * 2) % CORES.length], t);
+
+  // ----- a calçada e a gente do arraial -----
   R(0, gy, w, v.h - gy, '#8a8794'); R(0, gy, w, 2, '#a8a4b0');
   for (let y = gy + 4, j = 0; y < v.h; y += 7, j++) for (let x = (j % 2) * 6; x < w; x += 12) R(x, y, 5, 1, j % 3 ? '#7a7684' : '#c8c4d0');
+  // quem está a ver o concerto, de costas, entre o palco e nós
+  for (let x = cx - sw / 2 - 12, i = 0; x < cx + sw / 2 + 14; x += 11, i++) {
+    const hgt = 17 + Math.round(hash(i * 3.3) * 6), hop = Math.round(Math.abs(Math.sin(t * 5 + i * 1.7)) * 2), yb = gy + 1 - hop;
+    const c = ['#2a2540', '#3a2f55', '#4a2f48', '#2f3558', '#5a3348'][i % 5];
+    R(x - 4, yb - hgt, 9, hgt, c); disc(ctx, x, yb - hgt - 3, 4, ['#2a1c1a', '#d8b870', '#5a3a2a', '#c89a50', '#3a2a26'][i % 5]);
+    if (i % 4 === 1) { R(x - 6, yb - hgt - 9, 2, 10, c); R(x - 6, yb - hgt - 11, 2, 2, '#e8c0a0'); }
+  }
   for (let i = 0; i < Math.floor(w / 22); i++) {
     const x = 8 + i * 22 + Math.round(hash(i) * 8), y = v.h - 2 + Math.round(Math.abs(Math.sin(t * 5 + i * 1.3)) * -3), hgt = 22 + Math.round(hash(i * 3) * 8);
     if (v.h - gy < 90) break;

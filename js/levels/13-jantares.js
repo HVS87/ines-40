@@ -41,7 +41,7 @@ export default {
         'Lourenço: «Só tu, Inês! Quem me dera ter estado aí para ver...»',
         'Lourenço: «Eu por cá ando a aprender a atirar o bumerangue. Olha só: zás!»',
       ],
-      alert: 'O bumerangue voltou! Toca muitas vezes para o Lourenço se desviar!',
+      alert: 'O bumerangue voltou e lá vai o telemóvel pelo ar! Toca muitas vezes para o Lourenço se desviar!',
       win: 'Lourenço: «Ufa, passou a rasar! Dizem que volta sempre... e é verdade.»',
       lose: 'O bumerangue voltou... e levou o telefone com ele. Até amanhã, Austrália!',
     },

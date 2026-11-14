@@ -1,8 +1,9 @@
 // Ato «telefonema da Austrália»: a Inês em Lisboa (de noite) e o Lourenço na Austrália (de dia),
 // cada um no seu lado do ecrã. Os corações viajam pela linha: toca quando chegam ao telefone da
 // Inês para os apanhar. A meio, a Austrália intromete-se — um canguru, uma aranha gigante, um
-// bando de emus, um coala ou um bumerangue que volta — e é preciso tocar muitas vezes para
-// enxotar o intruso antes que a chamada caia.
+// bando de emus, um coala ou um bumerangue que volta —, o telemóvel salta das mãos do Lourenço e
+// fica no chão enquanto ele luta com o intruso: é preciso tocar muitas vezes (cada toque é um
+// golpe) para o enxotar antes que a chamada caia. Se conseguir, ele apanha o telemóvel outra vez.
 //
 //   { act: Call, animal: 'canguru' | 'aranha' | 'emus' | 'coala' | 'bumerangue', lines: [3 falas],
 //     win: 'fala', lose: 'fala', alert: 'instrução da interrupção' (opcional), label: 'ENXOTA!' }
@@ -14,6 +15,8 @@ const NAMES = { canguru: 'o canguru', aranha: 'a aranha', emus: 'os emus', coala
 const SPAWNS = [1, 3.6, 6.2, 8.8];     // quando parte cada coração
 const FLY = 2.3;                       // segundos de viagem de um coração
 const HIT = 0.9;                       // ponto da viagem em que chega ao telefone da Inês
+const VOO = 0.7;                       // segundos que o telemóvel leva a saltar das mãos até ao chão
+const GOLPES = ['PAF!', 'ZÁS!', 'PUM!', 'TOMA!'];
 
 export class Call extends Act {
   get music() { return 'australia'; }      // a música dos telefonemas (didgeridoo incluído)
@@ -37,6 +40,9 @@ export class Call extends Act {
     this.left = 6.5;
     this.won = false;
     this.flash = 0;
+    this.strike = 0;           // segundos que dura o golpe do último toque
+    this.hits = 0;
+    this.lx = 0;               // quanto o Lourenço se desviou do sítio (para o coala ir agarrado a ele)
     this.sfx('ring');
   }
 
@@ -57,8 +63,10 @@ export class Call extends Act {
   }
 
   update(dt, I, v) {
+    const antes = this.timer;
     this.timer += dt;
     this.flash = Math.max(0, this.flash - dt);
+    this.strike = Math.max(0, this.strike - dt);
     const g = this.geo(v), lines = this.cfg.lines || [];
 
     if (this.state === 'talk') {
@@ -82,12 +90,13 @@ export class Call extends Act {
         this.state = 'animal';
         this.timer = 0;
         this.sfx('buzz');
-        this.hint(this.cfg.alert || `Oh, não! Toca muitas vezes para enxotar ${NAMES[this.cfg.animal] || 'o bicho'}!`);
+        this.hint(this.cfg.alert || `Lá vai o telemóvel pelo ar! Toca muitas vezes para enxotar ${NAMES[this.cfg.animal] || 'o bicho'}!`);
       }
     } else if (this.state === 'animal') {
       this.left -= dt;
       this.meter = Math.max(0, this.meter - dt * 0.12);
-      if (I.actionPressed && this.timer > 0.5) { this.meter += 0.085; this.sfx('toc'); this.fx.burst(g.A.px + 20, g.A.gy - 30, 3, [GOLD, PAPER], 40); }
+      if (antes < VOO && this.timer >= VOO) this.sfx('toc');          // o telemóvel cai no chão
+      if (I.actionPressed && this.timer > 0.5) { this.meter += 0.085; this.strike = 0.22; this.hits++; this.sfx('toc'); this.fx.burst(g.A.px + 20, g.A.gy - 30, 3, [GOLD, PAPER], 40); }
       if (this.meter >= 1 || this.left <= 0) {
         this.won = this.meter >= 1;
         this.state = 'end';
@@ -122,6 +131,7 @@ export class Call extends Act {
       R(cx, L.gy - 44, 2, 44, INK); R(cx - 7, L.gy - 54, 16, 11, '#ffd166'); R(cx - 5, L.gy - 2, 12, 2, INK);
       ctx.drawImage(this.ines.stand.r, L.px - 16, L.gy - 48, 32, 48);
       R(L.tel.x - 2, L.tel.y - 5, 5, 10, INK); R(L.tel.x - 1, L.tel.y - 4, 3, 8, '#c9c9d8');
+      if (st === 'animal' && Math.floor(t * 3) % 2) text(ctx, '?!', L.px, L.gy - 62, PAPER, { align: 'center', shadow: INK });
       text(ctx, 'LISBOA', L.x + 5, L.y + L.h - 9, '#c9c9d8');
     });
 
@@ -144,16 +154,70 @@ export class Call extends Act {
       for (let i = 0; i < 7; i++) { R(sx + 1 - i, A.gy - 44 + i, 2 * i + 1, 1, '#ffd23e'); R(sx + 1 - i, A.gy - 31 - i, 2 * i + 1, 1, '#ffd23e'); }
       R(sx - 1, A.gy - 39, 3, 3, INK); R(sx + 1, A.gy - 41, 2, 2, INK);
 
-      const scared = st !== 'talk';
-      const wob = st === 'animal' ? Math.round(Math.sin(t * 30) * 1) : 0;
-      const gone = st === 'end' && !this.won && this.cfg.animal === 'emus';      // os emus levaram-no
+      const scared = st === 'animal' || (st === 'end' && !this.won), kind = this.cfg.animal;
+      const gone = st === 'end' && !this.won && kind === 'emus';      // os emus levaram-no
+      // a luta: como o Lourenço se mexe com cada intruso (lx, ly = desvio; lh = altura, mais baixa
+      // quando se agacha; lado para onde está virado; punhos = [dx, dy] a partir dos pés)
+      const luta = st === 'animal' && this.timer > VOO * 0.6, golpe = this.strike > 0;
+      let lx = 0, ly = 0, lh = 48, lado = 'l', punhos = [];
+      if (luta) {
+        const s = Math.sin(t * 9), a = Math.abs(s);
+        if (kind === 'canguru') {            // boxe: gingar, esquivar e dar socos
+          lado = 'r'; lx = Math.round(s * 2) + (golpe ? 4 : 0); ly = Math.round(a * 2);
+          punhos = [[10 + (golpe ? 8 : Math.round(a * 3)), -27], [7 + Math.round((1 - a) * 3), -21]];
+        } else if (kind === 'aranha') {      // encolher-se e sacudi-la de cima da cabeça
+          lh = golpe ? 48 : 43 + Math.round(a * 3); lado = Math.floor(t * 5) % 2 ? 'l' : 'r';
+          punhos = [[-9, -lh - 3 - Math.round(a * 4)], [9, -lh - 3 - Math.round((1 - a) * 4) - (golpe ? 5 : 0)]];
+        } else if (kind === 'emus') {        // rodopiar e saltar no meio do bando
+          lado = Math.floor(t * 7) % 2 ? 'l' : 'r'; ly = Math.round(a * 4); lx = Math.round(Math.sin(t * 5) * 3);
+          punhos = [[-11, -30 - Math.round(a * 5)], [11 + (golpe ? 5 : 0), -30 - Math.round((1 - a) * 5)]];
+        } else if (kind === 'coala') {       // às apalpadelas, com o coala agarrado à cara
+          lx = Math.round(Math.sin(t * 4.5) * 7); lado = Math.sin(t * 4.5) > 0 ? 'r' : 'l';
+          punhos = [[-9, -40 - (golpe ? 4 : 0)], [9, -40 - (golpe ? 4 : 0)]];
+        } else {                             // o bumerangue: agachar-se quando ele passa e saltar a seguir
+          const baixo = Math.sin(t * 6) > 0.2;
+          lh = baixo ? 39 : 48; ly = baixo ? 0 : Math.round(a * 5); lado = Math.cos(t * 6) > 0 ? 'r' : 'l';
+          punhos = [[-10, -lh + 12 - Math.round(a * 6)], [10, -lh + 12 - Math.round((1 - a) * 6) - (golpe ? 4 : 0)]];
+        }
+      }
+      this.lx = lx;
+      // o telemóvel: ao ouvido, a saltar-lhe das mãos, caído no chão ou de volta à mão
+      const chao = { x: A.px - 30, y: A.gy - 3 };
+      let tel = null, deitado = false;
+      if (st === 'talk') tel = A.tel;
+      else if (st === 'animal') {
+        const f = clamp(this.timer / VOO, 0, 1);
+        tel = { x: lerp(A.tel.x, chao.x, f), y: lerp(A.tel.y, chao.y, f) - Math.sin(f * Math.PI) * 32 };
+        deitado = f >= 1 || Math.floor(this.timer * 18) % 2 === 1;        // às cambalhotas pelo ar
+      } else if (this.won) {
+        const f = clamp((this.timer - 0.5) / 0.5, 0, 1);
+        tel = { x: lerp(chao.x, A.tel.x, f), y: lerp(chao.y, A.tel.y, f) - Math.sin(f * Math.PI) * 8 };
+        deitado = f < 0.5;
+      } else if (kind !== 'canguru' && kind !== 'bumerangue') { tel = chao; deitado = true; }      // (esses dois levam-no)
+      const telemovel = () => {
+        if (!tel) return;
+        const x = Math.round(tel.x), y = Math.round(tel.y);
+        if (deitado) { R(x - 5, y - 2, 10, 5, INK); R(x - 4, y - 1, 8, 3, '#c9c9d8'); } else { R(x - 2, y - 5, 5, 10, INK); R(x - 1, y - 4, 3, 8, '#c9c9d8'); }
+        if (st === 'animal' && this.timer >= VOO && Math.floor(t * 3) % 2) { R(x - 8, y - 8, 1, 3, PAPER); R(x + 8, y - 8, 1, 3, PAPER); R(x - 4, y - 10, 1, 2, PAPER); R(x + 4, y - 10, 1, 2, PAPER); }   // a voz da Inês, lá de dentro
+      };
       if (!gone) {
-        ctx.drawImage(this.lou.stand.l, A.px - 16 + wob, A.gy - 48, 32, 48);
-        const stolen = st === 'end' && !this.won;
-        if (!stolen) { R(A.tel.x - 2 + wob, A.tel.y - 5, 5, 10, INK); R(A.tel.x - 1 + wob, A.tel.y - 4, 3, 8, '#c9c9d8'); }
-        if (scared && Math.floor(t * 6) % 2) { R(A.px - 1, A.gy - 62, 2, 6, '#e0572f'); R(A.px - 1, A.gy - 54, 2, 2, '#e0572f'); }
+        ctx.drawImage(this.lou.stand[lado], A.px - 16 + lx, A.gy - lh - ly, 32, lh);
+        if (scared && Math.floor(t * 6) % 2) { R(A.px + lx - 1, A.gy - 62 - ly, 2, 6, '#e0572f'); R(A.px + lx - 1, A.gy - 54 - ly, 2, 2, '#e0572f'); }
       }
       if (st !== 'talk') this.drawAnimal(ctx, R, A, t);
+      telemovel();
+      if (luta) {
+        // os punhos, por cima do intruso
+        for (const [dx, dy] of punhos) { R(A.px + lx + dx - 2, A.gy + dy - ly - 2, 5, 5, INK); R(A.px + lx + dx - 1, A.gy + dy - ly - 1, 3, 3, '#f6c9a0'); }
+        // a poeira da luta no chão, as estrelas e, a cada toque, o golpe
+        const fx0 = A.px + (kind === 'canguru' || kind === 'emus' ? 20 : 4), fy0 = kind === 'canguru' || kind === 'emus' ? A.gy - 24 : A.gy - 48;
+        for (let i = 0; i < 5; i++) { const an = t * 8 + i * 1.26; disc(ctx, Math.round(A.px + 8 + Math.cos(an) * 16), Math.round(A.gy - 3 + Math.sin(an * 1.7) * 2), 2 + (i % 3), i % 2 ? '#f6ead2' : '#e0b890'); }
+        for (let i = 0; i < 3; i++) {
+          const an = -t * 7 + i * 2.1, x = Math.round(fx0 + Math.cos(an) * 15), y = Math.round(fy0 + Math.sin(an) * 10);
+          R(x - 2, y, 5, 1, '#ffd23e'); R(x, y - 2, 1, 5, '#ffd23e');
+        }
+        if (golpe) text(ctx, GOLPES[this.hits % GOLPES.length], clamp(fx0 + 6, A.x + 16, A.x + A.w - 16), fy0 - 16 - Math.round((0.22 - this.strike) * 30), PAPER, { align: 'center', shadow: INK });
+      }
       text(ctx, 'AUSTRÁLIA', A.x + A.w - 5, A.y + A.h - 9, '#7a3a1e', { align: 'right' });
       // a chamada caiu: riscas de estática
       if (st === 'end' && !this.won) for (let i = 0; i < 14; i++) R(A.x, A.y + ((i * 37 + Math.floor(t * 20) * 13) % A.h), A.w, 1, 'rgba(255,255,255,0.25)');
@@ -222,7 +286,7 @@ export class Call extends Act {
     }
     if (kind === 'coala') {
       // salta do eucalipto para a cabeça dele e agarra-se-lhe à cara; enxotado, volta para a árvore
-      const tx = A.x + Math.round(A.w * 0.12) + 10, ty = A.gy - 46, hx = A.px, hy = A.gy - 36;
+      const tx = A.x + Math.round(A.w * 0.12) + 10, ty = A.gy - 46, hx = A.px + (st === 'animal' ? this.lx : 0), hy = A.gy - 36;
       let f = inF, jump = Math.sin(inF * Math.PI) * 16;
       if (st === 'end' && this.won) { f = 1 - outF; jump = Math.sin(outF * Math.PI) * 16; }
       const cx = Math.round(lerp(tx, hx, f)), cy = Math.round(lerp(ty, hy, f) - jump);
@@ -241,8 +305,8 @@ export class Call extends Act {
       let x, y;
       if (st === 'animal') { const a = t * 6; x = cx0 + Math.cos(a) * 34 + (1 - inF) * 70; y = cy0 + Math.sin(a) * 12 - 6; }
       else if (this.won) { x = lerp(cx0 + 34, A.x + A.w + 40, outF); y = cy0 - 10 - outF * 24; }
-      else if (outF < 0.3) { x = lerp(cx0 + 34, A.tel.x, outF / 0.3); y = lerp(cy0, A.tel.y, outF / 0.3); }
-      else { x = lerp(A.tel.x, A.x - 40, (outF - 0.3) / 0.7); y = A.tel.y - (outF - 0.3) * 30; }
+      else if (outF < 0.3) { x = lerp(cx0 + 34, A.px - 30, outF / 0.3); y = lerp(cy0, A.gy - 6, outF / 0.3); }      // vai buscar o telemóvel ao chão
+      else { x = lerp(A.px - 30, A.x - 40, (outF - 0.3) / 0.7); y = A.gy - 6 - (outF - 0.3) * 60; }
       x = Math.round(x); y = Math.round(y);
       const d = [[1, 0, 0, 1], [0, 1, -1, 0], [-1, 0, 0, -1], [0, -1, 1, 0]][Math.floor(t * 14) % 4];
       for (let k = 0; k < 7; k++) { R(x + d[0] * k - 1, y + d[1] * k - 1, 4, 4, INK); R(x + d[2] * k - 1, y + d[3] * k - 1, 4, 4, INK); }

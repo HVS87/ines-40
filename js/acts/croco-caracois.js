@@ -1,9 +1,10 @@
-// «O Crôcô», ato 2: primavera, caracóis! O palito anda de um lado para o outro: toca-se quando
+// «O Crôcô», ato 2: primavera, caracóis! Primeiro aparece o cartaz da montra («Há caracóis à
+// "Crôcô"»); depois, o palito anda de um lado para o outro: toca-se quando
 // estiver na zona verde (por cima do caracol) para o tirar da casca. A travessa vai-se esvaziando
 // e as cascas acumulam-se na tacinha. Quem falha... fica o Pipoca com o caracol.
 import { Act } from './base.js';
 import { INK, GOLD, clamp, hash, disc, text } from '../draw.js';
-import { esplanada, sentados, malta, partes, painel } from './croco-cenario.js';
+import { esplanada, sentados, malta, partes, painel, cartaz } from './croco-cenario.js';
 
 const BASE = 'Toca quando o palito estiver na zona verde, por cima do caracol!';
 const BOAS = ['Inês: «Hmm, este estava ótimo!»', 'Ana: «E agora molha o pão no molho!»', 'Tété: «Cuidado com o molho, que salpica.»', 'Pi: «Isto pede mais uma imperial.»', 'Mi: «Não há caracóis como estes!»', 'Maísa: «Caracóis? Contem sempre comigo!»', 'Maria: «Primavera é isto mesmo.»'];
@@ -23,10 +24,10 @@ export class Caracois extends Act {
     this.r = 0;                 // ronda
     this.eaten = 0;             // cascas vazias na tacinha
     this.pos = 0; this.dir = 1;
-    this.state = 'aim'; this.st = 0; this.ok = false;
+    this.state = 'cartaz'; this.st = 0; this.ok = false;      // começa pelo cartaz da montra
     this.over = 0;
     this.novo();
-    this.hint(BASE);
+    this.hint('Chegou a primavera e o cartaz já está na montra: há caracóis à Crôcô!');
   }
 
   novo() { this.zc = 0.22 + hash(this.r * 5.3 + 1) * 0.56; this.zw = Math.max(0.2, 0.27 - this.r * 0.01); this.pos = this.zc > 0.5 ? 0 : 1; this.dir = this.zc > 0.5 ? 1 : -1; }
@@ -34,6 +35,10 @@ export class Caracois extends Act {
   update(dt, I) {
     if (this.over) { this.over += dt; if (this.over > 2.6) this.done(); return; }
     this.st += dt;
+    if (this.state === 'cartaz') {
+      if (this.st > 2.8 || (I.actionPressed && this.st > 0.6)) { this.state = 'aim'; this.st = 0; this.hint(BASE); }
+      return;
+    }
     if (this.state === 'res') {
       if (this.st > 1.0) {
         this.r++; this.state = 'aim'; this.st = 0;
@@ -53,7 +58,7 @@ export class Caracois extends Act {
 
   draw(ctx, v, R) {
     const p = partes(v, this.top(v)), t = this.t;
-    esplanada(ctx, v, R, { gy: p.gy, top: p.top, cx: p.cx, half: p.half, t });
+    esplanada(ctx, v, R, { gy: p.gy, top: p.top, cx: p.cx, half: p.half, rows: p.rows, t, caracois: true });
     const res = this.state === 'res';
     sentados(ctx, R, this.list, { x0: p.x0, x1: p.x1, gy: p.gy, rows: p.rows, t, drinks: 11, all: this.over > 0, speaker: res && !this.ok ? 'Pipoca' : res ? 'Inês' : '' });
 
@@ -61,6 +66,12 @@ export class Caracois extends Act {
     const { pw, ph } = painel(R, p, '#dfe3ee'), px = 0, py = 0;
     ctx.save(); ctx.translate(p.px, p.py); ctx.scale(p.s, p.s);
     R(px, py, pw, 2, '#f2f4fa'); R(px, py + ph - 3, pw, 3, '#b8bccc');
+    if (this.state === 'cartaz') {
+      const w = Math.min(pw - 14, 100), h = Math.min(ph - 14, 96);
+      cartaz(ctx, R, px + Math.round(pw / 2), py + Math.round((ph - h) / 2), w, h);
+      ctx.restore();
+      return;
+    }
     const bw = pw - 28, bx = px + 14, by = py + ph - 16, cy = Math.round(py + ph * 0.56);
     // a travessa (à esquerda, em cima) com os caracóis que faltam, e a tacinha das cascas (à direita)
     const left = RONDAS - this.r - (res ? 1 : 0), tx = px + Math.round(pw * 0.25), ty = py + 14;

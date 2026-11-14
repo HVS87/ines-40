@@ -8,12 +8,12 @@ import { esplanada, sentados, malta } from '../acts/croco-cenario.js';
 
 let gente = null;
 
-// A esplanada inteira, com o sol a pôr-se à medida que a conversa avança.
+// A esplanada inteira, com o sol a pôr-se à medida que a conversa avança (e o néon a acender-se).
 function fundo(ctx, v, R, t, act) {
   if (!gente) gente = malta();
   const gy = act.ground(v), n = (act.cfg.lines || []).length;
   const dusk = Math.max(0, Math.min(1, (act.i + Math.min(1, act.timer / 3)) / n));
-  esplanada(ctx, v, R, { gy, top: act.top(v), cx: Math.round(v.w / 2), half: v.w / 2, t, dusk, fore: true });
+  esplanada(ctx, v, R, { gy, top: act.top(v), cx: Math.round(v.w / 2), half: v.w / 2, rows: v.portrait ? 2 : 1, t, dusk, fore: true, caracois: true });
   sentados(ctx, R, gente, { x0: v.portrait ? 6 : Math.round(v.w * 0.04), x1: v.w - (v.portrait ? 6 : Math.round(v.w * 0.04)), gy, rows: v.portrait ? 2 : 1, t, drinks: 11, cafe: true, speaker: act.speaker, all: act.speaker === 'Todos' });
 }
 
@@ -36,7 +36,7 @@ export default {
         'Pipoca: «Eu?! Eu só molhei o pão no molho.»',
         'Leal: «Mais uma rodada? Pago eu... se o Pi me emprestar.»',
         'Pi: «Empresto, empresto. Mas os caracóis são por tua conta!»',
-        'Tété: «Olhem o sol a pôr-se. Ficávamos aqui para sempre!»',
+        'Tété: «Olhem o sol a pôr-se e o néon já aceso. Ficávamos aqui para sempre!»',
         'Inês: «Às tardes no Crôcô. Que nunca acabem!»',
         'Pipoca: «Só mais um café! É o último, juro.»',
         'Todos: «Já ouvimos essa, Pipoca!»',

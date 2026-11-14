@@ -1,6 +1,7 @@
-// Nível 12, ao balcão do Xafarix: fazer um Long Island Iced Tea. Partes iguais de cinco garrafas
-// (vodka, tequila, rum branco, gin e licor de laranja): mantém-se premido para deitar e larga-se
-// na marca dourada, cinco vezes. Depois o barman junta o limão e a cola, mexe, e dá a nota.
+// Nível 12, ao balcão do Xafarix: fazer um Long Island Iced Tea. Partes iguais (15 ml) de cinco
+// garrafas (vodka, tequila, rum branco, gin e licor de laranja): mantém-se premido para deitar e
+// larga-se na marca dourada, cinco vezes. Depois o barman junta o limão, o xarope e a cola, mexe,
+// dá a nota e mostra a receita completa, com as medidas (a receita clássica), para se fazer em casa.
 // Nunca se perde: quem deita de mais não ganha o coração dessa parte, e o barman acerta o copo.
 import { Act } from './base.js';
 import { getCharacter } from '../sprites.js';
@@ -16,7 +17,10 @@ const PARTS = [
 ];
 const TOL = 0.24;        // tolerância (em partes) para acertar na marca
 const TOP = 6.6;         // altura do copo cheio, em partes (5 + limão + cola)
+const ML = 15;           // mililitros de cada uma das cinco bebidas
 const HOW = 'Mantém o dedo no ecrã (ou Espaço) para deitar; larga na marca dourada!';
+// A receita completa, para o cartão do fim.
+const RECEITA = [...PARTS.map((p) => `${ML} ML ${p.name}`), '30 ML SUMO DE LIMÃO', '20 ML XAROPE DE AÇÚCAR', 'COLA ATÉ ACIMA', 'GELO E RODELA DE LIMÃO'];
 
 export class LongIsland extends Act {
   get max() { return this.cfg.hearts || 5; }
@@ -31,7 +35,7 @@ export class LongIsland extends Act {
     this.mix = 0;
     this.ines = getCharacter('ines', 'night');
     this.barman = getCharacter('empregado');
-    this.hint(`1 de 5: ${PARTS[0].label}. ${HOW}`);
+    this.hint(`1 de 5: ${ML} ml de ${PARTS[0].label}. ${HOW}`);
   }
 
   update(dt, I) {
@@ -56,14 +60,14 @@ export class LongIsland extends Act {
         this.level = target;                 // o barman acerta a medida
         this.step++;
         this.timer = 0; this.idle = 0;
-        if (this.step >= PARTS.length) { this.state = 'limao'; this.hint('Agora o sumo de limão, um pouco de açúcar...'); this.sfx('pop'); } else {
+        if (this.step >= PARTS.length) { this.state = 'limao'; this.hint('Agora 30 ml de sumo de limão e 20 ml de xarope de açúcar...'); this.sfx('pop'); } else {
           this.state = 'ready';
-          this.hint(`${this.step + 1} de 5: ${PARTS[this.step].label}. ${HOW}`);
+          this.hint(`${this.step + 1} de 5: ${ML} ml de ${PARTS[this.step].label}. ${HOW}`);
         }
       }
     } else if (this.state === 'limao') {
       this.level = Math.min(5.3, this.level + dt * 0.3);
-      if (this.timer > 1.5) { this.state = 'cola'; this.timer = 0; this.hint('... e cola por cima, até acima!'); }
+      if (this.timer > 2.2) { this.state = 'cola'; this.timer = 0; this.hint('... muito gelo, e cola por cima, até acima!'); }
     } else if (this.state === 'cola') {
       this.level = Math.min(TOP, this.level + dt * 0.9);
       if (Math.floor(this.timer * 9) !== Math.floor((this.timer - dt) * 9) && this.level < TOP) this.sfx('slurp');
@@ -73,11 +77,11 @@ export class LongIsland extends Act {
       if (this.timer > 1.4) {
         this.state = 'nota'; this.timer = 0;
         this.sfx(this.good >= 3 ? 'win' : 'check');
-        this.hint(this.good >= 5 ? 'Barman: «Perfeito! Nem eu fazia melhor.»'
+        this.hint((this.good >= 5 ? 'Barman: «Perfeito! Nem eu fazia melhor.»'
           : this.good >= 3 ? 'Barman: «Muito bom! Está quase como os nossos.»'
-            : 'Barman: «Bebe-se bem! Acertar nas medidas é que é difícil...»');
+            : 'Barman: «Bebe-se bem! Acertar nas medidas é que é difícil...»') + ' Fica com a receita! (Toca para continuar.)');
       }
-    } else if (this.timer > 3.4 || (this.timer > 1.2 && pressed)) this.done();
+    } else if (this.timer > 12 || (this.timer > 1.5 && pressed)) this.done();      // tempo para ler a receita
   }
 
   judge(helped) {
@@ -162,7 +166,11 @@ export class LongIsland extends Act {
     for (let k = 0; k < 4; k++) { const iy = gb - 8 - k * Math.round(ph * 1.5), ixx = x0 + 4 + ((k * 13) % (gw - 14)); if (iy > gt + 2) { R(ixx, iy, 8, 7, 'rgba(255,255,255,0.35)'); R(ixx, iy, 8, 1, 'rgba(255,255,255,0.6)'); } }
     R(x0 + 2, gt + 2, 2, gb - gt - 4, 'rgba(255,255,255,0.35)');
     // marcas das cinco partes; a da vez é dourada, com a zona boa a verde
-    for (let k = 1; k <= 5; k++) R(x0 - 6, yOf(k), 4, 1, k <= this.step ? '#5a5468' : PAPER);
+    for (let k = 1; k <= 5; k++) {
+      R(x0 - 6, yOf(k), 4, 1, k <= this.step ? '#5a5468' : PAPER);
+      if (this.mix < 1) text(ctx, String(k * ML), x0 + gw + 5, yOf(k) - 2, k <= this.step ? '#8a8494' : PAPER, { shadow: INK });      // mililitros
+    }
+    if (this.mix < 1) text(ctx, 'ML', x0 + gw + 5, yOf(5) - 10, '#8a8494', { shadow: INK });
     if (pouringStep >= 0) {
       const ty = yOf(this.step + 1), band = Math.round(TOL * ph);
       R(x0 - 9, ty - band, 5, band * 2 + 1, '#5cf08a');
@@ -179,7 +187,7 @@ export class LongIsland extends Act {
         if (Math.floor(t * 12) % 2) R(bxx - 17, yOf(lev) - 2, 6, 2, PAPER);
       } else this.bottle(R, bxx + 10, byy + 22, p, 1, false, true);
       const lw = P ? 0 : 0;
-      text(ctx, p.name, cx + lw, gb + 8, GOLD, { align: 'center', shadow: INK });
+      text(ctx, `${ML} ML ${p.name}`, cx + lw, gb + 8, GOLD, { align: 'center', shadow: INK });
     }
     // no fim: limão na borda, palhinha e o resultado
     if (this.state === 'limao' || this.state === 'cola' || this.state === 'mexer' || this.state === 'nota') {
@@ -193,7 +201,13 @@ export class LongIsland extends Act {
       const col = this.res === 'NA MARCA!' ? '#5cf08a' : '#ff8a6a';
       sign(ctx, this.res, cx, Math.max(top + 4, gt - 16), { color: col });
     }
-    if (this.state === 'nota') sign(ctx, 'LONG ISLAND ICED TEA', cx, Math.max(top + 4, gt - 30), { color: GOLD, bg: '#4a2018' });
+    if (this.state === 'nota') {
+      // o cartão da receita, com as medidas: por cima do copo (ao alto) ou à esquerda dele (deitado)
+      const cw = 100, chh = 16 + RECEITA.length * 7, kx = P ? Math.round((v.w - cw) / 2) : Math.max(4, Math.round(cx - gw / 2 - 16 - cw)), ky = P ? Math.max(top + 4, gt - chh - 22) : top + 4;
+      R(kx + 2, ky + 2, cw, chh, 'rgba(20,10,30,0.4)'); R(kx - 1, ky - 1, cw + 2, chh + 2, INK); R(kx, ky, cw, chh, '#fbf3df'); R(kx, ky, cw, 11, '#4a2018');
+      text(ctx, 'LONG ISLAND ICED TEA', kx + cw / 2, ky + 3, GOLD, { align: 'center' });
+      RECEITA.forEach((l, i) => text(ctx, l, kx + 5, ky + 15 + i * 7, i < 5 ? '#3a2416' : '#7a4a2a'));
+    }
   }
 
   // Garrafa de pé, com a base em (x, y). used: já foi deitada (fica mais apagada).
@@ -206,7 +220,7 @@ export class LongIsland extends Act {
   }
 
   bot(I) {
-    if (this.state === 'nota') { if (this.timer > 1.4) I.actionPressed = true; return; }
+    if (this.state === 'nota') { if (this.timer > 1.7) I.actionPressed = true; return; }
     if (this.state === 'ready' && this.timer > 0.3) { I.actionPressed = true; I.action = true; }
     if (this.state === 'pour' && this.level < this.step + 1 - 0.03) I.action = true;
   }

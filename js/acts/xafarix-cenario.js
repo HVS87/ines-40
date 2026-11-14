@@ -1,7 +1,7 @@
 // Cenário do Xafarix (nível 12), desenhado a partir de fotografias da sala: paredes brancas,
 // arcos de pedra amarelada, chão de tijoleira, bancos corridos de pele escura, mesas brancas, um
 // palco preto pequeno com a sua grade de projetores (luzes cor-de-rosa e roxas) e o gato de
-// auscultadores do logótipo. Serve de fundo ao jogo de ritmo, ao balcão e aos momentos de história.
+// auscultadores do logótipo (em pequeno, GATO, e ao pormenor, gatoGrande). Serve de fundo ao jogo de ritmo, ao balcão e aos momentos de história.
 import { getCharacter, makeSprite } from '../sprites.js';
 import { INK, PAPER, hash, text } from '../draw.js';
 
@@ -34,6 +34,49 @@ export function gato(ctx, x, y, fg = '#ffffff', bg = '#141220', scale = 1) {
   if (!gatos.has(key)) gatos.set(key, makeSprite(GATO, { w: fg, h: fg, k: bg }));
   const img = gatos.get(key);
   ctx.drawImage(img, Math.round(x), Math.round(y), img.width * scale, img.height * scale);
+}
+
+// O gato do logótipo em grande (33 x 27, mais os bigodes, que saem 3 píxeis para cada lado):
+// a crista espetada, o arco dos auscultadores, a orelha às riscas de um lado e o auscultador em
+// forma de rosa do outro, os olhos semicerrados, o nariz preto, as pintas e os bigodes compridos.
+// (x, y) = canto de cima; fg = cor do traço, bg = cor do fundo.
+export function gatoGrande(R, x, y, fg = '#2b1d2e', bg = '#f4eee2') {
+  x = Math.round(x); y = Math.round(y);
+  const P = (dx, dy, w = 1, h = 1, c = fg) => R(x + dx, y + dy, w, h, c);
+  const elipse = (cx, cy, rx, ry, c, y0 = -99, y1 = 99) => {
+    for (let dy = -Math.ceil(ry); dy <= Math.ceil(ry); dy++) {
+      if (cy + dy < y0 || cy + dy > y1) continue;
+      const k = 1 - (dy * dy) / (ry * ry); if (k < 0) continue;
+      const half = Math.round(rx * Math.sqrt(k)); P(Math.round(cx - half), Math.round(cy + dy), half * 2 + 1, 1, c);
+    }
+  };
+  const linha = (x0, y0, x1, y1) => { const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)); for (let i = 0; i <= n; i++) P(Math.round(x0 + ((x1 - x0) * i) / n), Math.round(y0 + ((y1 - y0) * i) / n)); };
+  // o arco dos auscultadores
+  elipse(16, 12, 14, 12, fg, 0, 12); elipse(16, 13, 12, 11, bg, 0, 13);
+  // a crista
+  for (const [dx, a] of [[11, 3], [13, 5], [15, 4], [17, 6], [19, 4], [21, 3]]) P(dx, 9 - a, 1, a);
+  P(11, 8, 11, 2);
+  // a orelha às riscas (à esquerda) e o auscultador desse lado
+  for (let i = 0; i < 7; i++) P(4 - Math.floor(i / 3), 4 + i, 2 + i, 1);
+  P(5, 7, 1, 1, bg); P(5, 9, 2, 1, bg); P(7, 8, 1, 1, bg);
+  P(0, 11, 4, 8); P(1, 10, 2, 10);
+  // a orelha da direita e o auscultador em rosa, com a ficha
+  for (let i = 0; i < 6; i++) P(26 - Math.floor(i / 2), 3 + i, 2 + i, 1);
+  elipse(29, 13, 4, 5, fg); elipse(29, 13, 3, 4, bg); elipse(29, 13, 1.5, 2.2, fg); P(29, 13, 1, 1, bg); P(27, 11, 2, 1); P(30, 15, 2, 1);
+  linha(31, 7, 33, 2); linha(32, 7, 34, 2);
+  // a cabeça
+  elipse(16, 16, 11.5, 8.5, fg); elipse(16, 16, 10.5, 7.5, bg);
+  // os olhos semicerrados
+  for (const ex of [11, 20]) { elipse(ex, 13, 3.4, 3.4, fg, 0, 13); elipse(ex, 13, 2.4, 2.4, bg, 0, 12); P(ex - 3, 13, 7, 1); P(ex - 3, 14, 1, 1); P(ex + 3, 14, 1, 1); P(ex - 1, 14, 2, 1); P(ex - 2, 15, 5, 1); }
+  // o nariz e a boca
+  P(13, 16, 6, 1); P(14, 17, 4, 1); P(15, 18, 2, 1); P(14, 16, 1, 1, bg);
+  P(16, 19, 1, 2); P(12, 20, 1, 1); P(13, 21, 3, 1); P(17, 21, 3, 1); P(20, 20, 1, 1); P(15, 22, 3, 1);
+  // as pintas e os bigodes
+  for (const [dx, dy] of [[8, 17], [10, 18], [8, 19], [10, 20], [24, 17], [22, 18], [24, 19], [22, 20]]) P(dx, dy);
+  linha(6, 17, -3, 14); linha(6, 19, -3, 19); linha(6, 21, -2, 25);
+  linha(26, 17, 35, 15); linha(26, 19, 35, 20); linha(26, 21, 34, 25);
+  // o pescoço
+  P(13, 24, 1, 3); P(19, 24, 1, 3);
 }
 
 // Feixe de luz em riscas (um trapézio).
@@ -127,7 +170,8 @@ export function xafarixBg(ctx, v, R, t, o) {
   const wy = Math.max(0, top - 30);
   parede(R, 0, wy, w, gy - wy, 3);
   // arcos de pedra, com a sala do fundo
-  const ah = Math.min(P ? 92 : 62, gy - top - 30), aw = P ? 62 : 54, na = P ? 2 : 3;
+  const grande = gy - top >= 86;            // cabe o letreiro grande, com o gato do logótipo ao pormenor?
+  const ah = Math.min(P ? 92 : 62, gy - top - (grande ? 46 : 30)), aw = P ? 62 : 54, na = P ? 2 : 3;
   for (let i = 0; i < na; i++) {
     const cx = Math.round(((i + 0.5) * w) / na);
     if (o.stage !== null && o.stage !== undefined && Math.abs(cx - o.stage) < aw * 0.8) continue;   // o palco tapa esse arco
@@ -139,11 +183,18 @@ export function xafarixBg(ctx, v, R, t, o) {
     if (o.stage !== null && o.stage !== undefined && Math.abs(x - o.stage) < 44) continue;
     aplique(R, x, gy - ah - 2, i % 2 ? 'rgba(200,90,255,A)' : 'rgba(255,90,170,A)', t);
   }
-  // letreiro: o nome em letras escuras sobre branco e o gato ao lado
+  // letreiro, como o logótipo: o gato de auscultadores e o nome por cima das linhas da pauta
   const sx = o.signX !== undefined ? o.signX : Math.round(w * (P ? 0.64 : 0.76));
-  R(sx - 47, top + 3, 94, 19, INK); R(sx - 46, top + 4, 92, 17, '#f4eee2');
-  text(ctx, 'XAFARIX', sx - 40, top + 8, '#2b1d2e', { scale: 2 });
-  gato(ctx, sx + 24, top + 6, '#2b1d2e', '#f4eee2');
+  if (grande) {
+    R(sx - 53, top + 3, 106, 35, INK); R(sx - 52, top + 4, 104, 33, '#f4eee2');
+    for (let k = 0; k < 5; k++) for (let x = 0; x < 60; x += 2) R(sx - 10 + x, top + 32 + k * 2 - Math.round(x / 5) - 4, 2, 1, '#b9aeb4');
+    gatoGrande(R, sx - 46, top + 7, '#2b1d2e', '#f4eee2');
+    text(ctx, 'XAFARIX', sx - 7, top + 11, '#2b1d2e', { scale: 2 });
+  } else {
+    R(sx - 47, top + 3, 94, 19, INK); R(sx - 46, top + 4, 92, 17, '#f4eee2');
+    text(ctx, 'XAFARIX', sx - 40, top + 8, '#2b1d2e', { scale: 2 });
+    gato(ctx, sx + 24, top + 6, '#2b1d2e', '#f4eee2');
+  }
   // banco corrido de pele escura ao longo da parede e rodapé
   R(0, gy - 13, w, 13, INK); R(0, gy - 12, w, 12, LEATHER); R(0, gy - 12, w, 2, '#5a4038');
   for (let x = 20; x < w; x += 40) R(x, gy - 12, 1, 12, '#2a1c1a');
@@ -152,8 +203,14 @@ export function xafarixBg(ctx, v, R, t, o) {
   if (o.stage !== null && o.stage !== undefined) {
     const mx = o.stage, sw = 84, sh = 9, ty = Math.max(top + 26, gy - ah - 18);
     R(mx - sw / 2, ty, sw, gy - sh - ty, '#141220');                                   // pano preto
-    R(mx - sw / 2 + 4, ty + 10, 21, 26, INK); gato(ctx, mx - sw / 2 + 6, ty + 13);      // o cartaz do gato
-    for (let k = 0; k < 4; k++) R(mx - sw / 2 + 5, ty + 29 + k * 2, 19 - k * 2, 1, '#ffffff');
+    if (gy - sh - ty >= 68) {                                                          // o cartaz do gato, em grande
+      R(mx - sw / 2 + 1, ty + 6, 40, 40, '#f4eee2');
+      gatoGrande(R, mx - sw / 2 + 5, ty + 8, '#2b1d2e', '#f4eee2');
+      text(ctx, 'XAFARIX', mx - sw / 2 + 8, ty + 38, '#2b1d2e');
+    } else {
+      R(mx - sw / 2 + 4, ty + 10, 21, 26, INK); gato(ctx, mx - sw / 2 + 6, ty + 13);
+      for (let k = 0; k < 4; k++) R(mx - sw / 2 + 5, ty + 29 + k * 2, 19 - k * 2, 1, '#ffffff');
+    }
     // grade de projetores
     R(mx - sw / 2 - 2, ty - 4, sw + 4, 4, INK);
     for (let x = mx - sw / 2; x < mx + sw / 2; x += 6) R(x, ty - 3, 3, 2, '#4a4458');
@@ -165,7 +222,7 @@ export function xafarixBg(ctx, v, R, t, o) {
     R(mx - sw / 2 - 1, gy - sh - 1, sw + 2, sh + 1, INK); R(mx - sw / 2, gy - sh, sw, sh, '#1c1a22'); R(mx - sw / 2, gy - sh, sw, 2, '#3a3448');
     // coluna de som
     R(mx - 38, gy - sh - 22, 14, 22, INK); R(mx - 37, gy - sh - 21, 12, 20, '#2a2436'); R(mx - 34, gy - sh - 18, 6, 6, '#0d0820'); R(mx - 33, gy - sh - 9, 4, 4, '#0d0820');
-    mico(ctx, R, mx + 4, gy - sh, t, o.beat === undefined ? t * 1.7 : o.beat, o.playing !== false);
+    mico(ctx, R, mx + 9, gy - sh, t, o.beat === undefined ? t * 1.7 : o.beat, o.playing !== false);
   }
   // mesas
   for (const x of o.tables || []) mesa(R, x, gy, t);

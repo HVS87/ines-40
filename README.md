@@ -79,7 +79,8 @@ corações ou tempo, e todos os atos acabam sempre.
 
 `Talk` é um momento de história (cenário, personagens e falas); `Catch` é o nascimento (o
 bebé salta e é preciso apanhá-lo); `Call` é um telefonema da Austrália, interrompido por um
-canguru, um coala, uma aranha gigante, um bumerangue ou um bando de emus; `Estrada`, `Ritmo` e `Pesca` são mecânicas
+canguru, um coala, uma aranha gigante, um bumerangue ou um bando de emus (o telemóvel salta das mãos do
+Lourenço e fica no chão enquanto ele luta com o intruso); `Estrada`, `Ritmo` e `Pesca` são mecânicas
 partilhadas por vários níveis, cada um com a sua «pele».
 
 ## Mudar coisas
