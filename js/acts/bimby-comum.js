@@ -139,7 +139,7 @@ export function bancada(R, v, gy) {
 }
 
 // Uma tigela de creme a fumegar (centro em x, base em y).
-export function tigela(R, x, y, t) {
+function tigela(R, x, y, t) {
   R(x - 6, y - 5, 12, 5, INK); R(x - 4, y - 1, 8, 2, INK);
   R(x - 5, y - 4, 10, 3, '#ffffff'); R(x - 3, y - 1, 6, 1, '#d8dce6');
   R(x - 4, y - 4, 8, 1, '#ff9a3b');

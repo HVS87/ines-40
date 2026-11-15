@@ -154,7 +154,7 @@ export function mico(ctx, R, x, gy, t, beat = t * 2, playing = true) {
 }
 
 // O chão de tijoleira vermelha, com as juntas escuras.
-export function tijoleira(R, w, gy, h) {
+function tijoleira(R, w, gy, h) {
   R(0, gy, w, h - gy, TILE);
   for (let y = gy, j = 0; y < h; y += 10, j++) {
     R(0, y, w, 1, TILE_D);

@@ -33,7 +33,7 @@ export function seg(R, x0, y0, x1, y1, c, th = 1) {
 
 // Os peixes. len/tall: comprimento e meia altura em píxeis · need: segundos na zona verde até
 // vir · force (0 a 1): quanto a zona verde se mexe.
-export const PEIXES = {
+const PEIXES = {
   // ----- Moçambique -----
   dourado: { nome: 'DOURADO', len: 34, tall: 6, back: '#1f9a8a', body: '#f2d23e', belly: '#fff3a8', fin: '#2f6fd0', blunt: true, dorsal: 'long', need: 3.6, force: 0.35 },
   xareu: { nome: 'XARÉU', len: 28, tall: 8, back: '#7f97ad', body: '#d2dde8', belly: '#f6fafc', fin: '#f2c230', need: 4, force: 0.55 },

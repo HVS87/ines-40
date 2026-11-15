@@ -24,7 +24,7 @@ function ceu(ctx, v, R, t, hy, dusk) {
 }
 
 // Palmeira com o pé em (x, gy): tronco curvo (lean = para que lado se inclina) e copa de folhas caídas.
-export function palmeira(R, x, gy, alt, lean = 1, shade = 0) {
+function palmeira(R, x, gy, alt, lean = 1, shade = 0) {
   const tr = mix('#9a7a52', '#3a2038', shade), tr2 = mix('#6b5236', '#2a1830', shade);
   const f1 = mix('#3fae5a', '#2a2040', shade), f2 = mix('#1f7a3a', '#1c1430', shade);
   for (let i = 0; i < alt; i++) {

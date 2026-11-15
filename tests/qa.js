@@ -27,7 +27,8 @@
 // Atenção: os testes apagam o progresso guardado neste browser.
 import { LEVELS, levelLabel } from '../js/levels/index.js';
 import { SAVE_KEY } from '../js/config.js';
-import { seen, missing } from '../js/sprites.js';
+import { seen, missing, getCharacter } from '../js/sprites.js';
+import { raparigas } from '../js/acts/farol-comum.js';
 import { CONVIDADOS, TODOS, PAIS, IRMAOS } from '../js/convidados.js';
 
 const STEP = 1 / 60;
@@ -388,6 +389,19 @@ async function testMoments() {
   const faltam = [...nomes(PAIS), ...nomes(CONVIDADOS)].filter((w) => !emCasa.includes(w) && !todos.includes(w));
   const naFesta = convidados.split(' '), paisNaFesta = nomes(PAIS).filter((w) => naFesta.includes(w)), irmaosFora = nomes(IRMAOS).filter((w) => !naFesta.includes(w));
   check('dados cruzados: o ecrã final junta a família e os amigos, sem repetir ninguém (os irmãos vão à festa; os pais, não)', new Set(todos).size === todos.length && !faltam.length && !emCasa.some((w) => todos.includes(w)) && !paisNaFesta.length && !irmaosFora.length && IRMAOS.length === 4, `faltam: ${faltam.join(', ')}; pais na festa: ${paisNaFesta.join(', ')}; irmãos de fora: ${irmaosFora.join(', ')}`);
+  // Ilha do Farol: das nove, seis são as amigas que lá estiveram e três são figurantes sem nome; a
+  // Maísa e a Mi não foram (nem no grupo, nem nas conversas)
+  const nove = raparigas(), comNome = ['ines', 'isabel', 'ana', 'soft', 'maria', 'tete'].map((w) => getCharacter(w, 'praia'));
+  const figurantes = nove.filter((f) => !comNome.includes(f));
+  seen.clear();
+  game.startLevel(LEVELS.findIndex((L) => L.id === 'farol'));
+  game.ui.act('start');
+  for (let n = 0; n < 60 * 600 && game.scene.state !== 'done'; n += 60) frames(60);
+  const intrusas = ['maisa', 'mi'].filter((w) => seen.has(w));
+  const farol = LEVELS.find((L) => L.id === 'farol') || {}, falas = JSON.stringify([farol.story, farol.help, farol.outro, (farol.acts || []).map((a) => [a.when, a.lines])]);
+  check('dados cruzados: na Ilha do Farol estão a Inês, a Isabel, a Ana, a Soft, a Maria, a Tété e três figurantes (sem a Maísa nem a Mi)', nove.length === 9 && comNome.every((f) => nove.includes(f)) && figurantes.length === 3 && new Set(nove).size === 9 && !figurantes.includes(getCharacter('mi', 'praia')) && !intrusas.length && !/Maísa|Mi/.test(falas) && ['Ana', 'Soft', 'Isabel', 'Maria', 'Tété'].every((n) => farol.story.includes(n)), `figurantes: ${figurantes.length}; apareceram: ${intrusas.join(', ')}`);
+  // a festa: o primeiro grupo dos abraços são os irmãos
+  check('dados cruzados: na festa, os irmãos são os primeiros a abraçar a Inês', abracos.length === 8 && abracos[0].people === IRMAOS && /mana/.test(abracos[0].line || ''), String(abracos.length));
   game.showVictory();
   const fim = game.scene;
   for (let k = 0; k < 240; k++) { if (k % 40 === 0) fim.onTap({ type: 'pointerdown' }); fim.update(STEP); fim.draw(ctx2d(), game.view); }

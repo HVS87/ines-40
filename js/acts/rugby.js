@@ -51,7 +51,7 @@ function bola(R, x, y, rot = 0) {
 
 // O campo visto da linha lateral: céu, as árvores da Tapada, a bancada, as placas e o relvado.
 // o: { gy, top, fy (linha lateral do fundo), tarde, festa }.
-export function campo(ctx, v, R, t, o) {
+function campo(ctx, v, R, t, o) {
   const w = v.w, P = v.portrait, fy = o.fy || o.gy - (P ? 64 : 40);
   sky(ctx, w, v.h, fy, o.tarde ? ['#4a5aa8', '#c87a9a', '#f8b07a', '#ffe0a0'] : ['#5aa6e8', '#9fd0f4', '#d8eef8']);
   const ty = fy - (P ? 46 : 32), A = o.tarde ? '#35704a' : '#3f8a4a', B = o.tarde ? '#42805a' : '#4f9f52';

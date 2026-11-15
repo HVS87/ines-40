@@ -242,7 +242,7 @@ export function sentada(ctx, R, frames, x, gy, face = 1, s = 2) {
 }
 
 // Deitada de costas na areia, com a cabeça para a esquerda. Ocupa de x a x + 24·s, acima de gy.
-export function deitada(ctx, frames, x, gy, s = 2) {
+function deitada(ctx, frames, x, gy, s = 2) {
   const img = frames.stand.r;
   ctx.save();
   ctx.translate(Math.round(x), Math.round(gy));

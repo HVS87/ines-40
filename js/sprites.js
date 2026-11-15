@@ -212,7 +212,7 @@ export const LOOKS = {
     praia: { t: '#3fa6a0', T: '#ffffff', b: '#efbd94' }, festa: { t: '#3f6fb5', T: '#2f5795', b: '#2b1d2e' } } },
   maisa: { def: F, rows: FRANJA, base: { h: '#5a3a26', H: '#7a5236', v: '#5a3a26', e: '#4a3a2a' }, outfits: {
     casual: { t: '#ffb347', T: '#e09030', b: '#2b1d2e' }, night: { t: '#7a3fa0', T: '#5a2f80', b: '#2b1d2e' },
-    praia: { t: '#ff5d8f', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#ff8a4b', T: '#e06a2b', b: '#2b1d2e' } } },
+    festa: { t: '#ff8a4b', T: '#e06a2b', b: '#2b1d2e' } } },
   soft: { def: F, base: { h: '#7a5236', H: '#96704a', v: '#7a5236', e: '#55803f' }, outfits: {
     casual: { t: '#7be0b0', T: '#4fb888', b: '#2b1d2e' }, teen: { t: '#ffd166', T: '#e0a820', b: '#ffffff' }, night: { t: '#3fa6a0', T: '#2f8680', b: '#2b1d2e' },
     praia: { t: '#ffd166', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#4fb888', T: '#3f9870', b: '#2b1d2e' } } },

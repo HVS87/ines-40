@@ -26,7 +26,7 @@ function arvore(ctx, R, x, gy) {
 }
 
 // Janela ogival com vidros de cores (a capela do colégio tem vitrais).
-export function vitral(R, cx, y, w, h, seed = 1) {
+function vitral(R, cx, y, w, h, seed = 1) {
   const x0 = Math.round(cx - w / 2);
   R(x0 - 1, y + 5, w + 2, h - 5, INK); R(x0 + 1, y + 2, w - 2, 3, INK); R(x0 + 3, y, w - 6, 2, INK);
   for (let yy = 1; yy < h - 1; yy += 2) {
