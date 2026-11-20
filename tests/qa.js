@@ -401,6 +401,9 @@ async function testMoments() {
   const farol = LEVELS.find((L) => L.id === 'farol') || {}, falas = JSON.stringify([farol.story, farol.help, farol.outro, (farol.acts || []).map((a) => [a.when, a.lines])]);
   check('dados cruzados: na Ilha do Farol estão a Inês, a Isabel, a Ana, a Soft, a Maria, a Tété e três figurantes (sem a Maísa nem a Mi)', nove.length === 9 && comNome.every((f) => nove.includes(f)) && figurantes.length === 3 && new Set(nove).size === 9 && !figurantes.includes(getCharacter('mi', 'praia')) && !intrusas.length && !/Maísa|Mi/.test(falas) && ['Ana', 'Soft', 'Isabel', 'Maria', 'Tété'].every((n) => farol.story.includes(n)), `figurantes: ${figurantes.length}; apareceram: ${intrusas.join(', ')}`);
   // a festa: o primeiro grupo dos abraços são os irmãos
+  // a Maísa tem o totó no Garage (night) e na festa (festa), e só aí: píxeis na primeira linha do boneco
+  const toto = (o) => { const c = getCharacter('maisa', o).stand.r; return [...c.getContext('2d').getImageData(0, 0, c.width, 1).data].some((x, i) => i % 4 === 3 && x > 0); };
+  check('Maísa: de totó no Garage e na festa, sem totó no resto do jogo', toto('night') && toto('festa') && !toto('casual'), JSON.stringify({ night: toto('night'), festa: toto('festa'), casual: toto('casual') }));
   check('dados cruzados: na festa, os irmãos são os primeiros a abraçar a Inês', abracos.length === 8 && abracos[0].people === IRMAOS && /mana/.test(abracos[0].line || ''), String(abracos.length));
   game.showVictory();
   const fim = game.scene;
