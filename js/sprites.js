@@ -147,6 +147,8 @@ const MENINO = {
 // Penteados (linhas do boneco de mulher que mudam): cabelo ondulado e franja.
 const ONDAS = { 10: '.ovvhsssesseso..', 12: '.ovvhosssmmso...', 14: '.ovvotttttto....' };
 const FRANJA = { 7: '..ovhhhhhhhhho..', 8: '..ovhhhshshsso..' };
+// Totó no cimo da cabeça, a apontar para o teto (linhas do boneco de mulher): k = o elástico.
+const TOTO = { 0: '......oooo......', 1: '.....ohHhho.....', 2: '......ohho......', 3: '....oookkooo....' };
 // Camisa às flores (linhas do boneco de homem): k = as flores.
 const FLORES = { 13: '...otkttttkto...', 14: '...ostkttktso...', 15: '...osttkttkso...', 16: '....otkttkto....' };
 // Camisola de rugby às riscas (linhas do boneco de homem): k = risca branca.
@@ -211,8 +213,9 @@ export const LOOKS = {
     casual: { t: '#5a8fd0', T: '#3f6fb0', b: '#2b1d2e' }, teen: { t: '#ff8a6a', T: '#e06a4a', b: '#ffffff' }, night: { t: '#c0392b', T: '#96281b', b: '#2b1d2e' },
     praia: { t: '#3fa6a0', T: '#ffffff', b: '#efbd94' }, festa: { t: '#3f6fb5', T: '#2f5795', b: '#2b1d2e' } } },
   maisa: { def: F, rows: FRANJA, base: { h: '#5a3a26', H: '#7a5236', v: '#5a3a26', e: '#4a3a2a' }, outfits: {
-    casual: { t: '#ffb347', T: '#e09030', b: '#2b1d2e' }, night: { t: '#7a3fa0', T: '#5a2f80', b: '#2b1d2e' },
-    festa: { t: '#ff8a4b', T: '#e06a2b', b: '#2b1d2e' } } },
+    // no Garage (night) e na festa dos 40 anos (festa), de totó no cabelo
+    casual: { t: '#ffb347', T: '#e09030', b: '#2b1d2e' }, night: { t: '#7a3fa0', T: '#5a2f80', b: '#2b1d2e', k: '#ff5d8f', rows: TOTO },
+    festa: { t: '#ff8a4b', T: '#e06a2b', b: '#2b1d2e', k: '#ffd166', rows: TOTO } } },
   soft: { def: F, base: { h: '#7a5236', H: '#96704a', v: '#7a5236', e: '#55803f' }, outfits: {
     casual: { t: '#7be0b0', T: '#4fb888', b: '#2b1d2e' }, teen: { t: '#ffd166', T: '#e0a820', b: '#ffffff' }, night: { t: '#3fa6a0', T: '#2f8680', b: '#2b1d2e' },
     praia: { t: '#ffd166', T: '#ffffff', b: '#f6c9a0' }, festa: { t: '#4fb888', T: '#3f9870', b: '#2b1d2e' } } },
